@@ -3,9 +3,10 @@ sys.path.append("..")  # Remove in production - KTZ
 
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 from ETFsList_Scripts.List523ETFsMongo import ETFListDocument
+from MongoDB.MongoDBConnections import MongoDBConnectors
 from mongoengine import *
 import csv
-
+import getpass
 class RelevantHoldings():
     def __init__(self):
         self.listofetfs = []
@@ -13,11 +14,13 @@ class RelevantHoldings():
         self.ChineseHoldings = set()
         self.NonChineseHoldings = set()
         self.NonChineseETFs = []
+        self.system_username = getpass.getuser()
     def getAllETFNames(self):
         try:
-            # connect('ETF_db', alias='ETF_db')
-            # Connecting to ETF_db on AWS EC2 Production Server
-            connect('ETF_db', alias='ETF_db', host='52.90.110.245', port=27017)
+            if self.system_username == 'ubuntu':
+                MongoDBConnectors().get_mongoengine_readWrite_production_production()
+            else:
+                MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
             etflistdocument = ETFListDocument.objects().first()
             # print(etflistdocument)
             for etf in etflistdocument.etflist:

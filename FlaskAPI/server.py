@@ -13,7 +13,7 @@ import json
 from datetime import datetime
 import traceback
 import sys
-
+import getpass
 
 
 sys.path.append("..")
@@ -22,10 +22,12 @@ app = Flask(__name__)
 
 CORS(app)
 
-# Production Local Server
-# connect('ETF_db', alias='ETF_db')
-# Production Server
-connection = connect('ETF_db', alias='ETF_db', host='18.213.229.80', port=27017)
+from MongoDB.MongoDBConnections import MongoDBConnectors
+system_username = getpass.getuser()
+if system_username == 'ubuntu':
+    connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
+else:
+    connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 ############################################
 # Load ETF Holdings Data and Description
 ############################################
@@ -63,6 +65,8 @@ def fetchOHLCDailyData(ETFName,StartDate):
 def SendETFHoldingsData(ETFName, date):
     req = request.__dict__['environ']['REQUEST_URI']
     try:
+        # connect_mongoengine = MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+        MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         # Load all the data holdings data together
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         ETFDataObject = etfdata.to_mongo().to_dict()

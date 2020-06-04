@@ -1,3 +1,4 @@
+import getpass
 import logging
 import os
 import time
@@ -5,7 +6,6 @@ import traceback
 from datetime import datetime
 
 import pandas as pd
-from mongoengine import *
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -14,6 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from CommonServices.EmailService import EmailSender
 from CommonServices.WebdriverServices import masterclass
+from MongoDB.MongoDBConnections import MongoDBConnectors
 
 path = os.path.join(os.getcwd(), "Logs/HoldingsScraperLogs/")
 
@@ -29,13 +30,20 @@ logger.addHandler(handler)
 from ETFsList_Scripts.List523ETFsMongo import ETFListDocument
 from HoldingsDataScripts.ETFMongo import ETF
 
+
 class PullHoldingsListClass(object):
 
     def __init__(self, dateofdownload=datetime.now().date()):
-        # connect to 'ETF_db' database in Mongodb with replica set
-        connect('ETF_db', alias='ETF_db', replicaSet='rs0')
-        # connect to 'ETF_db' database in Mongodb
-        # connect('ETF_db', alias='ETF_db')
+        self.system_username = getpass.getuser()
+        if self.system_username == 'ubuntu':
+            ''' Production to Production readWrite '''
+            MongoDBConnectors().get_mongoengine_readWrite_production_production()
+        else:
+            ''' Dev Local to Production Read Only '''
+            # MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+            ''' Dev Local to Dev Local readWrite '''
+            MongoDBConnectors().get_mongoengine_devlocal_devlocal()
+
         self.todaysdata = ETFListDocument.objects(Download_date=dateofdownload).first()
         self.etfdescdf = pd.DataFrame(self.todaysdata.to_mongo().to_dict()['etflist'])
 
@@ -47,6 +55,7 @@ class PullHoldingsListClass(object):
             return True
         else:
             return False
+
 
 class DownloadsEtfHoldingsData(masterclass):
 

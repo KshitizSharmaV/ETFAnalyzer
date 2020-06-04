@@ -4,13 +4,17 @@ import datetime
 import time
 import numpy as np
 import talib
-
-
+import getpass
+from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import LoadETFPrices, LoadETFArbitrageData, analysePerformance, countRightSignals
 from FlaskAPI.Components.ETFArbitrage.MomentumSignal import MomentumSignals
 from FlaskAPI.Components.ETFArbitrage.CandleStickPattern import PatternSignals
 
-connectionLocal = MongoClient('18.213.229.80', 27017)
+system_username = getpass.getuser()
+if system_username == 'ubuntu':
+    connectionLocal = MongoDBConnectors().get_pymongo_readWrite_production_production()
+else:
+    connectionLocal = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 db = connectionLocal.ETF_db
 TradesData = db.TradesData
 arbitragecollection = db.ArbitrageCollection

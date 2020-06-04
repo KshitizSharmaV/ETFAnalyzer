@@ -1,32 +1,39 @@
 from pymongo import ASCENDING, DESCENDING
-from pymongo import MongoClient
-import motor.motor_asyncio
-import asyncio
+import getpass
+from MongoDB.MongoDBConnections import MongoDBConnectors
 
-# CONNECTION STATEMENT FOR PRODUCTION AND PIYUSH :
-# connect with replica set
-connectionLocal = MongoClient('localhost', 27017, replicaSet='rs0')
-# connect without replica set for now
-# connectionLocal = MongoClient('localhost', 27017)
+system_username = getpass.getuser()
 
-# CONNECTION STATEMENT FOR REST OF DEV TEAM (from Non-local environment)
-# (Connects only to Primary. Will fail if Primary is down):
-# connectionLocal = MongoClient('18.213.229.80', 27017)
+if system_username == 'ubuntu':
+    ''' Production to Production:'''
+    connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
+else:
+    ''' Dev Local to Production ReadOnly:
+        Will need to comment out create_index() statements to use this connection '''
+    connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+    ''' Dev Local to Production ReadWrite:
+        Will need to specify username password file in MongoDB/MongoDBConnections.py __init__() '''
+    # connection = MongoDBConnectors().get_pymongo_readWrite_devlocal_production()
 
-db = connectionLocal.ETF_db
+db = connection.ETF_db
 
-# CONNECTION STATEMENT FOR PRODUCTION AND PIYUSH :
-motor_client = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017, replicaSet='rs0')
-
-# CONNECTION STATEMENT FOR REST OF DEV TEAM (from Non-local environment)
-# (Connects only to Primary. Will fail if Primary is down):
-#motor_client = motor.motor_asyncio.AsyncIOMotorClient('18.213.229.80', 27017)
+if system_username == 'ubuntu':
+    ''' Production to Production:'''
+    motor_client = MongoDBConnectors().get_motorasync_readWrite_production_production()
+else:
+    ''' Dev Local to Production ReadOnly:
+        Will need to comment out create_index() statements to use this connection '''
+    motor_client = MongoDBConnectors().get_motorasync_readonly_devlocal_production()
+    ''' Dev Local to Production ReadWrite:
+        Will need to specify username password file in MongoDB/MongoDBConnections.py __init__() '''
+    # motor_client = MongoDBConnectors().get_motorasync_readWrite_devlocal_production()
 
 motor_db = motor_client.ETF_db
 
 # Quotes Pipeline
 quotesCollection = db.QuotesData
-quotesCollection.create_index([("dateForData", DESCENDING), ("symbol", ASCENDING)])
+if system_username == 'ubuntu':
+    quotesCollection.create_index([("dateForData", DESCENDING), ("symbol", ASCENDING)])
 quotespipeline = [
     {'$match': ''},
     {'$unwind': '$data'},
@@ -45,7 +52,8 @@ quotespipeline = [
 
 # Trades Pipeline
 tradeCollection = db.TradesData
-tradeCollection.create_index([("dateForData", DESCENDING), ("symbol", ASCENDING)])
+if system_username == 'ubuntu':
+    tradeCollection.create_index([("dateForData", DESCENDING), ("symbol", ASCENDING)])
 tradespipeline = [
     {'$match': ''},
     {'$unwind': '$data'},
@@ -64,15 +72,18 @@ tradespipeline = [
 
 # Daily Open Close Collection
 dailyopencloseCollection = db.DailyOpenCloseCollection
-dailyopencloseCollection.create_index([("dateForData", DESCENDING), ("Symbol", ASCENDING)], unique=True)
+if system_username == 'ubuntu':
+    dailyopencloseCollection.create_index([("dateForData", DESCENDING), ("Symbol", ASCENDING)], unique=True)
 
 # Arbitrage
 arbitragecollection = db.ArbitrageCollection
-arbitragecollection.create_index([("dateOfAnalysis", DESCENDING), ("ETFName", ASCENDING)], unique=True)
+if system_username == 'ubuntu':
+    arbitragecollection.create_index([("dateOfAnalysis", DESCENDING), ("ETFName", ASCENDING)], unique=True)
 
 # Arbitrage Per Minute
 arbitrage_per_min = db.ArbitragePerMin
-arbitrage_per_min.create_index([('Timestamp', DESCENDING)])
+if system_username == 'ubuntu':
+    arbitrage_per_min.create_index([('Timestamp', DESCENDING)])
 
 # Trade Aggregate Minute for all Tickers.
 # Cursor for pulling data (PyMongo Cursor)
@@ -82,4 +93,4 @@ trade_per_min_WS_motor = motor_db.TradePerMinWS
 
 quotesWS_collection = db.QuotesLiveData
 
-connectionLocal.close()
+connection.close()

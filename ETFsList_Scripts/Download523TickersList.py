@@ -40,7 +40,7 @@ class Download523TickersList(masterclass):
                     EC.presence_of_element_located((By.LINK_TEXT, "Export this data to a CSV file")))
                 e = self.driver.find_element_by_link_text('Export this data to a CSV file')
                 e.click()
-                time.sleep(10)
+                time.sleep(30)
                 self.driver.quit()
                 # if successfully downloaded, no retries needed
                 retries = -1
@@ -49,12 +49,13 @@ class Download523TickersList(masterclass):
                 print(e)
                 logger.exception("Exception in Download523TickersList.py")
                 logger.info("Retrying once more")
+                traceback.print_exc()
                 retries -= 1
                 self.driver.quit()
                 # send email on every failure
-                emailobj = EmailSender()
-                msg = emailobj.message(subject="Exception Occurred",
-                                       text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
-                                           traceback.format_exc()))
-                emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+                # emailobj = EmailSender()
+                # msg = emailobj.message(subject="Exception Occurred",
+                #                        text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
+                #                            traceback.format_exc()))
+                # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
                 pass

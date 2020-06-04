@@ -3,15 +3,16 @@ import sys, traceback
 from time import perf_counter
 
 t1_start = perf_counter()
-# For Piyush system
-sys.path.extend(['/home/piyush/Desktop/etf1903', '/home/piyush/Desktop/etf1903/ETFsList_Scripts',
-                 '/home/piyush/Desktop/etf1903/HoldingsDataScripts',
-                 '/home/piyush/Desktop/etf1903/CommonServices',
-                 '/home/piyush/Desktop/etf1903/CalculateETFArbitrage'])
+# For Piyush System
+sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer', '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/HoldingsDataScripts',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/CommonServices',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage'])
 # For Production env
-sys.path.extend(['/home/ubuntu/ETFAnalysis', '/home/ubuntu/ETFAnalysis/ETFsList_Scripts',
-                 '/home/ubuntu/ETFAnalysis/HoldingsDataScripts', '/home/ubuntu/ETFAnalysis/CommonServices',
-                 '/home/ubuntu/ETFAnalysis/CalculateETFArbitrage'])
+sys.path.extend(['/home/ubuntu/ETFAnalyzer', '/home/ubuntu/ETFAnalyzer/ETFsList_Scripts',
+                 '/home/ubuntu/ETFAnalyzer/HoldingsDataScripts', '/home/ubuntu/ETFAnalyzer/CommonServices',
+                 '/home/ubuntu/ETFAnalyzer/CalculateETFArbitrage'])
+sys.path.append("..")  # Remove in production - KTZ
 # Use absolute import paths
 import CommonServices.WebdriverServices as serv
 from ETFsList_Scripts.Download523TickersList import Download523TickersList

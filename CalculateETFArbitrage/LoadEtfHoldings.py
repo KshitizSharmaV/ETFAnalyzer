@@ -1,3 +1,5 @@
+import traceback
+
 from mongoengine import *
 from datetime import datetime
 import pandas as pd
@@ -27,15 +29,14 @@ logger.addHandler(handler)
 logger2.addHandler(handler2)
 
 from HoldingsDataScripts.ETFMongo import ETF
-
-
-# from MongoDB.Schemas import connection
+from MongoDB.MongoDBConnections import MongoDBConnectors
 
 class LoadHoldingsdata(object):
     def __init__(self):
         self.cashvalueweight = None
         self.weights = None
         self.symbols = None
+        self.system_username = getpass.getuser()
 
     def LoadHoldingsAndClean(self, etfname, fundholdingsdate):
         try:
@@ -70,16 +71,11 @@ class LoadHoldingsdata(object):
 
     def getHoldingsDatafromDB(self, etfname, fundholdingsdate):
         try:
-            # Production username = ubuntu
-            if getpass.getuser() == 'ubuntu':
-                # Connect to localhost server for Production
-                # connect to 'ETF_db' database in Mongodb with replica set
-                # connect('ETF_db', alias='ETF_db', replicaSet='rs0')
-                # connect to 'ETF_db' database in Mongodb
-                connect('ETF_db', alias='ETF_db')
+            if self.system_username == 'ubuntu':
+                MongoDBConnectors().get_mongoengine_readWrite_production_production()
             else:
-                # Connecting to ETF_db on AWS EC2 Production Server
-                connect('ETF_db', alias='ETF_db', host='18.213.229.80', port=27017)
+                MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+
             etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
                 '-FundHoldingsDate').first()
             print(etfdata)
@@ -105,6 +101,7 @@ class LoadHoldingsdata(object):
         except Exception as e:
             print("Can't Fetch Fund Holdings Data")
             print(e)
+            traceback.print_exc()
             logger.exception(e)
             logger2.exception(e)
             # logger.critical(e, exc_info=True)
@@ -112,16 +109,10 @@ class LoadHoldingsdata(object):
 
     def getHoldingsDataForAllETFfromDB(self, etfname):
         try:
-            # Production username = ubuntu
-            if getpass.getuser() == 'ubuntu':
-                # Connect to localhost server for Production
-                # connect to 'ETF_db' database in Mongodb with replica set
-                # connect('ETF_db', alias='ETF_db', replicaSet='rs0')
-                # connect to 'ETF_db' database in Mongodb
-                connect('ETF_db', alias='ETF_db')
+            if self.system_username == 'ubuntu':
+                MongoDBConnectors().get_mongoengine_readWrite_production_production()
             else:
-                # Connecting to ETF_db on AWS EC2 Production Server
-                connect('ETF_db', alias='ETF_db', host='18.213.229.80', port=27017)
+                MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
             etfdata = ETF.objects(ETFTicker=etfname).order_by('-FundHoldingsDate').first()
             print(etfdata.ETFTicker)
             holdingsdatadf = pd.DataFrame(etfdata.to_mongo().to_dict()['holdings'])

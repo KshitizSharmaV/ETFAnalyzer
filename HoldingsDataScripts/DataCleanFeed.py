@@ -1,3 +1,4 @@
+import getpass
 import traceback
 
 import pandas as pd
@@ -10,6 +11,8 @@ from CommonServices.EmailService import EmailSender
 
 import logging
 import os
+
+from MongoDB.MongoDBConnections import MongoDBConnectors
 
 path = os.path.join(os.getcwd(), "Logs/HoldingsScraperLogs/")
 if not os.path.exists(path):
@@ -28,10 +31,15 @@ class PullandCleanData:
         self.savingpath = './ETFDailyData' + '/' + datetime.now().strftime("%Y%m%d")
         self.detailsdata = pd.DataFrame()
         self.holdingsdata = pd.DataFrame()
-        # connect to 'ETF_db' database in Mongodb with replica set
-        connect('ETF_db', alias='ETF_db', replicaSet='rs0')
-        # connect to 'ETF_db' database in Mongodb
-        # connect('ETF_db', alias='ETF_db')
+        self.system_username = getpass.getuser()
+        if self.system_username == 'ubuntu':
+            ''' Production to Production readWrite '''
+            MongoDBConnectors().get_mongoengine_readWrite_production_production()
+        else:
+            ''' Dev Local to Production Read Only '''
+            # MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+            ''' Dev Local to Dev Local readWrite '''
+            MongoDBConnectors().get_mongoengine_devlocal_devlocal()
 
     def readfilesandclean(self, etfname, etfdescdf):
         # take etf name to be stored and respective data in DataFrame format
