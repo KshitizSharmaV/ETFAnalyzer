@@ -1,4 +1,4 @@
 #!/bin/bash
 source /home/ubuntu/etfenv/bin/activate
-cd /home/ubuntu/ETFAnalysis/ETFLiveAnalysisWS/ || exit
+cd /home/ubuntu/ETFAnalyzer/ETFLiveAnalysisWS/ || exit
 python PerMinCaller.py
