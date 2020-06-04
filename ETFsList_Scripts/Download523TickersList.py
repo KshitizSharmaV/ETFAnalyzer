@@ -40,7 +40,7 @@ class Download523TickersList(masterclass):
                     EC.presence_of_element_located((By.LINK_TEXT, "Export this data to a CSV file")))
                 e = self.driver.find_element_by_link_text('Export this data to a CSV file')
                 e.click()
-                time.sleep(30)
+                time.sleep(10)
                 self.driver.quit()
                 # if successfully downloaded, no retries needed
                 retries = -1
