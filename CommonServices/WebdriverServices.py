@@ -51,11 +51,11 @@ class masterclass:
         e.click()
         time.sleep(3)
 
-    def savelisttodb(self):
+    def savelisttodb(self,df):
 
         try:
             etflistsaverobject = ETFListSaver()
-            etflistsaverobject.readandclean()
+            etflistsaverobject.readandclean(df)
 
             etflistsaverobject.pushtodb()
 

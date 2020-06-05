@@ -56,7 +56,7 @@ class ArbPerMin():
 
     def __init__(self):
         self.etflist = list(
-            pd.read_csv("WorkingETFs.csv").columns.values)
+            pd.read_csv("UpdatedWorkingETFs.csv").columns.values)
         f = open('etf-hold.json', 'r')
         self.etfdict = json.load(f)
         self.trade_dict = {}

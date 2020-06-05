@@ -23,12 +23,13 @@ class ETFListSaver:
         self.readingpath = ''
         self.etflistdf = pd.DataFrame()
 
-    def readandclean(self):
+    def readandclean(self, df):
         # specify path from where 523 etf list csv file is to be read
-        self.readingpath = './ETFDailyData/ETFTickersDescription/' + datetime.now().strftime(
-            "%Y%m%d") + '/etfs_details_type_fund_flow.csv'
-        # read csv file into dataframe
-        self.etflistdf = pd.read_csv(self.readingpath)
+        # self.readingpath = './ETFDailyData/ETFTickersDescription/' + datetime.now().strftime(
+        #     "%Y%m%d") + '/etfs_details_type_fund_flow.csv'
+        # # read csv file into dataframe
+        # self.etflistdf = pd.read_csv(self.readingpath)
+        self.etflistdf = df
         print(self.etflistdf)
 
     def pushtodb(self):

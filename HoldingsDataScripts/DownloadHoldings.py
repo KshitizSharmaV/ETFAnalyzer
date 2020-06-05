@@ -44,7 +44,8 @@ class PullHoldingsListClass(object):
             ''' Dev Local to Dev Local readWrite '''
             MongoDBConnectors().get_mongoengine_devlocal_devlocal()
 
-        self.todaysdata = ETFListDocument.objects(Download_date=dateofdownload).first()
+        self.todaysdata = ETFListDocument.objects(Download_date__lte=dateofdownload).order_by(
+                '-Download_date').first()
         self.etfdescdf = pd.DataFrame(self.todaysdata.to_mongo().to_dict()['etflist'])
 
     def ReturnetflistDF(self):
@@ -132,6 +133,7 @@ class DownloadsEtfHoldingsData(masterclass):
                 logger.info("Retrying once more")
                 retries -= 1
                 self.driver.quit()
+                traceback.print_exc()
                 # send email on every failure
                 emailobj = EmailSender()
                 msg = emailobj.message(subject="Exception Occurred",

@@ -124,6 +124,7 @@ class LoadHoldingsdata(object):
             print(e)
             logger.exception(e)
             logger2.exception(e)
+            traceback.print_exc()
             disconnect('ETF_db')
 
     def getETFWeights(self):

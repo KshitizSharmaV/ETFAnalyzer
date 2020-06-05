@@ -4,7 +4,8 @@ from time import perf_counter
 
 t1_start = perf_counter()
 # For Piyush System
-sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer', '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
+sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/HoldingsDataScripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/CommonServices',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage'])
@@ -22,6 +23,7 @@ from datetime import datetime
 from CommonServices.EmailService import EmailSender
 from CommonServices.DirectoryRemover import Directory_Remover
 import logging
+import pandas as pd
 # Check for system via username of the system
 import getpass
 import os
@@ -38,8 +40,20 @@ logger.addHandler(handler)
 
 
 def startCronJobForETFHoldings():
-    Download523TickersList().fetchTickerDataDescription()
-    serv.masterclass().savelisttodb()
+    finalETFlistDF = pd.DataFrame()
+    for url in ['https://etfdb.com/etfs/sector/', 'https://etfdb.com/etfs/country/us/']:
+        Download523TickersList().fetchTickerDataDescription(url)
+        df = pd.read_csv('./ETFDailyData/ETFTickersDescription/' + datetime.now().strftime(
+            "%Y%m%d") + '/etfs_details_type_fund_flow.csv')
+        if url == 'https://etfdb.com/etfs/country/us/':
+            def money_to_float(money_str):
+                return float(money_str.replace("$", "").replace(",", ""))
+            df['Total Assets '] = df['Total Assets '].apply(money_to_float)
+            df = df.loc[df['Total Assets '] >= 1000000000]
+        finalETFlistDF = pd.concat([finalETFlistDF, df], ignore_index=True).drop_duplicates()
+    print(finalETFlistDF)
+
+    serv.masterclass().savelisttodb(finalETFlistDF)
     # Pull ETF list into a dataframe
     ETFListDF = PullHoldingsListClass().ReturnetflistDF()
 
@@ -62,6 +76,7 @@ def startCronJobForETFHoldings():
             continue
         except Exception as e:
             logger.exception(e)
+            traceback.print_exc()
             continue
 
 
@@ -84,6 +99,7 @@ except Exception as e:
     t1_stop = perf_counter()
     logger.debug("Execution Time (E) {}".format(t1_stop - t1_start))
     print("Execution Time (NE) {}".format(t1_stop - t1_start))
+    traceback.print_exc()
     # receivers' address in a list (1 or more addresses), subject, body - exception message
     emailobj = EmailSender()
     msg = emailobj.message(subject="Exception Occurred",

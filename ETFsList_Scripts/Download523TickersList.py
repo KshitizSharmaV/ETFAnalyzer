@@ -26,7 +26,7 @@ logger.addHandler(handler)
 
 class Download523TickersList(masterclass):
 
-    def fetchTickerDataDescription(self):
+    def fetchTickerDataDescription(self, url):
         # initialise driver and login to ETFdb
         retries = 1
         while retries >=0:
@@ -34,13 +34,16 @@ class Download523TickersList(masterclass):
                 super().initialisewebdriver()
                 super().logintoetfdb()
                 # Fetch List using this url
-                url = 'https://etfdb.com/etfs/sector/'
+                # url = 'https://etfdb.com/etfs/country/us/'
                 self.driver.get(url)
-                element = WebDriverWait(self.driver, 180).until(
-                    EC.presence_of_element_located((By.LINK_TEXT, "Export this data to a CSV file")))
-                e = self.driver.find_element_by_link_text('Export this data to a CSV file')
+                element = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//td/a[@class='btn btn-medium btn-primary' and 2]")))
+                e = self.driver.find_element_by_xpath("//td/a[@class='btn btn-medium btn-primary' and 2]")
                 e.click()
-                time.sleep(10)
+                if url == 'https://etfdb.com/etfs/country/us/':
+                    time.sleep(20)
+                else:
+                    time.sleep(10)
                 self.driver.quit()
                 # if successfully downloaded, no retries needed
                 retries = -1
@@ -53,9 +56,9 @@ class Download523TickersList(masterclass):
                 retries -= 1
                 self.driver.quit()
                 # send email on every failure
-                # emailobj = EmailSender()
-                # msg = emailobj.message(subject="Exception Occurred",
-                #                        text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
-                #                            traceback.format_exc()))
-                # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+                emailobj = EmailSender()
+                msg = emailobj.message(subject="Exception Occurred",
+                                       text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
+                                           traceback.format_exc()))
+                emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
                 pass

@@ -1,6 +1,8 @@
 import sys  # Remove in production - KTZ
-sys.path.append("..")  # Remove in production - KTZ
+import traceback
 
+sys.path.append("..")  # Remove in production - KTZ
+import pandas as pd
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 from ETFsList_Scripts.List523ETFsMongo import ETFListDocument
 from MongoDB.MongoDBConnections import MongoDBConnectors
@@ -21,12 +23,20 @@ class RelevantHoldings():
                 MongoDBConnectors().get_mongoengine_readWrite_production_production()
             else:
                 MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-            etflistdocument = ETFListDocument.objects().first()
-            # print(etflistdocument)
-            for etf in etflistdocument.etflist:
-                self.listofetfs.append(str(etf.Symbol))
-            # print(self.listofetfs)
+            # 1484 list
+            etfdf = pd.read_csv("/home/piyush/Downloads/etfs_details_type_fund_flow (4).csv")
+            etfdf.set_index('Symbol', inplace=True)
+            # above 1 billion list
+            etflist = [symbol for symbol in etfdf.index if float(etfdf.loc[symbol,'Total Assets '][1:].replace(',',''))>1000000000]
+            # 282 list
+            workingetflist = pd.read_csv('~/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage/WorkingETFs.csv').columns.to_list()
+            # final common list
+            self.listofetfs = list(set(etflist).union(set(workingetflist)))
+            print(self.listofetfs)
+            print(len(self.listofetfs))
+            return self.listofetfs
         except Exception as e:
+            traceback.print_exc()
             print("Can't Fetch Fund Holdings Data for all ETFs")
             print(e)
 
@@ -76,4 +86,4 @@ class RelevantHoldings():
 
 if __name__ == "__main__":
     non = RelevantHoldings().getAllNonChineseHoldingsETFs()
-    RelevantHoldings().write_to_csv(non)
+    RelevantHoldings().write_to_csv(non, 'Consolidated1blist.csv')
