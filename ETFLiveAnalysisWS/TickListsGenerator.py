@@ -6,7 +6,7 @@ import datetime
 
 class ListsCreator():
     def create_list_files(self):
-        workinglist = list(pd.read_csv("UpdatedWorkingETFs.csv").columns.values)
+        workinglist = list(pd.read_csv("WorkingETFs.csv").columns.values)
         holdingslist = []
         etfdicts = []
         for etfname in workinglist:

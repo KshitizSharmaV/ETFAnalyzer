@@ -60,7 +60,7 @@ def on_open(ws):
     # Subscribe to ticker data
     tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
     tickerlistStr = ','.join([''.join(['AM.', str(elem)]) for elem in tickerlist])
-    etflist = list(pd.read_csv("UpdatedWorkingETFs.csv").columns.values)
+    etflist = list(pd.read_csv("WorkingETFs.csv").columns.values)
     quotestickerlistStr = ','.join([''.join(['Q.', str(elem)]) for elem in etflist])
     subs_list = ','.join([tickerlistStr,quotestickerlistStr])
     print(subs_list)
