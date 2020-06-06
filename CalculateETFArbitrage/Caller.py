@@ -40,7 +40,8 @@ logger2.addHandler(handler2)
 
 etfwhichfailed = []
 # MAKE A LIST OF WORKING ETFs.
-workinglist = list(pd.read_csv("UpdatedWorkingETFs.csv").columns.values)
+workingdf = pd.read_csv("final365list.csv")
+workinglist = workingdf['Symbol'].to_list()
 print("List of working ETFs:")
 print(workinglist)
 print(len(workinglist))

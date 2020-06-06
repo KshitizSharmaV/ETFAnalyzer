@@ -41,9 +41,9 @@ class Download523TickersList(masterclass):
                 e = self.driver.find_element_by_xpath("//td/a[@class='btn btn-medium btn-primary' and 2]")
                 e.click()
                 if url == 'https://etfdb.com/etfs/country/us/':
-                    time.sleep(20)
+                    time.sleep(60)
                 else:
-                    time.sleep(10)
+                    time.sleep(30)
                 self.driver.quit()
                 # if successfully downloaded, no retries needed
                 retries = -1

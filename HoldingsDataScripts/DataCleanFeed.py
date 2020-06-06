@@ -62,6 +62,7 @@ class PullandCleanData:
                 # Read the holdings data from the CSV into DataFrame and Clean the data
                 self.holdingsdata = pd.read_csv(self.savingpath + '/' + x[etfname], header=12,
                                                 names=['Holdings', 'Symbol', 'Weights'])
+                self.holdingsdata['Symbol'] = self.holdingsdata['Symbol'].apply(lambda x: x.split(' ')[0])
                 self.holdingsdata['Weights'] = list(map(lambda x: x[:-1], self.holdingsdata['Weights'].values))
                 self.holdingsdata['Weights'] = [float(x) for x in self.holdingsdata['Weights'].values]
 

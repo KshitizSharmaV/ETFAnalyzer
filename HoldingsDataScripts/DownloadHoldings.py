@@ -105,7 +105,7 @@ class DownloadsEtfHoldingsData(masterclass):
                     el = self.driver.find_element_by_xpath(
                         '//input[@type="submit" and @value="Download Detailed ETF Holdings and Analytics"]')
                     el.click()  # clicks download button
-                    time.sleep(3)
+                    time.sleep(8)
                 else:
                     logger.error("Record for {} already present, Moving to next etf".format(etfname))
                 self.driver.quit()
