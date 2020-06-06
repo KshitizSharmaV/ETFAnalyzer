@@ -72,7 +72,6 @@ class App extends Component {
       <Route path="/HistoricalArbitrage" render={() => <HistoricalArbitrage startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />} />
       <Route path="/Live-Arbitrage-Single" render={() => <Live_Arbitrage_Single ETF={this.state.ETF} />} />
       <Route path="/Live-Arbitrage" render={() => <Live_Arbitrage ETF={this.state.ETF} />} />
-      <Route path="/Machine-Learning" render={ML} />
       <Route path="/SignUp" render={() => <SignUpFormPage />} />
       <Route path="/Login" render={SignInFormPage} />
       <Route path="/EmailVerification" render={() => <EmailVerification />} />
