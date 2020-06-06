@@ -234,84 +234,95 @@ def SendLiveArbitrageDataAllTickers():
 ############################################
 import time
 
-@app.route('/ETfLiveArbitrage/Single/<etfname>')
-def SendLiveArbitrageDataSingleTicker(etfname):
-    start_time = time.time()
+
+# Fetch Arbitrage & Price Data
+def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None):
     try:
         # Full day historical Prie for ETF
-        etf_full_day_price_cursor = PerMinDataOperations().FetchFullDayPricesForETF(etfname)
-        etf_full_day_price_data = []
-        [etf_full_day_price_data.append(item) for item in etf_full_day_price_cursor]
-        full_day_prices_df = pd.DataFrame.from_records(etf_full_day_price_data)
-        full_day_prices_df.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume','e': 'date'}, inplace=True)
-        full_day_prices_df.drop(columns=['Symbol'], inplace=True)
-        
+        PriceDF = FuncETFPrices(etfname)
         # Full day historical Arbitrage for ETF
-        full_day_data = PerMinDataOperations().FetchFullDayPerMinArbitrage(etfname=etfname)
-        data = []
-        [data.append({'Timestamp': item['Timestamp'], 'Symbol': item['ArbitrageData'][0]['Symbol'],
-                      'Arbitrage': item['ArbitrageData'][0]['Arbitrage'], 'Spread': item['ArbitrageData'][0]['Spread']})
-         for item in full_day_data]
-        full_day_data_df = pd.DataFrame.from_records(data)
-        mergedDF = full_day_data_df.merge(full_day_prices_df, left_on='Timestamp',right_on='date', how='left')
+        ArbitrageDF = FuncArbitrageData(etfname=etfname)
+        
+        mergedDF = ArbitrageDF.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
         mergedDF =mergedDF[['Symbol','Timestamp','Arbitrage','Spread','VWPrice','TickVolume']]
         mergedDF=mergedDF.round(5)
-        # Converting full_day_prices_df to human timestamp
+        
         helperObj=Helper()
-        full_day_prices_df['date'] = full_day_prices_df['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4))
-        print("Price Dataframe")
-        print(full_day_prices_df)
-
+        PriceDF['date'] = PriceDF['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4))
         mergedDF['Timestamp'] = mergedDF['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4)).time()))
-        print("Merged Dataframe")
-        print(mergedDF)
-
-
-        print("--- %s seconds ---" % (time.time() - start_time))
-        full_day_prices_df.to_csv("CheckData.csv")
-        return jsonify(Full_Day_Prices=full_day_prices_df[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=mergedDF.to_dict())
+        
+        #res=jsonify(Full_Day_Prices=PriceDF[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=mergedDF.to_dict())
+        res={}
+        res['Prices']=PriceDF[::-1]
+        res['Arbitrage']=mergedDF
+        return res
 
     except Exception as e:
         print("Issue in Flask app while fetching ETF Description Data")
         print(traceback.format_exc())
         return str(e)
+
+
+# Signal Analyzer
+def analyzeSignalPerformane(Arbitrage=None):
+    SignalInfo={}
+    # Check here for kind of ETF and adjust Sell or Buy Signal Accordingly
+    if Arbitrage==0:
+        SignalInfo['ETFStatus'] = 'Balanced'
+        SignalInfo['Signal'] = 'Hold'
+        SignalInfo['Strength'] = 'Weak'
+        return SignalInfo
+
+    elif Arbitrage<0:
+        SignalInfo['ETFStatus'] = 'Over Bought'
+        SignalInfo['Signal'] = 'Buy'
+
+    else:
+        SignalInfo['ETFStatus'] = 'Over Sold'
+        SignalInfo['Signal'] = 'Sell'
+
+    # Measurement of signal
+    absoluteArbitrage = abs(Arbitrage)
+    if absoluteArbitrage<0.05:
+        SignalInfo['Strength'] = 'Weak'
+    elif absoluteArbitrage<0.10:
+        SignalInfo['Strength'] = 'Good'
+    elif absoluteArbitrage<0.15:
+        SignalInfo['Strength'] = 'Strong'
+    elif absoluteArbitrage<0.15:
+        SignalInfo['Strength'] = '+ Strong'
+    elif absoluteArbitrage<0.20:
+        SignalInfo['Strength'] = '++ Strong'
+    else:
+        SignalInfo['Strength'] = '+++ Strong'
+
+    return SignalInfo
+
+def AnalyzeDaysPerformance(ArbitrageDf=None):
+    pass
+
+@app.route('/ETfLiveArbitrage/Single/<etfname>')
+def SendLiveArbitrageDataSingleTicker(etfname):
+    PerMinObj = PerMinDataOperations()
+    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage)
+    print(res['Prices'])
+    print(res['Arbitrage'])
+    res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
+    #res['DaysPerformance']=AnalyzeDaysPerformance(res['Arbitrage'])
+    res['Arbitrage']=res['Arbitrage'].to_dict()
+    return res
+
 
 @app.route('/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
-    start_time = time.time()
-    try:
-        # Last 1 min historical Price for ETF
-        etf_live_price_one_min_curosr = PerMinDataOperations().LiveFetchETFPrice(etfname=etfname)
-        temp = []
-        [temp.append(item) for item in etf_live_price_one_min_curosr]
-        liveETFprice_onemin = pd.DataFrame.from_records(temp)
-        liveETFprice_onemin.rename(columns={'sym': 'Symbol', 'vw': 'Price', 'e': 'Timestamp'}, inplace=True)
-        liveETFprice_onemin.drop(columns=['Symbol'], inplace=True)
-        print("Live Price 1 min")
-        print(liveETFprice_onemin)
-
-        # Last 1 min Arbitrga for ETF 
-        liveArbitrageData_onemin_cursor = PerMinDataOperations().LiveFetchPerMinArbitrage(etfname=etfname)
-        data = []
-        [data.append({'Timestamp': item['Timestamp'], 'Symbol': item['ArbitrageData'][0]['Symbol'],
-                      'Arbitrage': item['ArbitrageData'][0]['Arbitrage'], 'Spread': item['ArbitrageData'][0]['Spread']})
-         for item in liveArbitrageData_onemin_cursor]
-        liveArbitrageData_onemin = pd.DataFrame.from_records(data)
-        mergedDF = liveArbitrageData_onemin.merge(liveETFprice_onemin, on='Timestamp', how='left')
-        print("Merged Dataaframe")
-        print(mergedDF)
-        helperObj=Helper()
-        mergedDF['Timestamp'] = mergedDF['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4)).time()))
-
-        # return "Live: {}, Full_Day: {}".format(live_data_df.to_dict(), full_day_data_df.to_dict())
-        print("--- %s seconds ---" % (time.time() - start_time))
-        return jsonify(LivePrice=liveETFprice_onemin.to_dict(), LiveArbitrage=mergedDF.to_dict())
-
-    except Exception as e:
-        print("Issue in Flask app while fetching ETF Description Data")
-        print(traceback.format_exc())
-        return str(e)
-
+    PerMinObj = PerMinDataOperations()
+    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage)
+    print(res['Prices'])
+    print(res['Arbitrage'])
+    res['Prices']=res['Prices'].to_dict()
+    res['Arbitrage']=res['Arbitrage'].to_dict()
+    res['SignalInfo']=analyzeSignalPerformane(res['Arbitrage']['Arbitrage'][0])
+    return res
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
