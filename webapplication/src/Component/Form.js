@@ -115,9 +115,6 @@ class Former extends Component{
 	          <Nav.Item>
 	            <Nav.Link style={{color: 'white'}} as={Link} to="/Live-Arbitrage" eventKey="Live-Arbitrage">Live-Arbitrage</Nav.Link>
 	          </Nav.Item>
-	          <Nav.Item>
-	            <Nav.Link style={{color: 'white'}} as={Link} to="/Machine-Learning" eventKey="Machine-Learning">Machine-Learning</Nav.Link>
-	          </Nav.Item>
 	        </Nav>
 	      </Navbar>
 	      <Navbar className="bg-dark">

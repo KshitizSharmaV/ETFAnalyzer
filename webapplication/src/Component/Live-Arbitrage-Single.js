@@ -6,7 +6,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
+import { tsvParse, csvParse } from  "d3-dsv";
+import { timeParse } from "d3-time-format";
 
+import ChartComponent from './StockPriceChart';
 
 
 class Live_Arbitrage extends React.Component{
@@ -15,8 +18,14 @@ class Live_Arbitrage extends React.Component{
     }
 
     state ={
-        LiveData: {},
-        FullDay : {},
+        Full_Day_Arbitrage_Data: {},
+        Full_Day_Prices : '',
+        LivePrice:'',
+        LiveArbitrage:'',
+        LiveSpread:'',
+        LivePrice:'',
+        parseDate : timeParse("%Y-%m-%d %H:%M:%S"),
+        CurrentTime:''
     }
 
     componentDidMount() {
@@ -44,19 +53,19 @@ class Live_Arbitrage extends React.Component{
             axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
                 console.log(res);
                 this.setState({
-                    LiveData: res.data.Live,
-                    time: (new Date(res.data.Full_Day.Timestamp["0"])).toLocaleString(),
-                    FullDay: res.data.Full_Day,
+                    Full_Day_Arbitrage_Data: res.data.Full_Day_Arbitrage_Data,
+                    Full_Day_Prices: {'data':tsvParse(res.data.Full_Day_Prices, this.parseData(this.state.parseDate))}
                 });
-                console.log(this.state.FullDay);
+                console.log(this.state.Full_Day_Prices);
             });    
         }else{
             axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/UpdateTable/${this.props.ETF}`).then(res =>{
                 console.log(res);
                 this.setState({
-                    LiveData: res.data.Live,
-                    time: (new Date(res.data.Full_Day.Timestamp["0"])).toLocaleString(),
-                    FullDay: res.data.Full_Day,
+                    LiveArbitrage: res.data.LiveArbitrage.Arbitrage[0],
+                    LiveSpread: res.data.LiveArbitrage.Spread[0],
+                    Price: res.data.LiveArbitrage.Price[0],
+                    CurrentTime: res.data.LiveArbitrage.Timestamp[0],
                 });
                 console.log(this.state.FullDay);
             });    
@@ -69,25 +78,48 @@ class Live_Arbitrage extends React.Component{
             <Container fluid>
             <h4> Live Arbitrage </h4>
             <h5> {this.props.ETF} </h5>
-            <h5> {this.state.time} </h5>
             <br />
             <Row>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={3}>
                     <div className="DescriptionTable3">
-                        {
-                            (this.state.LiveData) ? <AppTable data={this.state.LiveData} /> : "Loadingg"
-                        }
+                        <LiveTable data={this.state.Full_Day_Arbitrage_Data} />
                     </div>
                 </Col>
+
+                <Col xs={12} md={3}>
+                    <div className="DescriptionTable3">
+                        <p>{this.state.CurrentTime}</p>
+                        <p>{this.state.LiveArbitrage}</p>
+                        <p>{this.state.LiveSpread}</p>
+                        <p>{this.state.Price}</p>
+                    </div>
+                </Col>
+
                 <Col xs={12} md={6}>
                     <div className="DescriptionTable3">
-                        <LiveTable data={this.state.FullDay} />
+                        <ChartComponent data={this.state.Full_Day_Prices} />
                     </div>
                 </Col>
             </Row>
         </Container>
         )
     }
+
+
+    // Parse Data For Stock Price Chart
+    parseData(parse) {
+        return function(d) {
+            d.date = parse(d.date);
+            d.open = +parseFloat(d.open);
+            d.high = +parseFloat(d.high);
+            d.low = +parseFloat(d.low);
+            d.close = +parseFloat(d.close);
+            d.volume = +parseInt(d.TickVolume);
+            
+            return d;
+        };
+    }
+
 }
 
 
@@ -96,8 +128,7 @@ const TableStyling = {
   };
 
 const LiveTable = (props) => {
-    //console.log(props.data);
-    if(props.data.Symbol == null){
+    if(props.data.Arbitrage==undefined){
         console.log(props.data);
         return "Loading";
     }
@@ -122,11 +153,11 @@ const LiveTable = (props) => {
             }
             return (
                 <tr key={index}>
-                    <td className={cls}>{new Date(props.data.Timestamp[key]).toLocaleTimeString()}</td>
+                    <td className={cls}>{props.data.Timestamp[key]}</td>
                     <td className={cls}>{props.data.Arbitrage[key]}</td>
                     <td>{props.data.Spread[key]}</td>
-                    <td>{props.data.Price[key]}</td>
-                    <td>{props.data.Symbol[key]}</td>
+                    <td>{props.data.VWPrice[key]}</td>
+                    <td>{props.data.TickVolume[key]}</td>
                 </tr>
             )
         })
@@ -141,7 +172,7 @@ const LiveTable = (props) => {
                 <td>Arbitrage</td>
                 <td>Spread</td>
                 <td>Price</td>
-                <td>Volume</td>
+                <td>TickVolume</td>
             </tr>
           </thead>
           <tbody>
