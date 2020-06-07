@@ -34,7 +34,8 @@ class Live_Arbitrage extends React.Component{
         // Signal
         ETFStatus:'',
         Signal:'',
-        SignalStrength:''
+        SignalStrength:'',
+        pnlstatementforday:''
     }
 
     componentDidMount() {
@@ -53,7 +54,8 @@ class Live_Arbitrage extends React.Component{
             console.log(res);
             this.setState({
                 Full_Day_Arbitrage_Data: res.data.Arbitrage,
-                Full_Day_Prices: {'data':tsvParse(res.data.Prices, this.parseData(this.state.parseDate))}
+                Full_Day_Prices: {'data':tsvParse(res.data.Prices, this.parseData(this.state.parseDate))},
+                pnlstatementforday: <AppTable data={res.data.pnlstatementforday}/>
             });
             console.log(this.state.Full_Day_Prices);
         });    
@@ -95,15 +97,14 @@ class Live_Arbitrage extends React.Component{
         return (
             <Container fluid>
             <Row className="mt-1">
-                <Col xs={12} md={3}>
+                <Col xs={12} md={4}>
                     <div className="DescriptionTable3">
                         <LiveTable data={this.state.Full_Day_Arbitrage_Data} />
                     </div>
                 </Col>
 
                 <Col xs={12} md={3}>
-                    <div className="DescriptionTable3">
-
+                    <div className="">
                         <span className="h4 pull-left pr-2">{this.props.ETF}</span>
                         H:<span className="text-muted">{this.state.HighPrice} </span>
                         O:<span className="text-muted">{this.state.OpenPrice} </span>
@@ -119,9 +120,14 @@ class Live_Arbitrage extends React.Component{
                         <div><span className="">Signal: {this.state.Signal}</span></div>
                         <div><span className="">Strength: {this.state.SignalStrength}</span></div>
                     </div>
+
+                    <div className="pt-3">
+                        {this.state.pnlstatementforday}
+                    </div>
+
                 </Col>
 
-                <Col xs={12} md={6}>
+                <Col xs={12} md={5}>
                     <div className="DescriptionTable3">
                         <ChartComponent data={this.state.Full_Day_Prices} />
                     </div>

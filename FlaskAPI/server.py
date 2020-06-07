@@ -16,7 +16,6 @@ import sys
 import getpass
 
 sys.path.append("..")
-from PolygonTickData.Helper import Helper
 app = Flask(__name__)
 
 CORS(app)
@@ -233,73 +232,8 @@ def SendLiveArbitrageDataAllTickers():
 # Live Arbitrage Single ETF
 ############################################
 import time
+from FlaskAPI.Components.LiveCalculations.helperLiveArbitrage import fecthArbitrageANDLivePrices, analyzeSignalPerformane, AnalyzeDaysPerformance
 
-
-# Fetch Arbitrage & Price Data
-def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None):
-    try:
-        # Full day historical Prie for ETF
-        PriceDF = FuncETFPrices(etfname)
-        # Full day historical Arbitrage for ETF
-        ArbitrageDF = FuncArbitrageData(etfname=etfname)
-        
-        mergedDF = ArbitrageDF.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        mergedDF =mergedDF[['Symbol','Timestamp','Arbitrage','Spread','VWPrice','TickVolume']]
-        mergedDF=mergedDF.round(5)
-        
-        helperObj=Helper()
-        PriceDF['date'] = PriceDF['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4))
-        mergedDF['Timestamp'] = mergedDF['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4)).time()))
-        
-        #res=jsonify(Full_Day_Prices=PriceDF[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=mergedDF.to_dict())
-        res={}
-        res['Prices']=PriceDF[::-1]
-        res['Arbitrage']=mergedDF
-        return res
-
-    except Exception as e:
-        print("Issue in Flask app while fetching ETF Description Data")
-        print(traceback.format_exc())
-        return str(e)
-
-
-# Signal Analyzer
-def analyzeSignalPerformane(Arbitrage=None):
-    SignalInfo={}
-    # Check here for kind of ETF and adjust Sell or Buy Signal Accordingly
-    if Arbitrage==0:
-        SignalInfo['ETFStatus'] = 'Balanced'
-        SignalInfo['Signal'] = 'Hold'
-        SignalInfo['Strength'] = 'Weak'
-        return SignalInfo
-
-    elif Arbitrage<0:
-        SignalInfo['ETFStatus'] = 'Over Bought'
-        SignalInfo['Signal'] = 'Buy'
-
-    else:
-        SignalInfo['ETFStatus'] = 'Over Sold'
-        SignalInfo['Signal'] = 'Sell'
-
-    # Measurement of signal
-    absoluteArbitrage = abs(Arbitrage)
-    if absoluteArbitrage<0.05:
-        SignalInfo['Strength'] = 'Weak'
-    elif absoluteArbitrage<0.10:
-        SignalInfo['Strength'] = 'Good'
-    elif absoluteArbitrage<0.15:
-        SignalInfo['Strength'] = 'Strong'
-    elif absoluteArbitrage<0.15:
-        SignalInfo['Strength'] = '+ Strong'
-    elif absoluteArbitrage<0.20:
-        SignalInfo['Strength'] = '++ Strong'
-    else:
-        SignalInfo['Strength'] = '+++ Strong'
-
-    return SignalInfo
-
-def AnalyzeDaysPerformance(ArbitrageDf=None):
-    pass
 
 @app.route('/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
@@ -309,6 +243,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     print(res['Arbitrage'])
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
     #res['DaysPerformance']=AnalyzeDaysPerformance(res['Arbitrage'])
+    res['pnlstatementforday'] = AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname)
     res['Arbitrage']=res['Arbitrage'].to_dict()
     return res
 

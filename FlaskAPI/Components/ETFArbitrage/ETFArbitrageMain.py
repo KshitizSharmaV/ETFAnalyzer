@@ -39,21 +39,10 @@ InverseSignal = ['FTEC']
 # Signal Type 1 : When 111 = Buy and -111 = Sell
 MaintainSignal = ['XLK','XLC','XLP']
 
-def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrageToFilterOn=0):
-	
+
+# Calcualte Arbitrage and other results for a df
+def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilterOn=0, BuildMomentumSignals=True, BuildPatternSignals=True, includeMovers=True, getScatterPlot=True):
 	arbitrageBuySellSignals = pd.DataFrame()
-	pricedf = pd.DataFrame()
-	
-	dateOfAnalysis=arbitrageDataFromMongo['dateOfAnalysis']
-	year=dateOfAnalysis.year
-	# Load Prices Data
-	pricedf=LoadETFPrices(arbitrageDataFromMongo['ETFName'],dateOfAnalysis,year,TradesData)
-	# Load Arbitrage Data
-	etfdata=LoadETFArbitrageData(arbitrageDataFromMongo['data'],dateOfAnalysis,year)
-
-	df=pd.merge(etfdata,pricedf,on='Time',how='left')
-	df=df.ffill(axis=0)
-
 	df['Magnitude of Arbitrage']=abs(df['ETF Trading Spread in $']-abs(df['Arbitrage in $']))
 	df['Over Bought/Sold'] = 0
 	a = (abs(df['Arbitrage in $']) > df['ETF Trading Spread in $'])
@@ -64,12 +53,15 @@ def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrage
 	df=df.set_index('Time')
 
 	# Build Signals
-	df=MomentumSignals(df,tp=10)
-	df=PatternSignals(df)
+	if BuildMomentumSignals:
+		df=MomentumSignals(df,tp=10)
+	if BuildPatternSignals:
+		df=PatternSignals(df)
 
 	columnsneeded=['ETF Trading Spread in $','Arbitrage in $','Magnitude of Arbitrage','Over Bought/Sold']
 	#columnsneeded=columnsneeded+MomentumsignalsColumns+CandlesignalsColumns+MajorUnderlyingMovers
-	columnsneeded=columnsneeded+MajorUnderlyingMovers
+	if includeMovers:
+		columnsneeded=columnsneeded+MajorUnderlyingMovers
 
 	etfOverBought = df.loc[df['Over Bought/Sold']== 111.0]
 	PNLSellPositionsT_1=0
@@ -95,12 +87,13 @@ def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrage
 		arbitrageBuySellSignals = arbitrageBuySellSignals.append(buyPositions)
 		PNLBuyPositionsT_1 =round(buyPositions['T+1'].sum(),2)
 
-	scatterPlotData=df[['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records')
-	pricedf.columns=['date','volume','open','close','high','low']
+	scatterPlotData=None
+	if getScatterPlot:
+		scatterPlotData=df[['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records')
 
 	# Dvision By ETF Type
 	# Some etfs have inverse signal, IF TRUE, than we stick with momentum and keep buying with it
-	if arbitrageDataFromMongo['ETFName'] in MaintainSignal:
+	if etfname in MaintainSignal:
 		pnlstatementforday = {'PNL% Sell Pos. (T+1)':-PNLBuyPositionsT_1,'PNL% Buy Pos. (T+1)':-PNLSellPositionsT_1,'Magnitue Of Arbitrage':0}
 		arbitrageBuySellSignals['Over Bought/Sold'] = arbitrageBuySellSignals['Over Bought/Sold'].map({-111.0: 'Sell', 111.0: 'Buy'})
 	else:
@@ -111,6 +104,27 @@ def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrage
 	resultDict=countRightSignals(arbitrageBuySellSignals)
 	pnlstatementforday={**pnlstatementforday,**resultDict}
 
+	return arbitrageBuySellSignals, pnlstatementforday, scatterPlotData
+
+
+# Collecs the data for arbitrage calculations
+def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrageToFilterOn=0):
+	etfname=arbitrageDataFromMongo['ETFName']
+	pricedf = pd.DataFrame()
+	
+	dateOfAnalysis=arbitrageDataFromMongo['dateOfAnalysis']
+	year=dateOfAnalysis.year
+	# Load Prices Data
+	pricedf=LoadETFPrices(etfname,dateOfAnalysis,year,TradesData)
+	# Load Arbitrage Data
+	etfdata=LoadETFArbitrageData(arbitrageDataFromMongo['data'],dateOfAnalysis,year)
+
+	df=pd.merge(etfdata,pricedf,on='Time',how='left')
+	df=df.ffill(axis=0)
+
+	arbitrageBuySellSignals, pnlstatementforday, scatterPlotData = calculateArbitrageResults(df=df, etfname=etfname, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
+
+	pricedf.columns=['date','volume','open','close','high','low']
 	return arbitrageBuySellSignals, pricedf, pnlstatementforday, scatterPlotData
 
 
