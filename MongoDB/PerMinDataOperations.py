@@ -36,9 +36,9 @@ class PerMinDataOperations():
         day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '09:00']),
                                                   '%Y-%m-%d %H:%M')
         # Testing Remove in prod
-        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(2)), '09:00']),
+        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(3)), '09:00']),
                                                   '%Y-%m-%d %H:%M')
-        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(1)), '08:00']),'%Y-%m-%d %H:%M')
+        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(2)), '08:00']),'%Y-%m-%d %H:%M')
         day_end_dt = int(day_end_dt.timestamp() * 1000)
         # Testing Remove in prod
 
@@ -61,8 +61,8 @@ class PerMinDataOperations():
     def FetchFullDayPricesForETF(self, etfname):
         day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '09:00']),'%Y-%m-%d %H:%M')
         # Testing Remove in prod
-        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(2)), '09:00']),'%Y-%m-%d %H:%M')
-        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(1)), '08:00']),'%Y-%m-%d %H:%M')
+        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(3)), '09:00']),'%Y-%m-%d %H:%M')
+        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(2)), '08:00']),'%Y-%m-%d %H:%M')
         day_end_dt = int(day_end_dt.timestamp() * 1000)
         # Testing Remove in prod
         day_start_ts = int(day_start_dt.timestamp() * 1000)

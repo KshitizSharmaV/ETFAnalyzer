@@ -232,7 +232,7 @@ def SendLiveArbitrageDataAllTickers():
 # Live Arbitrage Single ETF
 ############################################
 import time
-from FlaskAPI.Components.LiveCalculations.helperLiveArbitrage import fecthArbitrageANDLivePrices, analyzeSignalPerformane, AnalyzeDaysPerformance
+from FlaskAPI.Components.LiveCalculations.helperLiveArbitrage import fecthArbitrageANDLivePrices, analyzeSignalPerformane, AnalyzeDaysPerformance, CategorizeSignals
 
 
 @app.route('/ETfLiveArbitrage/Single/<etfname>')
@@ -244,7 +244,8 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
     #res['DaysPerformance']=AnalyzeDaysPerformance(res['Arbitrage'])
     res['pnlstatementforday'] = AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname)
-    res['Arbitrage']=res['Arbitrage'].to_dict()
+    res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage']).to_dict()
+    res['Arbitrage'] = res['Arbitrage'].to_dict()
     return res
 
 
