@@ -205,22 +205,13 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 
 @app.route('/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
-    req = request.__dict__['environ']['REQUEST_URI']
     try:
-        live_data = PerMinDataOperations().FetchPerMinLiveData()
-        live_prices = PerMinDataOperations().FetchAllETFPricesLive()
-
-        live_prices_data = []
-        [live_prices_data.append(item) for item in live_prices]
-
-        data2 = []
-        [data2.extend(item['ArbitrageData']) for item in live_data]
-
-        prices_df = pd.DataFrame.from_records(live_prices_data)
-        prices_df.rename(columns={'sym': 'Symbol', 'vw': 'Price', 'e': 'Timestamp'}, inplace=True)
-        df = pd.DataFrame.from_records(data2)
-        ndf = df.merge(prices_df, how='left', on='Symbol')
+        live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
+        live_prices = PerMinDataOperations().LiveFetchETFPrice()
+        ndf = live_data.merge(live_prices, how='left', on='Symbol')
         ndf.dropna(inplace=True)
+        ndf=ndf.round(4)
+        print(ndf)
         return ndf.to_dict()
     except Exception as e:
         print("Issue in Flask app while fetching ETF Description Data")
@@ -244,7 +235,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
     #res['DaysPerformance']=AnalyzeDaysPerformance(res['Arbitrage'])
     res['pnlstatementforday'] = AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname)
-    res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage']).to_dict()
+    res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'])
     res['Arbitrage'] = res['Arbitrage'].to_dict()
     return res
 
@@ -253,6 +244,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage)
+    
     print(res['Prices'])
     print(res['Arbitrage'])
     res['Prices']=res['Prices'].to_dict()

@@ -88,22 +88,26 @@ class PerMinDataOperations():
         print(dt)
         dt_ts = int(dt.timestamp() * 1000)
         print(dt_ts)
+        # Data for 1 ticker
+        data = []
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts, "ArbitrageData.Symbol": etfname},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
+            [data.append({'Timestamp': item['Timestamp'], 
+                'Symbol': item['ArbitrageData'][0]['Symbol'],
+                'Arbitrage': item['ArbitrageData'][0]['Arbitrage'], 
+                'Spread': item['ArbitrageData'][0]['Spread']})
+                for item in live_per_min_cursor]
+        # Data For Multiple Ticker for live minute
         else:
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData": 1})
-
-        data = []
-        [data.append({'Timestamp': item['Timestamp'], 'Symbol': item['ArbitrageData'][0]['Symbol'],
-                      'Arbitrage': item['ArbitrageData'][0]['Arbitrage'], 'Spread': item['ArbitrageData'][0]['Spread']})
-         for item in live_per_min_cursor]
+            [data.extend(item['ArbitrageData']) for item in live_per_min_cursor]
+             
         liveArbitrageData_onemin = pd.DataFrame.from_records(data)
         
-
         return liveArbitrageData_onemin
 
     # LIVE 1 Min prices for 1 or all etf
@@ -120,7 +124,8 @@ class PerMinDataOperations():
         [temp.append(item) for item in etf_live_prices_cursor]
         livePrices = pd.DataFrame.from_records(temp)
         livePrices.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
-        livePrices.drop(columns=['Symbol'], inplace=True)
+        if etfname:
+            livePrices.drop(columns=['Symbol'], inplace=True)
         return livePrices
 
     
