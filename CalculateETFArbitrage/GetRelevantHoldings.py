@@ -23,18 +23,22 @@ class RelevantHoldings():
                 MongoDBConnectors().get_mongoengine_readWrite_production_production()
             else:
                 MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-            # 1484 list
-            etfdf = pd.read_csv("/home/piyush/Downloads/etfs_details_type_fund_flow (4).csv")
-            etfdf.set_index('Symbol', inplace=True)
-            # above 1 billion list
-            etflist = [symbol for symbol in etfdf.index if float(etfdf.loc[symbol,'Total Assets '][1:].replace(',',''))>1000000000]
-            # 282 list
-            workingetflist = pd.read_csv('~/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage/WorkingETFs.csv').columns.to_list()
-            # final common list
-            self.listofetfs = list(set(etflist).union(set(workingetflist)))
+            # if self.system_username == 'ubuntu':
+            #     MongoDBConnectors().get_mongoengine_readWrite_production_production()
+            # else:
+            #     MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+            # etflistdocument = ETFListDocument.objects().order_by('-Download_date').first()
+            # # print(etflistdocument)
+            # self.listofetfs = [str(etf.Symbol) for etf in etflistdocument.etflist]
+            # print(self.listofetfs)
+            # print(len(self.listofetfs))
+            etfdf = pd.read_csv("final365list.csv")
+            self.listofetfs = etfdf['Symbol']
             print(self.listofetfs)
             print(len(self.listofetfs))
             return self.listofetfs
+
+
         except Exception as e:
             traceback.print_exc()
             print("Can't Fetch Fund Holdings Data for all ETFs")
@@ -86,4 +90,4 @@ class RelevantHoldings():
 
 if __name__ == "__main__":
     non = RelevantHoldings().getAllNonChineseHoldingsETFs()
-    RelevantHoldings().write_to_csv(non, 'Consolidated1blist.csv')
+    RelevantHoldings().write_to_csv(non, 'NonChineseETFs.csv')
