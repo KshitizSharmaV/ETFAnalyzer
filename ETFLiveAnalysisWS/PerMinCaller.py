@@ -87,7 +87,7 @@ if __name__=='__main__':
     ListsCreator().create_list_files()
     print("Tick Lists Generated")
     tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
-    etflist = list(pd.read_csv("WorkingETFs.csv").columns.values)
+    etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
     ArbCalcObj = ArbPerMin()
     PerMinAnlysObj = PerMinAnalysis()
     schedule.every().minute.at(":10").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)

@@ -44,7 +44,9 @@ dates = ['2020-04-01', '2020-04-02', '2020-04-15', '2020-04-16', '2020-04-27', '
 for date in dates:
     etfwhichfailed = []
     # MAKE A LIST OF WORKING ETFs.
-    workinglist = list(pd.read_csv("WorkingETFs.csv").columns.values)
+    workingdf = pd.read_csv("NonChineseETFs.csv")
+    # workinglist = workingdf['Symbol'].to_list()
+    workinglist = workingdf.columns.to_list()
     print("List of working ETFs:")
     print(workinglist)
     print(len(workinglist))
@@ -91,11 +93,11 @@ for date in dates:
             traceback.print_exc()
             logger.exception(e)
             logger2.exception(e)
-            emailobj = EmailSender()
-            msg = emailobj.message(subject="Exception Occurred",
-                                   text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/MultipleDatesCaller.py {}".format(
-                                       traceback.format_exc()))
-            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # emailobj = EmailSender()
+            # msg = emailobj.message(subject="Exception Occurred",
+            #                        text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/MultipleDatesCaller.py {}".format(
+            #                            traceback.format_exc()))
+            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             continue
     if len(etfwhichfailed) > 0:
         RelevantHoldings().write_to_csv(etfwhichfailed, "etfwhichfailed.csv")
