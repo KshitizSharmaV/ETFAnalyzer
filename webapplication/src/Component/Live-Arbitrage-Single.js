@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import AppTable from './Table.js';
 import Table from 'react-bootstrap/Table';
-import '../static/css/Description.css';
+import '../static/css/Live_Arbitrage.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import { tsvParse, csvParse } from  "d3-dsv";
 import { timeParse } from "d3-time-format";
-
+import Card from 'react-bootstrap/Card'
 import ChartComponent from './StockPriceChart';
 
 
@@ -20,12 +20,23 @@ class Live_Arbitrage extends React.Component{
     state ={
         Full_Day_Arbitrage_Data: {},
         Full_Day_Prices : '',
-        LivePrice:'',
+        
         LiveArbitrage:'',
         LiveSpread:'',
-        LivePrice:'',
+        // Prices
+        LiveVWPrice:'',
+        OpenPrice:'',
+        ClosePrice:'',
+        HighPrice:'',
+        LowPrice:'',
         parseDate : timeParse("%Y-%m-%d %H:%M:%S"),
-        CurrentTime:''
+        CurrentTime:'',
+        // Signal
+        ETFStatus:'',
+        Signal:'',
+        SignalStrength:'',
+        pnlstatementforday:'',
+        LiveColor:'',
     }
 
     componentDidMount() {
@@ -38,64 +49,98 @@ class Live_Arbitrage extends React.Component{
         }
     }
 
-    fetchETFLiveData(newEtfWasRequested){
-        this.UpdateArbitragDataTables(newEtfWasRequested)
+    fetchETFLiveData(){
+        // Load the Historical Arbitrgae Data for Today 
+        axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
+            console.log(res);
+            this.setState({
+                Full_Day_Arbitrage_Data: res.data.Arbitrage,
+                Full_Day_Prices: {'data':tsvParse(res.data.Prices, this.parseData(this.state.parseDate))},
+                pnlstatementforday: <AppTable data={res.data.pnlstatementforday}/>,
+                SignalCategorization: <AppTable data={res.data.SignalCategorization}/>,
+
+            });
+            console.log(this.state.Full_Day_Prices);
+        });    
+        // Immediately Load the current Live arbitrage Data
+        this.UpdateArbitragDataTables(false)
+
+        // Does Iterative calls
         setInterval(() => {
             if ((new Date()).getSeconds() == 13){
-                this.UpdateArbitragDataTables(false)
+                this.UpdateArbitragDataTables(true)
             }
         }, 1000)
     }
 
-    UpdateArbitragDataTables(newEtfWasRequested){
-        console.log(newEtfWasRequested);
-        if(newEtfWasRequested){
-            axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
-                console.log(res);
+    UpdateArbitragDataTables(appendToPreviousTable){
+        axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/UpdateTable/${this.props.ETF}`).then(res =>{
+            console.log(res);
+            if(appendToPreviousTable){
+                console.log("Append To Previous table");
+            }else{
                 this.setState({
-                    Full_Day_Arbitrage_Data: res.data.Full_Day_Arbitrage_Data,
-                    Full_Day_Prices: {'data':tsvParse(res.data.Full_Day_Prices, this.parseData(this.state.parseDate))}
+                    LiveArbitrage: res.data.Arbitrage.Arbitrage[0],
+                    LiveSpread: res.data.Arbitrage.Spread[0],
+                    CurrentTime: res.data.Arbitrage.Timestamp[0],
+                    LiveVWPrice: res.data.Prices.VWPrice[0],
+                    OpenPrice: res.data.Prices.open[0],
+                    ClosePrice: res.data.Prices.close[0],
+                    HighPrice: res.data.Prices.high[0],
+                    LowPrice: res.data.Prices.low[0],
+                    ETFStatus: res.data.SignalInfo.ETFStatus,
+                    Signal: res.data.SignalInfo.Signal,
+                    SignalStrength: res.data.SignalInfo.Strength,
+                    LiveColor: res.data.Arbitrage.Arbitrage[0]<0 ? 'text-success':res.data.Arbitrage.Arbitrage[0]==0? 'text-muted':'text-danger'
                 });
-                console.log(this.state.Full_Day_Prices);
-            });    
-        }else{
-            axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/UpdateTable/${this.props.ETF}`).then(res =>{
-                console.log(res);
-                this.setState({
-                    LiveArbitrage: res.data.LiveArbitrage.Arbitrage[0],
-                    LiveSpread: res.data.LiveArbitrage.Spread[0],
-                    Price: res.data.LiveArbitrage.Price[0],
-                    CurrentTime: res.data.LiveArbitrage.Timestamp[0],
-                });
-                console.log(this.state.FullDay);
-            });    
-        }
-        
+            }
+        });    
     }
 
     render(){
         return (
             <Container fluid>
-            <h4> Live Arbitrage </h4>
-            <h5> {this.props.ETF} </h5>
-            <br />
-            <Row>
-                <Col xs={12} md={3}>
-                    <div className="DescriptionTable3">
+            <Row className="mt-1">
+                <Col xs={12} md={4}>
+                    <div className="LiveArbitrageTable">
                         <LiveTable data={this.state.Full_Day_Arbitrage_Data} />
                     </div>
                 </Col>
 
                 <Col xs={12} md={3}>
-                    <div className="DescriptionTable3">
-                        <p>{this.state.CurrentTime}</p>
-                        <p>{this.state.LiveArbitrage}</p>
-                        <p>{this.state.LiveSpread}</p>
-                        <p>{this.state.Price}</p>
+                    <div className="">
+                        <Card>
+                            <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>
+                                <span className="h4 pull-left pr-2">{this.props.ETF}</span>
+                                H: <span className="text-muted">{this.state.HighPrice} </span>
+                                O: <span className="text-muted">{this.state.OpenPrice} </span>
+                                C: <span className="text-muted">{this.state.ClosePrice} </span>
+                                L: <span className="text-muted">{this.state.LowPrice} </span>
+                                <div>Time: <span className="text-muted">{this.state.CurrentTime}</span></div>
+                            </Card.Header>
+                        
+                              <Card.Body>
+                                <div><h5><span className={this.state.LiveColor}>ETF Status: {this.state.ETFStatus}</span></h5></div>
+                                <div><h5><span className={this.state.LiveColor}>Signal: {this.state.Signal}</span></h5></div>
+                                <div><span className={this.state.LiveColor}>Strength: {this.state.SignalStrength}</span></div>
+
+                                <div><span className="">$ Arbitrage: {this.state.LiveArbitrage}</span></div>
+                                <div><span className="">$ Spread: {this.state.LiveSpread}</span></div>    
+                              </Card.Body>
+                        </Card>
                     </div>
+
+                    <div className="pt-3">
+                        {this.state.pnlstatementforday}
+                    </div>
+
+                    <div className="pt-3">
+                        {this.state.SignalCategorization}
+                    </div>
+
                 </Col>
 
-                <Col xs={12} md={6}>
+                <Col xs={12} md={5}>
                     <div className="DescriptionTable3">
                         <ChartComponent data={this.state.Full_Day_Prices} />
                     </div>

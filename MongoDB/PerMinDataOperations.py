@@ -1,6 +1,6 @@
 import datetime
 from MongoDB.Schemas import trade_per_min_WS_motor, trade_per_min_WS, quotesWS_collection, arbitrage_per_min
-
+import pandas as pd
 
 class PerMinDataOperations():
 
@@ -36,9 +36,9 @@ class PerMinDataOperations():
         day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '09:00']),
                                                   '%Y-%m-%d %H:%M')
         # Testing Remove in prod
-        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(1)), '09:00']),
+        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(3)), '09:00']),
                                                   '%Y-%m-%d %H:%M')
-        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '08:00']),'%Y-%m-%d %H:%M')
+        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(2)), '08:00']),'%Y-%m-%d %H:%M')
         day_end_dt = int(day_end_dt.timestamp() * 1000)
         # Testing Remove in prod
 
@@ -46,21 +46,36 @@ class PerMinDataOperations():
         full_day_data_cursor = arbitrage_per_min.find(
             {"Timestamp": {"$gte": day_start_ts,"$lt":day_end_dt}, "ArbitrageData.Symbol": etfname},
             {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
-        return full_day_data_cursor
+
+        data = []
+        [data.append({'Timestamp': item['Timestamp'], 'Symbol': item['ArbitrageData'][0]['Symbol'],
+                      'Arbitrage': item['ArbitrageData'][0]['Arbitrage'], 'Spread': item['ArbitrageData'][0]['Spread']})
+         for item in full_day_data_cursor]
+        full_day_data_df = pd.DataFrame.from_records(data)
+        
+
+        return full_day_data_df
 
 
     # Full full  day prices for 1 etf
     def FetchFullDayPricesForETF(self, etfname):
         day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '09:00']),'%Y-%m-%d %H:%M')
         # Testing Remove in prod
-        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(1)), '09:00']),'%Y-%m-%d %H:%M')
-        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '08:00']),'%Y-%m-%d %H:%M')
+        day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(3)), '09:00']),'%Y-%m-%d %H:%M')
+        day_end_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()-datetime.timedelta(2)), '08:00']),'%Y-%m-%d %H:%M')
         day_end_dt = int(day_end_dt.timestamp() * 1000)
         # Testing Remove in prod
         day_start_ts = int(day_start_dt.timestamp() * 1000)
         full_day_prices_etf_cursor = trade_per_min_WS.find({"e": {"$gte": day_start_ts,"$lt":day_end_dt}, "sym": etfname},
                                                            {"_id": 0, "sym": 1, "vw": 1,"o":1,"c":1,"h":1,"l":1,"v":1,"e": 1})
-        return full_day_prices_etf_cursor
+        
+        temp = []
+        [temp.append(item) for item in full_day_prices_etf_cursor]
+        livePrices = pd.DataFrame.from_records(temp)
+        livePrices.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
+        livePrices.drop(columns=['Symbol'], inplace=True)
+        
+        return livePrices
 
     #################################
     # Live Arbitrage & Price for 1 or all ETF
@@ -73,16 +88,27 @@ class PerMinDataOperations():
         print(dt)
         dt_ts = int(dt.timestamp() * 1000)
         print(dt_ts)
+        # Data for 1 ticker
+        data = []
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts, "ArbitrageData.Symbol": etfname},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
+            [data.append({'Timestamp': item['Timestamp'], 
+                'Symbol': item['ArbitrageData'][0]['Symbol'],
+                'Arbitrage': item['ArbitrageData'][0]['Arbitrage'], 
+                'Spread': item['ArbitrageData'][0]['Spread']})
+                for item in live_per_min_cursor]
+        # Data For Multiple Ticker for live minute
         else:
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData": 1})
-
-        return live_per_min_cursor
+            [data.extend(item['ArbitrageData']) for item in live_per_min_cursor]
+             
+        liveArbitrageData_onemin = pd.DataFrame.from_records(data)
+        
+        return liveArbitrageData_onemin
 
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):
@@ -90,10 +116,17 @@ class PerMinDataOperations():
         dt = datetime.datetime(2020, 6, 4, 15, 59)
         dt_ts = int(dt.timestamp() * 1000)
         if etfname:
-            etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts,"sym": etfname}, {"_id": 0, "sym": 1, "vw": 1, "e": 1})
+            etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts,"sym": etfname}, {"_id": 0, "sym": 1, "vw": 1,"o":1,"c":1,"h":1,"l":1,"v":1, "e": 1})
         else:
             etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts}, {"_id": 0, "sym": 1, "vw": 1,"o":1,"c":1,"h":1,"l":1,"v":1, "e": 1})
-        return etf_live_prices_cursor
+        
+        temp = []
+        [temp.append(item) for item in etf_live_prices_cursor]
+        livePrices = pd.DataFrame.from_records(temp)
+        livePrices.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
+        if etfname:
+            livePrices.drop(columns=['Symbol'], inplace=True)
+        return livePrices
 
     
     
