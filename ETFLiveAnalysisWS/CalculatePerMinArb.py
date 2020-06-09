@@ -2,7 +2,8 @@ import json
 import sys, traceback
 
 # For Piyush System
-sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer', '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
+sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/HoldingsDataScripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/CommonServices',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage'])
@@ -83,25 +84,25 @@ class ArbPerMin():
                         self.trade_dict[symbol] = trade_obj
                 else:
                     # If ticker data not in last minute response
-                    try:
-                        if ticker in self.etflist:
-                            dt_query = datetime.datetime.now().replace(second=0, microsecond=0)
-                            dt_query_ts = int(dt_query.timestamp() * 1000)
-                            last_recvd_data_for_ticker = trade_per_min_WS.find(
-                                {"e": {"$lte": dt_query_ts}, "sym": ticker}).sort("e", -1).limit(1)
-                            x = [{legend: (
-                                item[legend] if legend in item.keys() and legend in ['ev', 'sym', 'v', 'av', 'op', 'vw',
-                                                                                     'o', 'c', 'h', 'l', 'a'] else (
-                                    dt_query_ts - 60000 if legend == 's' else dt_query_ts)) for legend in
-                                  ['ev', 'sym', 'v', 'av', 'op', 'vw', 'o', 'c', 'h', 'l', 'a', 's', 'e']} for item in
-                                 last_recvd_data_for_ticker]
-                            # for dict_data in x:
-                            #     dict_data.update({"s": dt_query_ts - 60000, "e": dt_query_ts})
-                            unreceived_data.extend(x)
-                    except Exception as e:
-                        print("Exception in CalculatePerMinArb.py at line 84")
-                        print(e)
-                        traceback.print_exc()
+                    # try:
+                    #     if ticker in self.etflist:
+                    #         dt_query = datetime.datetime.now().replace(second=0, microsecond=0)
+                    #         dt_query_ts = int(dt_query.timestamp() * 1000)
+                    #         last_recvd_data_for_ticker = trade_per_min_WS.find(
+                    #             {"e": {"$lte": dt_query_ts}, "sym": ticker}).sort("e", -1).limit(1)
+                    #         x = [{legend: (
+                    #             item[legend] if legend in item.keys() and legend in ['ev', 'sym', 'v', 'av', 'op', 'vw',
+                    #                                                                  'o', 'c', 'h', 'l', 'a'] else (
+                    #                 dt_query_ts - 60000 if legend == 's' else dt_query_ts)) for legend in
+                    #               ['ev', 'sym', 'v', 'av', 'op', 'vw', 'o', 'c', 'h', 'l', 'a', 's', 'e']} for item in
+                    #              last_recvd_data_for_ticker]
+                    #         # for dict_data in x:
+                    #         #     dict_data.update({"s": dt_query_ts - 60000, "e": dt_query_ts})
+                    #         unreceived_data.extend(x)
+                    # except Exception as e:
+                    #     print("Exception in CalculatePerMinArb.py at line 84")
+                    #     print(e)
+                    #     traceback.print_exc()
                     symbol = ticker
                     if symbol in self.trade_dict.keys():
                         priceT_1 = self.trade_dict[symbol].priceT
@@ -113,6 +114,7 @@ class ArbPerMin():
 
             self.tradedf = pd.DataFrame([value.__dict__ for key, value in self.trade_dict.items()])
             self.arbdict = {}
+
             self.tradedf.set_index('symbol', inplace=True)
             for etf in self.etfdict:
                 for etfname, holdingdata in etf.items():
@@ -122,12 +124,33 @@ class ArbPerMin():
                         # NAV change % Calculation
                         holdingsdf = pd.DataFrame(*[holdings for holdings in holdingdata])
                         holdingsdf.set_index('symbol', inplace=True)
-                        nav = sum([holdingsdf.loc[sym, 'weight'] * self.tradedf.loc[sym, 'price_pct_chg'] for sym in
-                                   holdingsdf.index])
+                        # holdingsdf contains Weights corresponding to each holding
+                        navdf = self.tradedf.mul(holdingsdf['weight'], axis=0)['price_pct_chg'].dropna()
+                        # nav = sum([holdingsdf.loc[sym, 'weight'] * self.tradedf.loc[sym, 'price_pct_chg'] for sym in
+                        #            holdingsdf.index])
+                        nav = navdf.sum()
                         # nav = NAV change %
+                        # Top 10 Movers and Price Changes
+                        if len(navdf) >= 10:
+                            abs_navdf = navdf.abs().sort_values(ascending=False)
+                            moverdict = navdf.loc[abs_navdf.index][:10].to_dict()
+                            moverlist = [(item, moverdict[item]) for item in moverdict]
+                            abs_tradedf = self.tradedf['price_pct_chg'].abs().sort_values(ascending=False)
+                            changedict = abs_tradedf[:10].to_dict()
+                            changelist = [(item, changedict[item]) for item in changedict]
+                        # If less than 10 Holdings, Top Movers and Price Changes
+                        else:
+                            abs_navdf = navdf.abs().sort_values(ascending=False)
+                            moverdict = navdf.loc[abs_navdf.index][:].to_dict()
+                            moverlist = [(item, moverdict[item]) for item in moverdict]
+                            abs_tradedf = self.tradedf['price_pct_chg'].abs().sort_values(ascending=False)
+                            changedict = abs_tradedf[:].to_dict()
+                            changelist = [(item, changedict[item]) for item in changedict]
+
                         etfprice = self.tradedf.loc[etfname, 'priceT']
                         arbitrage = ((etfchange - nav) * etfprice) / 100
-                        self.arbdict.update({etfname: arbitrage})
+                        self.arbdict.update({etfname: {'Arbitrage': arbitrage, 'ETF Price': etfprice,
+                                                       'ETF Change Price %': etfchange, 'Net Asset Value Change%': nav, 'Movers':moverlist, 'Change':changelist}})
                     except Exception as e:
                         # print(e)
                         traceback.print_exc(file=sys.stdout)
@@ -139,9 +162,9 @@ class ArbPerMin():
         end = time.time()
         print("Calculation time: {}".format(end - start))
         print(unreceived_data)
-        trade_per_min_WS.insert_many(unreceived_data)
+        # trade_per_min_WS.insert_many(unreceived_data)
         return self.arbdict
 
 
 if __name__ == '__main__':
-    print(ArbPerMin().calcArbitrage())
+    print(ArbPerMin().calcArbitrage(tickerlist=list(pd.read_csv("tickerlist.csv").columns.values)))

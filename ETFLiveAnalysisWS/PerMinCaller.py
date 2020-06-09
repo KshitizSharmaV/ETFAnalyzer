@@ -33,7 +33,7 @@ class PerMinAnalysis():
         # ETF Arbitrage Calculation
         #######################################################
         startarb = time.time()
-        arbDF = pd.DataFrame.from_dict(obj.calcArbitrage(tickerlist), orient='index', columns=['Arbitrage'])
+        arbDF = pd.DataFrame.from_dict(obj.calcArbitrage(tickerlist), orient='index')
         endarb = time.time()
         print("Arbitrage time: {}".format(endarb - startarb))
         #######################################################
@@ -73,9 +73,14 @@ class PerMinAnalysis():
         print(spreadDF)
         mergeDF = arbDF.merge(spreadDF, how='outer', left_index=True, right_index=True)
         print("Merged DF:")
-        print(mergeDF)
+        # print(mergeDF)
         mergeDF.reset_index(inplace=True)
         mergeDF.rename(columns={"index":"Symbol"}, inplace=True)
+        cols = list(mergeDF.columns)
+        cols = [cols[0]] + [cols[-1]] + cols[1:-1]
+        mergeDF = mergeDF[cols]
+        print("Saving following DF:")
+        print(mergeDF)
         SaveCalculatedArbitrage().insertIntoPerMinCollection(end_ts=end_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
         endtime = time.time()
         print("One whole Cycle time : {}".format(endtime - starttime))
@@ -84,7 +89,7 @@ class PerMinAnalysis():
 # Execution part. To be same from wherever PerMinAnalysisCycle() is called.
 if __name__=='__main__':
     # Below 3 Objects' life to be maintained throughout the day while market is open
-    ListsCreator().create_list_files()
+    # ListsCreator().create_list_files()
     print("Tick Lists Generated")
     tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
     etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
