@@ -1,366 +1,362 @@
-Symbol,ETF Name
-QQQ,Invesco QQQ
-VGT,Vanguard Information Technology ETF
-XLK,Technology Select Sector SPDR Fund
-VNQ,Vanguard Real Estate Index Fund
-XLV,Health Care Select Sector SPDR Fund
-XLF,Financial Select Sector SPDR Fund
-XLP,Consumer Staples Select Sector SPDR Fund
-XLY,Consumer Discretionary Select Sector SPDR Fund
-XLU,Utilities Select Sector SPDR Fund
-XLE,Energy Select Sector SPDR Fund
-VHT,Vanguard Healthcare ETF
-XLC,Communication Services Select Sector SPDR Fund
-IBB,iShares Nasdaq Biotechnology ETF
-FDN,First Trust Dow Jones Internet Index
-XLI,Industrial Select Sector SPDR Fund
-IHI,iShares U.S. Medical Devices ETF
-VFH,Vanguard Financials ETF
-IYW,iShares U.S. Technology ETF
-VDC,Vanguard Consumer Staples ETF
-XLB,Materials Select Sector SPDR ETF
-SCHH,Schwab US REIT ETF
-AMLP,Alerian MLP ETF
-XBI,SPDR S&P Biotech ETF
-XLRE,Real Estate Select Sector SPDR Fund
-IGV,iShares Expanded Tech-Software Sector ET
-VPU,Vanguard Utilities ETF
-SKYY,First Trust ISE Cloud Computing Index Fund
-FTEC,Fidelity MSCI Information Technology Index ETF
-IXN,iShares Global Tech ETF
-VDE,Vanguard Energy ETF
-ITA,iShares U.S. Aerospace & Defense ETF
-IYR,iShares U.S. Real Estate ETF
-VCR,Vanguard Consumer Discretionary ETF
-SOXX,iShares PHLX Semiconductor ETF
-VIS,Vanguard Industrial ETF
-QTEC,First Trust NASDAQ 100 Technology
-XT,iShares Exponential Technologies ETF
-VOX,Vanguard Communication Services ETF
-IYH,iShares U.S. Healthcare ETF
-IGM,iShares Expanded Tech Sector ETF
-IXJ,iShares Global Healthcare ETF
-XOP,SPDR S&P Oil & Gas Exploration & Production ETF
-FBT,First Trust Amex Biotechnology Index
-SMH,VanEck Vectors Semiconductor ETF
-FXL,First Trust Technology AlphaDEX Fund
-FHLC,Fidelity MSCI Health Care Index ETF
-ICF,iShares Cohen & Steers REIT ETF
-FXH,First Trust Health Care AlphaDEX Fund
-CIBR,First Trust NASDAQ CEA Cybersecurity ETF
-RYT,Invesco S&P 500® Equal Weight Technology ETF
-VAW,Vanguard Materials ETF
-XAR,SPDR S&P Aerospace & Defense ETF
-RWR,SPDR Dow Jones REIT ETF
-TECL,Direxion Daily Technology Bull 3X Shares
-ITB,iShares U.S. Home Construction ETF
-KBE,SPDR S&P Bank ETF
-IEV,iShares Europe ETF
-SOXL,Direxion Daily Semiconductor Bull 3x Shares
-IYF,iShares U.S. Financials ETF
-IYG,iShares U.S. Financial Services ETF
-TDIV,First Trust NASDAQ Technology Dividend Index Fund
-KRE,SPDR S&P Regional Banking ETF
-ARKG,ARK Genomic Revolution Multi-Sector ETF
-PHO,Invesco Water Resources ETF
-BBRE,JPMorgan BetaBuilders MSCI US REIT ETF
-FREL,Fidelity MSCI Real Estate Index ETF
-NUGT,Direxion Daily Gold Miners Bull 2X Shares
-IYC,iShares US Consumer Services ETF
-IHF,iShares U.S. Healthcare Providers ETF
-FUTY,Fidelity MSCI Utilities Index ETF
-IDU,iShares U.S. Utilities ETF
-REM,iShares Mortgage Real Estate ETF
-FXU,First Trust Utilities AlphaDEX Fund
-XHB,SPDR S&P Homebuilders ETF
-FNCL,Fidelity MSCI Financials Index ETF
-PPA,Invesco Aerospace & Defense ETF
-IYJ,iShares U.S. Industrials ETF
-RYH,Invesco S&P 500® Equal Weight Health Care ETF
-MLPA,Global X MLP ETF
-FDIS,Fidelity MSCI Consumer Discretionary Index ETF
-SRVR,Pacer Benchmark Data & Infrastructure Real Estate SCTR ETF
-KXI,iShares Global Consumer Staples ETF
-CGW,Invesco S&P Global Water Index ETF
-FSTA,Fidelity MSCI Consumer Staples Index ETF
-PNQI,Invesco NASDAQ Internet ETF
-JNUG,Direxion Daily Junior Gold Miners Index Bull 2x Shares
-KIE,SPDR S&P Insurance ETF
-MLPX,Global X MLP & Energy Infrastructure ETF
-IYT,iShares Transportation Average ETF
-FINX,Global X FinTech Thematic ETF
-FCOM,Fidelity MSCI Communication Services Index ETF
-RHS,Invesco S&P 500® Equal Weight Consumer Staples ETF
-XHE,SPDR S&P Health Care Equipment ETF
-IYE,iShares U.S. Energy ETF
-FIW,First Trust ISE Water Index Fund
-OIH,VanEck Vectors Oil Services ETF
-FENY,Fidelity MSCI Energy Index ETF
-IYK,iShares U.S. Consumer Goods ETF
-XSD,SPDR S&P Semiconductor ETF
-KBWB,Invesco KBW Bank ETF
-BBH,VanEck Vectors Biotech ETF
-PSJ,Invesco Dynamic Software ETF
-ROM,ProShares Ultra Technology
-LABU,Direxion Daily S&P Biotech Bull 3x Shares
-ERX,Direxion Daily Energy Bull 2X Shares
-IGE,iShares North American Natural Resources ETF
-XME,SPDR S&P Metals & Mining ETF
-PSCH,Invesco S&P SmallCap Health Care ETF
-GUSH,Direxion Daily S&P Oil & Gas Exploration & Production Bull 2x Shares
-PTH,Invesco DWA Healthcare Momentum ETF
-XNTK,NYSE Technology ETF
-IYZ,iShares U.S. Telecommunications ETF
-IHE,iShares U.S. Pharmaceuticals ETF
-REZ,iShares Residential Real Estate ETF
-PJP,Invesco Dynamic Pharmaceuticals ETF
-XRT,SPDR S&P Retail ETF
-NAIL,Direxion Daily Homebuilders & Supplies Bull 3X Shares
-FIDU,Fidelity MSCI Industrials Index ETF
-FIVG,Defiance Next Gen Connectivity ETF
-PBW,Invesco WilderHill Clean Energy ETF
-IYM,iShares U.S. Basic Materials ETF
-RYU,Invesco S&P 500® Equal Weight Utilities ETF
-IAT,iShares U.S. Regional Banks ETF
-PEJ,Invesco Dynamic Leisure and Entertainment ETF
-PSI,Invesco Dynamic Semiconductors ETF
-FXG,First Trust Consumer Staples AlphaDEX Fund
-PSCT,Invesco S&P SmallCap Information Technology ETF
-XPH,SPDR S&P Pharmaceuticals ETF
-PPH,VanEck Vectors Pharmaceutical ETF
-PBE,Invesco Dynamic Biotechnology & Genome ETF
-XSW,SPDR S&P Software & Services ETF
-IEZ,iShares U.S. Oil Equipment & Services ETF
-MLPB,ETRACS Alerian MLP Infrastructure Index ETN
-BIZD,VanEck Vectors BDC Income ETF
-PTF,Invesco DWA Technology Momentum ETF
-WCLD,WisdomTree Cloud Computing Fund
-SBIO,ALPS Medical Breakthroughs ETF
-FXD,First Trust Consumer Discretionary AlphaDEX Fund
-DFEN,Direxion Daily Aerospace & Defense Bull 3X Shares
-KBWY,Invesco KBW Premium Yield Equity REIT ETF
-IEO,iShares U.S. Oil & Gas Exploration & Production ETF
-CLIX,ProShares Long Online/Short Stores ETF
-FXR,First Trust Industrials/Producer Durables AlphaDEX Fund
-RYF,Invesco S&P 500® Equal Weight Financials ETF
-XTN,SPDR S&P Transportation ETF
-MORT,VanEck Vectors Mortgage REIT Income ETF
-SOXS,Direxion Daily Semiconductor Bear 3x Shares
-FMAT,Fidelity MSCI Materials Index ETF
-RGI,Invesco S&P 500® Equal Weight Industrials ETF
-CURE,Direxion Daily Healthcare Bull 3x Shares
-AMZA,InfraCap MLP ETF
-HDGE,AdvisorShares Ranger Equity Bear ETF
-ONLN,ProShares Online Retail ETF
-DIG,ProShares Ultra Oil & Gas
-PAVE,Global X US Infrastructure Development ETF
-RTM,Invesco S&P 500® Equal Weight Materials ETF
-IAI,iShares US Broker-Dealers ETF
-XITK,SPDR FactSet Innovative Technology ETF
-PSR,Invesco Active U.S. Real Estate Fund
-PSL,Invesco DWA Consumer Staples Momentum ETF
-RTH,VanEck Vectors Retail ETF
-RXL,ProShares Ultra Health Care
-FXN,First Trust Energy AlphaDEX Fund
-MLPI,UBS E-TRACS Alerian MLP Infrastructure ETN
-XES,SPDR S&P Oil & Gas Equipment & Services ETF
-FRI,First Trust S&P REIT Index Fund
-FCG,First Trust ISE-Revere Natural Gas Index Fund
-PPTY,PPTY - U.S. Diversified Real Estate ETF
-XHS,SPDR S&P Health Care Services ETF
-RYE,Invesco S&P 500® Equal Weight Energy ETF
-URE,ProShares Ultra Real Estate
-BTEC,Principal Healthcare Innovators Index ETF
-DPST,Direxion Daily Regional Banks Bull 3X Shares
-USD,ProShares Ultra Semiconductors
-PUI,Invesco DWA Utilities Momentum ETF
-LABD,Direxion Daily S&P Biotech Bear 3x Shares
-PKB,Invesco Dynamic Building & Construction ETF
-NRGU,MicroSectors U.S. Big Oil Index 3X Leveraged ETN
-FXZ,First Trust Materials AlphaDEX Fund
-QABA,First Trust NASDAQ ABA Community Bank Index
-KBWP,Invesco KBW Property & Casualty Insurance ETF
-FTXO,First Trust Nasdaq Bank ETF
-IAK,iShares U.S. Insurance ETF
-REML,Credit Suisse X-Links Monthly Pay 2xLeveraged Mortgage REIT ETN
-DRN,Direxion Daily Real Estate Bull 3x Shares
-PRN,Invesco DWA Industrials Momentum ETF
-INDS,Pacer Benchmark Industrial Real Estate SCTR ETF
-RCD,Invesco S&P 500® Equal Weight Consumer Discretionary ETF
-PXQ,Invesco Dynamic Networking ETF
-XTL,SPDR S&P Telecom ETF
-IETC,iShares Evolved U.S. Technology ETF
-NURE,Nuveen Short-Term REIT ETF
-VMOT,Alpha Architect Value Momentum Trend ETF
-BBC,Virtus LifeSci Biotech Clinical Trials ETF
-DRV,Direxion Daily Real Estate Bear 3x Shares
-IGN,iShares North American Tech-Multimedia Networking ETF
-CWEB,Direxion Daily CSI China Internet Index Bull 2x Shares
-NETL,NETLease Corporate Real Estate ETF
-SRS,ProShares Ultra Short Real Estate
-JHMH,John Hancock Multi-Factor Health Care ETF
-ROOF,IQ US Real Estate Small Cap ETF
-FTXL,First Trust Nasdaq Semiconductor ETF
-ZMLP,Direxion Zacks MLP High Income Shares
-CNCR,Loncar Cancer Immunotherapy ETF
-TDV,ProShares S&P Technology Dividend Aristocrats ETF
-AIRR,First Trust RBA American Industrial Renaissance ETF
-SLX,VanEck Vectors Steel ETF
-JHMT,John Hancock Multi-Factor Technology ETF
-VPC,Virtus Private Credit Strategy ETF
-PSCI,Invesco S&P SmallCap Industrials ETF
-TECS,Direxion Daily Technology Bear 3X Shares
-SKF,ProShares Ultra Short Financials
-PYZ,Invesco DWA Basic Materials Momentum ETF
-JHMC,John Hancock Multi-Factor Consumer Discretionary ETF
-DRIP,Direxion Daily S&P Oil & Gas Exploration & Production Bear 2x Shares
-EVX,VanEck Vectors Environmental Services ETF
-PXI,Invesco DWA Energy Momentum ETF
-RDOG,ALPS REIT Dividend Dogs ETF
-KBWR,Invesco KBW Regional Banking ETF
-PSCF,Invesco S&P SmallCap Financials ETF
-PBS,Invesco Dynamic Media ETF
-UYM,ProShares Ultra Basic Materials
-SEF,Short Financials ProShares
-UTES,Reaves Utilities ETF
-PFI,Invesco DWA Financial Momentum ETF
-JHMU,John Hancock Multi-Factor Utilities ETF
-REK,ProShares Short Real Estate
-CNRG,SPDR S&P Kensho Clean Power ETF
-BBP,Virtus LifeSci Biotech Products ETF
-PSCU,Invesco S&P SmallCap Utilities ETF
-BMLP,Dorsey Wright MLP Index ETN
-RETL,Direxion Daily Retail Bull 3X Shares
-TPOR,Direxion Daily Transportation Bull 3X Shares
-PEZ,Invesco DWA Consumer Cyclicals Momentum ETF
-EWRE,Invesco S&P 500® Equal Weight Real Estate ETF
-XWEB,SPDR S&P Internet ETF
-UTSL,Direxion Daily Utilities Bull 3X Shares
-ERY,Direxion Daily Energy Bear 2X Shares
-JHMS,John Hancock Multifactor Consumer Staples ETF
-FITE,SPDR S&P Future Security ETF
-PSCD,Invesco S&P SmallCap Consumer Discretionary ETF
-UCC,ProShares Ultra Consumer Services
-JHMA,John Hancock Multi-Factor Materials ETF
-PILL,Direxion Daily Pharmaceutical & Medical Bull 3X Shares
-NRGO,MicroSectors U.S. Big Oil Index 2X Leveraged ETN
-NRGD,MicroSectors U.S. Big Oil Index -3X Inverse Leveraged ETN
-PXE,Invesco Dynamic Energy Exploration & Production ETF
-JHME,John Hancock Multi-Factor Energy ETF
-ZIG,Acquirers Fund
-UXI,ProShares Ultra Industrials
-UPW,ProShares Ultra Utilities
-HOMZ,Hoya Capital Housing ETF
-PSCE,Invesco S&P SmallCap Energy ETF
-IEHS,iShares Evolved U.S. Healthcare Staples ETF
-DUG,ProShares Ultra Short Oil & Gas
-WANT,Direxion Daily Consumer Discretionary Bull 3X Shares
-IEDI,iShares Evolved U.S. Discretionary Spending ETF
-DUSL,Direxion Daily Industrials Bull 3X Shares
-PSCM,Invesco S&P SmallCap Materials ETF
-IFRA,iShares U.S. Infrastructure ETF
-IECS,iShares Evolved U.S. Consumer Staples ETF
-TAWK,Direxion Daily Communication Services Index Bull 3X Shares
-PXJ,Invesco Dynamic Oil & Gas Services ETF
-BNKD,MicroSectors U.S. Big Banks Index -3x Inverse Leveraged ETN
-BNKU,MicroSectors U.S. Big Banks Index 3x Leveraged ETN
-SIMS,SPDR S&P Kensho Intelligent Structures ETF
-ROKT,SPDR S&P Kensho Final Frontiers ETF
-NEED,Direxion Daily Consumer Staples Bull 3X Shares
-SSG,ProShares Ultra Short Semiconductors
-FTXR,First Trust Nasdaq Transportation ETF
-UGE,ProShares Ultra Consumer Goods
-HAIL,SPDR S&P Smart Mobility ETF
-REW,ProShares Ultra Short Technology
-IEFN,iShares Evolved U.S. Financials ETF
-PASS,Direxion Daily Consumer Discretionary Bear 3X Shares
-SMN,ProShares Ultra Short Basic Materials
-RORE,Hartford Multifactor REIT ETF
-DDG,Short Oil & Gas ProShares
-SIJ,ProShares Ultra Short Industrials
-FTXG,First Trust Nasdaq Food & Beverage ETF
-SDP,ProShares Ultra Short Utilities
-SCC,ProShares Ultra Short Consumer Services
-SZK,ProShares Ultra Short Consumer Goods
-LACK,Direxion Daily Consumer Staples Bear 3X Shares
-SPY,SPDR S&P 500 ETF
-IVV,iShares Core S&P 500 ETF
-VOO,Vanguard S&P 500 ETF
-VUG,Vanguard Growth ETF
-VTV,Vanguard Value ETF
-IJH,iShares Core S&P Mid-Cap ETF
-IJR,iShares Core S&P Small-Cap ETF
-USMV,iShares Edge MSCI Min Vol USA ETF
-VO,Vanguard Mid-Cap Index ETF
-IVW,iShares S&P 500 Growth ETF
-DIA,SPDR Dow Jones Industrial Average ETF
-SCHX,Schwab U.S. Large-Cap ETF
-VV,Vanguard Large Cap ETF
-IVE,iShares S&P 500 Value ETF
-MDY,SPDR S&P MidCap 400 ETF
-IWP,iShares Russell Midcap Growth ETF
-SCHD,Schwab US Dividend Equity ETF
-RSP,Invesco S&P 500® Equal Weight ETF
-VBK,Vanguard Small Cap Growth ETF
-SCHG,Schwab U.S. Large-Cap Growth ETF
-IWS,iShares Russell Midcap Value ETF
-MTUM,iShares Edge MSCI USA Momentum Factor ETF
-SPLV,Invesco S&P 500® Low Volatility ETF
-VOE,Vanguard Mid-Cap Value ETF
-IUSG,iShares Core S&P U.S. Growth ETF
-GSLC,Goldman Sachs ActiveBeta U.S. Large Cap Equity ETF
-SPYG,SPDR Portfolio S&P 500 Growth ETF
-VOT,Vanguard Mid-Cap Growth ETF
-ESGU,iShares ESG MSCI USA ETF
-MGK,Vanguard Mega Cap Growth ETF
-OEF,iShares S&P 100 ETF
-IJK,iShares S&P MidCap 400 Growth ETF
-SCHM,Schwab US Mid-Cap ETF
-IUSV,iShares Core S&P U.S. Value ETF
-SCHV,Schwab U.S. Large-Cap Value ETF
-TQQQ,ProShares UltraPro QQQ
-NOBL,ProShares S&P 500 Aristocrats
-SPLG,SPDR Portfolio Large Cap ETF
-FTCS,First Trust Capital Strength ETF
-VLUE,iShares Edge MSCI USA Value Factor ETF
-IJS,iShares S&P SmallCap 600 Value ETF
-SPYV,SPDR Portfolio S&P 500 Value ETF
-IJJ,iShares S&P MidCap 400 Value ETF
-IJT,iShares S&P SmallCap 600 Growth ETF
-VOOG,Vanguard S&P 500 Growth ETF
-MGV,Vanguard Mega Cap Value ETF
-MGC,Vanguard Mega Cap ETF
-XMLV,Invesco S&P MidCap Low Volatility ETF
-QLD,ProShares Ultra QQQ
-SUSL,iShares ESG MSCI USA Leaders ETF
-USSG,MSCI USA ESG Leaders Equity ETF
-SPMD,SPDR S&P 1000 ETF
-DLN,WisdomTree US LargeCap Dividend ETF
-IOO,iShares Global 100 ETF
-SSO,ProShares Ultra S&P 500
-MDYG,SPDR S&P 400 Mid Cap Growth ETF
-SLYV,SPDR S&P 600 Small Cap Value ETF
-SPSM,SPDR Portfolio Small Cap ETF
-SPYD,SPDR Portfolio S&P 500 High Dividend ETF
-JKE,iShares Morningstar Large-Cap Growth ETF
-SLYG,SPDR S&P 600 Small Cap Growth ETF
-SUSA,iShares MSCI USA ESG Select ETF
-MDYV,SPDR S&P 400 Mid Cap Value ETF
-XSLV,Invesco S&P SmallCap Low Volatility ETF
-SPXU,ProShares UltraPro Short S&P 500
-VOOV,Vanguard S&P 500 Value ETF
-SLY,SPDR S&P 600 Small Cap ETF
-FEX,First Trust Large Cap Core AlphaDEX Fund
-IVOO,Vanguard S&P Mid-Cap 400 ETF
-VIOO,Vanguard S&P Small-Cap 600 ETF
-PWB,Invesco Dynamic Large Cap Growth ETF
-JKD,iShares Morningstar Large-Cap ETF
-RWL,Invesco S&P 500 Revenue ETF
-PWV,Invesco Dynamic Large Cap Value ETF
-IVOG,Vanguard S&P Mid-Cap 400 Growth ETF
-PEY,Invesco High Yield Equity Dividend Achievers™ ETF
-EWQ,iShares MSCI France ETF
-FTA,First Trust Large Cap Value AlphaDEX Fund
-FNX,First Trust Mid Cap Core AlphaDEX Fund
-XMMO,Invesco S&P MidCap Momentum ETF
-RPV,Invesco S&P 500® Pure Value ETF
+Symbol,ETF Name,ETFdb.com Category
+QQQ,Invesco QQQ,Large Cap Blend Equities
+VGT,Vanguard Information Technology ETF,Technology Equities
+XLK,Technology Select Sector SPDR Fund,Technology Equities
+VNQ,Vanguard Real Estate Index Fund,Real Estate
+XLV,Health Care Select Sector SPDR Fund,Health & Biotech Equities
+XLF,Financial Select Sector SPDR Fund,Financials Equities
+XLP,Consumer Staples Select Sector SPDR Fund,Consumer Staples Equities
+XLY,Consumer Discretionary Select Sector SPDR Fund,Consumer Discretionary Equities
+XLU,Utilities Select Sector SPDR Fund,Utilities Equities
+XLE,Energy Select Sector SPDR Fund,Energy Equities
+VHT,Vanguard Healthcare ETF,Health & Biotech Equities
+XLC,Communication Services Select Sector SPDR Fund,Large Cap Blend Equities
+IBB,iShares Nasdaq Biotechnology ETF,Health & Biotech Equities
+FDN,First Trust Dow Jones Internet Index,Large Cap Blend Equities
+XLI,Industrial Select Sector SPDR Fund,Industrials Equities
+IHI,iShares U.S. Medical Devices ETF,Health & Biotech Equities
+VFH,Vanguard Financials ETF,Financials Equities
+IYW,iShares U.S. Technology ETF,Technology Equities
+VDC,Vanguard Consumer Staples ETF,Consumer Staples Equities
+XLB,Materials Select Sector SPDR ETF,Materials
+SCHH,Schwab US REIT ETF,Real Estate
+AMLP,Alerian MLP ETF,MLPs
+XBI,SPDR S&P Biotech ETF,Health & Biotech Equities
+XLRE,Real Estate Select Sector SPDR Fund,Real Estate
+IGV,iShares Expanded Tech-Software Sector ET,Technology Equities
+VPU,Vanguard Utilities ETF,Utilities Equities
+SKYY,First Trust ISE Cloud Computing Index Fund,Technology Equities
+FTEC,Fidelity MSCI Information Technology Index ETF,Technology Equities
+IXN,iShares Global Tech ETF,Technology Equities
+VDE,Vanguard Energy ETF,Energy Equities
+ITA,iShares U.S. Aerospace & Defense ETF,Industrials Equities
+IYR,iShares U.S. Real Estate ETF,Real Estate
+VCR,Vanguard Consumer Discretionary ETF,Consumer Discretionary Equities
+SOXX,iShares PHLX Semiconductor ETF,Technology Equities
+VIS,Vanguard Industrial ETF,Industrials Equities
+QTEC,First Trust NASDAQ 100 Technology,Technology Equities
+XT,iShares Exponential Technologies ETF,Large Cap Blend Equities
+VOX,Vanguard Communication Services ETF,Large Cap Blend Equities
+IYH,iShares U.S. Healthcare ETF,Health & Biotech Equities
+IGM,iShares Expanded Tech Sector ETF,Technology Equities
+IXJ,iShares Global Healthcare ETF,Health & Biotech Equities
+XOP,SPDR S&P Oil & Gas Exploration & Production ETF,Energy Equities
+FBT,First Trust Amex Biotechnology Index,Health & Biotech Equities
+SMH,VanEck Vectors Semiconductor ETF,Technology Equities
+FXL,First Trust Technology AlphaDEX Fund,Technology Equities
+FHLC,Fidelity MSCI Health Care Index ETF,Health & Biotech Equities
+ICF,iShares Cohen & Steers REIT ETF,Real Estate
+FXH,First Trust Health Care AlphaDEX Fund,Health & Biotech Equities
+CIBR,First Trust NASDAQ CEA Cybersecurity ETF,Technology Equities
+RYT,Invesco S&P 500® Equal Weight Technology ETF,Technology Equities
+VAW,Vanguard Materials ETF,Materials
+XAR,SPDR S&P Aerospace & Defense ETF,Industrials Equities
+RWR,SPDR Dow Jones REIT ETF,Real Estate
+TECL,Direxion Daily Technology Bull 3X Shares,Leveraged Equities
+ITB,iShares U.S. Home Construction ETF,Building & Construction 
+KBE,SPDR S&P Bank ETF,Financials Equities
+IEV,iShares Europe ETF,Europe Equities
+SOXL,Direxion Daily Semiconductor Bull 3x Shares,Leveraged Equities
+IYF,iShares U.S. Financials ETF,Financials Equities
+IYG,iShares U.S. Financial Services ETF,Financials Equities
+TDIV,First Trust NASDAQ Technology Dividend Index Fund,Technology Equities
+KRE,SPDR S&P Regional Banking ETF,Financials Equities
+ARKG,ARK Genomic Revolution Multi-Sector ETF,Health & Biotech Equities
+PHO,Invesco Water Resources ETF,Water Equities 
+BBRE,JPMorgan BetaBuilders MSCI US REIT ETF,Real Estate
+FREL,Fidelity MSCI Real Estate Index ETF,Real Estate
+IYC,iShares US Consumer Services ETF,Large Cap Blend Equities
+IHF,iShares U.S. Healthcare Providers ETF,Health & Biotech Equities
+FUTY,Fidelity MSCI Utilities Index ETF,Utilities Equities
+IDU,iShares U.S. Utilities ETF,Utilities Equities
+REM,iShares Mortgage Real Estate ETF,Real Estate
+FXU,First Trust Utilities AlphaDEX Fund,Utilities Equities
+XHB,SPDR S&P Homebuilders ETF,Building & Construction 
+FNCL,Fidelity MSCI Financials Index ETF,Financials Equities
+PPA,Invesco Aerospace & Defense ETF,Industrials Equities
+IYJ,iShares U.S. Industrials ETF,Large Cap Growth Equities
+RYH,Invesco S&P 500® Equal Weight Health Care ETF,Health & Biotech Equities
+MLPA,Global X MLP ETF,MLPs
+FDIS,Fidelity MSCI Consumer Discretionary Index ETF,Consumer Discretionary Equities
+SRVR,Pacer Benchmark Data & Infrastructure Real Estate SCTR ETF,Real Estate
+KXI,iShares Global Consumer Staples ETF,Consumer Staples Equities
+CGW,Invesco S&P Global Water Index ETF,Water Equities 
+FSTA,Fidelity MSCI Consumer Staples Index ETF,Consumer Staples Equities
+PNQI,Invesco NASDAQ Internet ETF,Large Cap Blend Equities
+KIE,SPDR S&P Insurance ETF,Financials Equities
+MLPX,Global X MLP & Energy Infrastructure ETF,MLPs
+IYT,iShares Transportation Average ETF,Transportation Equities
+FINX,Global X FinTech Thematic ETF,Technology Equities
+FCOM,Fidelity MSCI Communication Services Index ETF,Large Cap Blend Equities
+RHS,Invesco S&P 500® Equal Weight Consumer Staples ETF,Consumer Staples Equities
+XHE,SPDR S&P Health Care Equipment ETF,Health & Biotech Equities
+IYE,iShares U.S. Energy ETF,Energy Equities
+FIW,First Trust ISE Water Index Fund,Water Equities 
+OIH,VanEck Vectors Oil Services ETF,Energy Equities
+FENY,Fidelity MSCI Energy Index ETF,Energy Equities
+IYK,iShares U.S. Consumer Goods ETF,Consumer Staples Equities
+XSD,SPDR S&P Semiconductor ETF,Technology Equities
+KBWB,Invesco KBW Bank ETF,Financials Equities
+BBH,VanEck Vectors Biotech ETF,Health & Biotech Equities
+PSJ,Invesco Dynamic Software ETF,All Cap Equities
+ROM,ProShares Ultra Technology,Leveraged Equities
+LABU,Direxion Daily S&P Biotech Bull 3x Shares,Leveraged Equities
+ERX,Direxion Daily Energy Bull 2X Shares,Leveraged Equities
+IGE,iShares North American Natural Resources ETF,Energy Equities
+XME,SPDR S&P Metals & Mining ETF,Materials
+PSCH,Invesco S&P SmallCap Health Care ETF,Health & Biotech Equities
+PTH,Invesco DWA Healthcare Momentum ETF,Health & Biotech Equities
+XNTK,NYSE Technology ETF,Technology Equities
+IYZ,iShares U.S. Telecommunications ETF,Communications Equities
+IHE,iShares U.S. Pharmaceuticals ETF,Health & Biotech Equities
+REZ,iShares Residential Real Estate ETF,Real Estate
+PJP,Invesco Dynamic Pharmaceuticals ETF,Health & Biotech Equities
+XRT,SPDR S&P Retail ETF,Consumer Discretionary Equities
+NAIL,Direxion Daily Homebuilders & Supplies Bull 3X Shares,Leveraged Equities
+FIDU,Fidelity MSCI Industrials Index ETF,Industrials Equities
+FIVG,Defiance Next Gen Connectivity ETF,Technology Equities
+PBW,Invesco WilderHill Clean Energy ETF,Alternative Energy Equities
+IYM,iShares U.S. Basic Materials ETF,Materials
+RYU,Invesco S&P 500® Equal Weight Utilities ETF,Utilities Equities
+IAT,iShares U.S. Regional Banks ETF,Financials Equities
+PEJ,Invesco Dynamic Leisure and Entertainment ETF,All Cap Equities
+PSI,Invesco Dynamic Semiconductors ETF,Technology Equities
+FXG,First Trust Consumer Staples AlphaDEX Fund,Consumer Staples Equities
+PSCT,Invesco S&P SmallCap Information Technology ETF,Technology Equities
+XPH,SPDR S&P Pharmaceuticals ETF,Health & Biotech Equities
+PBE,Invesco Dynamic Biotechnology & Genome ETF,Health & Biotech Equities
+XSW,SPDR S&P Software & Services ETF,Technology Equities
+IEZ,iShares U.S. Oil Equipment & Services ETF,Energy Equities
+MLPB,ETRACS Alerian MLP Infrastructure Index ETN,MLPs
+BIZD,VanEck Vectors BDC Income ETF,Financials Equities
+PTF,Invesco DWA Technology Momentum ETF,Technology Equities
+WCLD,WisdomTree Cloud Computing Fund,All Cap Equities
+SBIO,ALPS Medical Breakthroughs ETF,Health & Biotech Equities
+FXD,First Trust Consumer Discretionary AlphaDEX Fund,Consumer Discretionary Equities
+DFEN,Direxion Daily Aerospace & Defense Bull 3X Shares,Leveraged Equities
+KBWY,Invesco KBW Premium Yield Equity REIT ETF,Real Estate
+IEO,iShares U.S. Oil & Gas Exploration & Production ETF,Energy Equities
+CLIX,ProShares Long Online/Short Stores ETF,Long-Short
+FXR,First Trust Industrials/Producer Durables AlphaDEX Fund,Industrials Equities
+RYF,Invesco S&P 500® Equal Weight Financials ETF,Financials Equities
+XTN,SPDR S&P Transportation ETF,Transportation Equities
+MORT,VanEck Vectors Mortgage REIT Income ETF,Real Estate
+SOXS,Direxion Daily Semiconductor Bear 3x Shares,Leveraged Equities
+FMAT,Fidelity MSCI Materials Index ETF,Materials
+RGI,Invesco S&P 500® Equal Weight Industrials ETF,Industrials Equities
+CURE,Direxion Daily Healthcare Bull 3x Shares,Leveraged Equities
+AMZA,InfraCap MLP ETF,MLPs
+HDGE,AdvisorShares Ranger Equity Bear ETF,Inverse Equities
+ONLN,ProShares Online Retail ETF,Consumer Discretionary Equities
+DIG,ProShares Ultra Oil & Gas,Leveraged Equities
+PAVE,Global X US Infrastructure Development ETF,Industrials Equities
+RTM,Invesco S&P 500® Equal Weight Materials ETF,Materials
+IAI,iShares US Broker-Dealers ETF,Financials Equities
+XITK,SPDR FactSet Innovative Technology ETF,All Cap Equities
+PSR,Invesco Active U.S. Real Estate Fund,Real Estate
+PSL,Invesco DWA Consumer Staples Momentum ETF,Consumer Staples Equities
+RTH,VanEck Vectors Retail ETF,Consumer Discretionary Equities
+RXL,ProShares Ultra Health Care,Leveraged Equities
+FXN,First Trust Energy AlphaDEX Fund,Energy Equities
+MLPI,UBS E-TRACS Alerian MLP Infrastructure ETN,MLPs
+XES,SPDR S&P Oil & Gas Equipment & Services ETF,Energy Equities
+FRI,First Trust S&P REIT Index Fund,Real Estate
+FCG,First Trust ISE-Revere Natural Gas Index Fund,Energy Equities
+PPTY,PPTY - U.S. Diversified Real Estate ETF,Real Estate
+XHS,SPDR S&P Health Care Services ETF,Health & Biotech Equities
+RYE,Invesco S&P 500® Equal Weight Energy ETF,Energy Equities
+URE,ProShares Ultra Real Estate,Leveraged Real Estate
+BTEC,Principal Healthcare Innovators Index ETF,Health & Biotech Equities
+DPST,Direxion Daily Regional Banks Bull 3X Shares,Leveraged Equities
+USD,ProShares Ultra Semiconductors,Leveraged Equities
+PUI,Invesco DWA Utilities Momentum ETF,Utilities Equities
+LABD,Direxion Daily S&P Biotech Bear 3x Shares,Leveraged Equities
+PKB,Invesco Dynamic Building & Construction ETF,Building & Construction 
+NRGU,MicroSectors U.S. Big Oil Index 3X Leveraged ETN,Leveraged Equities
+FXZ,First Trust Materials AlphaDEX Fund,Materials
+QABA,First Trust NASDAQ ABA Community Bank Index,Financials Equities
+KBWP,Invesco KBW Property & Casualty Insurance ETF,Financials Equities
+FTXO,First Trust Nasdaq Bank ETF,Financials Equities
+IAK,iShares U.S. Insurance ETF,Financials Equities
+REML,Credit Suisse X-Links Monthly Pay 2xLeveraged Mortgage REIT ETN,Leveraged Real Estate
+DRN,Direxion Daily Real Estate Bull 3x Shares,Leveraged Real Estate
+PRN,Invesco DWA Industrials Momentum ETF,All Cap Equities
+INDS,Pacer Benchmark Industrial Real Estate SCTR ETF,Real Estate
+RCD,Invesco S&P 500® Equal Weight Consumer Discretionary ETF,Consumer Discretionary Equities
+PXQ,Invesco Dynamic Networking ETF,Technology Equities
+XTL,SPDR S&P Telecom ETF,Communications Equities
+IETC,iShares Evolved U.S. Technology ETF,Technology Equities
+NURE,Nuveen Short-Term REIT ETF,Real Estate
+VMOT,Alpha Architect Value Momentum Trend ETF,Foreign Small & Mid Cap Equities
+BBC,Virtus LifeSci Biotech Clinical Trials ETF,Health & Biotech Equities
+DRV,Direxion Daily Real Estate Bear 3x Shares,Leveraged Real Estate
+IGN,iShares North American Tech-Multimedia Networking ETF,Communications Equities
+NETL,NETLease Corporate Real Estate ETF,Real Estate
+SRS,ProShares Ultra Short Real Estate,Leveraged Real Estate
+JHMH,John Hancock Multi-Factor Health Care ETF,Health & Biotech Equities
+ROOF,IQ US Real Estate Small Cap ETF,Real Estate
+FTXL,First Trust Nasdaq Semiconductor ETF,Technology Equities
+ZMLP,Direxion Zacks MLP High Income Shares,Energy Equities
+CNCR,Loncar Cancer Immunotherapy ETF,Global Equities
+TDV,ProShares S&P Technology Dividend Aristocrats ETF,Technology Equities
+AIRR,First Trust RBA American Industrial Renaissance ETF,Building & Construction 
+JHMT,John Hancock Multi-Factor Technology ETF,Technology Equities
+VPC,Virtus Private Credit Strategy ETF,Small Cap Blend Equities
+PSCI,Invesco S&P SmallCap Industrials ETF,Industrials Equities
+TECS,Direxion Daily Technology Bear 3X Shares,Leveraged Equities
+SKF,ProShares Ultra Short Financials,Leveraged Equities
+PYZ,Invesco DWA Basic Materials Momentum ETF,Materials
+JHMC,John Hancock Multi-Factor Consumer Discretionary ETF,Consumer Discretionary Equities
+DRIP,Direxion Daily S&P Oil & Gas Exploration & Production Bear 2x Shares,Leveraged Equities
+EVX,VanEck Vectors Environmental Services ETF,Industrials Equities
+PXI,Invesco DWA Energy Momentum ETF,Energy Equities
+RDOG,ALPS REIT Dividend Dogs ETF,Real Estate
+KBWR,Invesco KBW Regional Banking ETF,Financials Equities
+PSCF,Invesco S&P SmallCap Financials ETF,Financials Equities
+PBS,Invesco Dynamic Media ETF,All Cap Equities
+UYM,ProShares Ultra Basic Materials,Leveraged Equities
+SEF,Short Financials ProShares,Inverse Equities
+UTES,Reaves Utilities ETF,Utilities Equities
+PFI,Invesco DWA Financial Momentum ETF,All Cap Equities
+JHMU,John Hancock Multi-Factor Utilities ETF,Utilities Equities
+REK,ProShares Short Real Estate,Real Estate
+BBP,Virtus LifeSci Biotech Products ETF,Health & Biotech Equities
+PSCU,Invesco S&P SmallCap Utilities ETF,Small Cap Value Equities
+BMLP,Dorsey Wright MLP Index ETN,MLPs
+RETL,Direxion Daily Retail Bull 3X Shares,Leveraged Equities
+TPOR,Direxion Daily Transportation Bull 3X Shares,Leveraged Equities
+PEZ,Invesco DWA Consumer Cyclicals Momentum ETF,Consumer Discretionary Equities
+EWRE,Invesco S&P 500® Equal Weight Real Estate ETF,Real Estate
+XWEB,SPDR S&P Internet ETF,All Cap Equities
+UTSL,Direxion Daily Utilities Bull 3X Shares,Leveraged Equities
+ERY,Direxion Daily Energy Bear 2X Shares,Leveraged Equities
+JHMS,John Hancock Multifactor Consumer Staples ETF,Consumer Staples Equities
+FITE,SPDR S&P Future Security ETF,All Cap Equities
+PSCD,Invesco S&P SmallCap Consumer Discretionary ETF,Consumer Discretionary Equities
+UCC,ProShares Ultra Consumer Services,Leveraged Equities
+JHMA,John Hancock Multi-Factor Materials ETF,Materials
+PILL,Direxion Daily Pharmaceutical & Medical Bull 3X Shares,Leveraged Equities
+NRGO,MicroSectors U.S. Big Oil Index 2X Leveraged ETN,Leveraged Equities
+NRGD,MicroSectors U.S. Big Oil Index -3X Inverse Leveraged ETN,Leveraged Equities
+PXE,Invesco Dynamic Energy Exploration & Production ETF,Energy Equities
+JHME,John Hancock Multi-Factor Energy ETF,Energy Equities
+ZIG,Acquirers Fund,Global Equities
+UXI,ProShares Ultra Industrials,Leveraged Equities
+UPW,ProShares Ultra Utilities,Leveraged Equities
+HOMZ,Hoya Capital Housing ETF,Real Estate
+PSCE,Invesco S&P SmallCap Energy ETF,Energy Equities
+IEHS,iShares Evolved U.S. Healthcare Staples ETF,Health & Biotech Equities
+DUG,ProShares Ultra Short Oil & Gas,Leveraged Equities
+WANT,Direxion Daily Consumer Discretionary Bull 3X Shares,Leveraged Equities
+IEDI,iShares Evolved U.S. Discretionary Spending ETF,Consumer Discretionary Equities
+DUSL,Direxion Daily Industrials Bull 3X Shares,Leveraged Equities
+PSCM,Invesco S&P SmallCap Materials ETF,Materials
+IFRA,iShares U.S. Infrastructure ETF,All Cap Equities
+IECS,iShares Evolved U.S. Consumer Staples ETF,Consumer Staples Equities
+TAWK,Direxion Daily Communication Services Index Bull 3X Shares,Leveraged Equities
+PXJ,Invesco Dynamic Oil & Gas Services ETF,Energy Equities
+BNKD,MicroSectors U.S. Big Banks Index -3x Inverse Leveraged ETN,Leveraged Equities
+BNKU,MicroSectors U.S. Big Banks Index 3x Leveraged ETN,Leveraged Equities
+SIMS,SPDR S&P Kensho Intelligent Structures ETF,All Cap Equities
+ROKT,SPDR S&P Kensho Final Frontiers ETF,All Cap Equities
+NEED,Direxion Daily Consumer Staples Bull 3X Shares,Leveraged Equities
+SSG,ProShares Ultra Short Semiconductors,Leveraged Equities
+FTXR,First Trust Nasdaq Transportation ETF,All Cap Equities
+UGE,ProShares Ultra Consumer Goods,Leveraged Equities
+REW,ProShares Ultra Short Technology,Leveraged Equities
+IEFN,iShares Evolved U.S. Financials ETF,Financials Equities
+PASS,Direxion Daily Consumer Discretionary Bear 3X Shares,Leveraged Equities
+SMN,ProShares Ultra Short Basic Materials,Leveraged Equities
+RORE,Hartford Multifactor REIT ETF,Real Estate
+DDG,Short Oil & Gas ProShares,Inverse Equities
+SIJ,ProShares Ultra Short Industrials,Leveraged Equities
+FTXG,First Trust Nasdaq Food & Beverage ETF,Consumer Staples Equities
+SDP,ProShares Ultra Short Utilities,Leveraged Equities
+SCC,ProShares Ultra Short Consumer Services,Leveraged Equities
+SZK,ProShares Ultra Short Consumer Goods,Leveraged Equities
+LACK,Direxion Daily Consumer Staples Bear 3X Shares,Leveraged Equities
+SPY,SPDR S&P 500 ETF,Large Cap Blend Equities
+IVV,iShares Core S&P 500 ETF,Large Cap Blend Equities
+VOO,Vanguard S&P 500 ETF,Large Cap Blend Equities
+VUG,Vanguard Growth ETF,Large Cap Blend Equities
+VTV,Vanguard Value ETF,Large Cap Blend Equities
+IJH,iShares Core S&P Mid-Cap ETF,Small Cap Value Equities
+IJR,iShares Core S&P Small-Cap ETF,Small Cap Value Equities
+USMV,iShares Edge MSCI Min Vol USA ETF,Large Cap Blend Equities
+VO,Vanguard Mid-Cap Index ETF,Mid Cap Blend Equities
+IVW,iShares S&P 500 Growth ETF,Large Cap Blend Equities
+DIA,SPDR Dow Jones Industrial Average ETF,Large Cap Growth Equities
+SCHX,Schwab U.S. Large-Cap ETF,Large Cap Blend Equities
+VV,Vanguard Large Cap ETF,Large Cap Blend Equities
+IVE,iShares S&P 500 Value ETF,Large Cap Blend Equities
+MDY,SPDR S&P MidCap 400 ETF,Small Cap Value Equities
+IWP,iShares Russell Midcap Growth ETF,All Cap Equities
+SCHD,Schwab US Dividend Equity ETF,Large Cap Growth Equities
+RSP,Invesco S&P 500® Equal Weight ETF,All Cap Equities
+VBK,Vanguard Small Cap Growth ETF,Small Cap Blend Equities
+SCHG,Schwab U.S. Large-Cap Growth ETF,Large Cap Blend Equities
+IWS,iShares Russell Midcap Value ETF,Mid Cap Blend Equities
+MTUM,iShares Edge MSCI USA Momentum Factor ETF,Large Cap Blend Equities
+SPLV,Invesco S&P 500® Low Volatility ETF,Volatility Hedged Equity
+VOE,Vanguard Mid-Cap Value ETF,Mid Cap Blend Equities
+IUSG,iShares Core S&P U.S. Growth ETF,Large Cap Blend Equities
+GSLC,Goldman Sachs ActiveBeta U.S. Large Cap Equity ETF,Large Cap Blend Equities
+SPYG,SPDR Portfolio S&P 500 Growth ETF,Large Cap Blend Equities
+VOT,Vanguard Mid-Cap Growth ETF,All Cap Equities
+ESGU,iShares ESG MSCI USA ETF,Large Cap Blend Equities
+MGK,Vanguard Mega Cap Growth ETF,Large Cap Blend Equities
+OEF,iShares S&P 100 ETF,Large Cap Blend Equities
+IJK,iShares S&P MidCap 400 Growth ETF,Small Cap Value Equities
+SCHM,Schwab US Mid-Cap ETF,Mid Cap Blend Equities
+IUSV,iShares Core S&P U.S. Value ETF,Large Cap Blend Equities
+SCHV,Schwab U.S. Large-Cap Value ETF,Large Cap Blend Equities
+TQQQ,ProShares UltraPro QQQ,Leveraged Equities
+NOBL,ProShares S&P 500 Aristocrats,Large Cap Blend Equities
+SPLG,SPDR Portfolio Large Cap ETF,Large Cap Blend Equities
+FTCS,First Trust Capital Strength ETF,Large Cap Blend Equities
+VLUE,iShares Edge MSCI USA Value Factor ETF,Large Cap Value Equities
+IJS,iShares S&P SmallCap 600 Value ETF,Small Cap Value Equities
+SPYV,SPDR Portfolio S&P 500 Value ETF,Large Cap Blend Equities
+IJJ,iShares S&P MidCap 400 Value ETF,Small Cap Value Equities
+IJT,iShares S&P SmallCap 600 Growth ETF,Small Cap Value Equities
+VOOG,Vanguard S&P 500 Growth ETF,Large Cap Blend Equities
+MGV,Vanguard Mega Cap Value ETF,Large Cap Blend Equities
+MGC,Vanguard Mega Cap ETF,Large Cap Blend Equities
+XMLV,Invesco S&P MidCap Low Volatility ETF,Volatility Hedged Equity
+QLD,ProShares Ultra QQQ,Leveraged Equities
+SUSL,iShares ESG MSCI USA Leaders ETF,Large Cap Blend Equities
+USSG,MSCI USA ESG Leaders Equity ETF,Large Cap Blend Equities
+SPMD,SPDR S&P 1000 ETF,Small Cap Value Equities
+DLN,WisdomTree US LargeCap Dividend ETF,Large Cap Blend Equities
+IOO,iShares Global 100 ETF,Large Cap Blend Equities
+SSO,ProShares Ultra S&P 500,Leveraged Equities
+MDYG,SPDR S&P 400 Mid Cap Growth ETF,Small Cap Value Equities
+SLYV,SPDR S&P 600 Small Cap Value ETF,Small Cap Value Equities
+SPSM,SPDR Portfolio Small Cap ETF,Small Cap Value Equities
+SPYD,SPDR Portfolio S&P 500 High Dividend ETF,Large Cap Blend Equities
+JKE,iShares Morningstar Large-Cap Growth ETF,Large Cap Blend Equities
+SLYG,SPDR S&P 600 Small Cap Growth ETF,Small Cap Value Equities
+SUSA,iShares MSCI USA ESG Select ETF,Large Cap Blend Equities
+MDYV,SPDR S&P 400 Mid Cap Value ETF,Small Cap Value Equities
+XSLV,Invesco S&P SmallCap Low Volatility ETF,Volatility Hedged Equity
+SPXU,ProShares UltraPro Short S&P 500,Leveraged Equities
+VOOV,Vanguard S&P 500 Value ETF,Large Cap Blend Equities
+SLY,SPDR S&P 600 Small Cap ETF,Small Cap Value Equities
+FEX,First Trust Large Cap Core AlphaDEX Fund,Large Cap Blend Equities
+IVOO,Vanguard S&P Mid-Cap 400 ETF,Small Cap Value Equities
+VIOO,Vanguard S&P Small-Cap 600 ETF,Small Cap Value Equities
+PWB,Invesco Dynamic Large Cap Growth ETF,Large Cap Blend Equities
+JKD,iShares Morningstar Large-Cap ETF,Large Cap Growth Equities
+RWL,Invesco S&P 500 Revenue ETF,Large Cap Blend Equities
+PWV,Invesco Dynamic Large Cap Value ETF,Large Cap Blend Equities
+IVOG,Vanguard S&P Mid-Cap 400 Growth ETF,Small Cap Value Equities
+PEY,Invesco High Yield Equity Dividend Achievers™ ETF,All Cap Equities
+EWQ,iShares MSCI France ETF,Europe Equities
+FTA,First Trust Large Cap Value AlphaDEX Fund,Mid Cap Blend Equities
+FNX,First Trust Mid Cap Core AlphaDEX Fund,Small Cap Value Equities
+XMMO,Invesco S&P MidCap Momentum ETF,Mid Cap Value Equities
+RPV,Invesco S&P 500® Pure Value ETF,All Cap Equities
+CNRG,_State Street SPDR,_Alternative Energy Equities
+HAIL,_State Street SPDR,_Global Equities
+PPH,_VanEck,_Health & Biotech Equities
+SLX,_VanEck,_Materials
