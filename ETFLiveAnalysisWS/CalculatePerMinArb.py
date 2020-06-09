@@ -84,25 +84,25 @@ class ArbPerMin():
                         self.trade_dict[symbol] = trade_obj
                 else:
                     # If ticker data not in last minute response
-                    # try:
-                    #     if ticker in self.etflist:
-                    #         dt_query = datetime.datetime.now().replace(second=0, microsecond=0)
-                    #         dt_query_ts = int(dt_query.timestamp() * 1000)
-                    #         last_recvd_data_for_ticker = trade_per_min_WS.find(
-                    #             {"e": {"$lte": dt_query_ts}, "sym": ticker}).sort("e", -1).limit(1)
-                    #         x = [{legend: (
-                    #             item[legend] if legend in item.keys() and legend in ['ev', 'sym', 'v', 'av', 'op', 'vw',
-                    #                                                                  'o', 'c', 'h', 'l', 'a'] else (
-                    #                 dt_query_ts - 60000 if legend == 's' else dt_query_ts)) for legend in
-                    #               ['ev', 'sym', 'v', 'av', 'op', 'vw', 'o', 'c', 'h', 'l', 'a', 's', 'e']} for item in
-                    #              last_recvd_data_for_ticker]
-                    #         # for dict_data in x:
-                    #         #     dict_data.update({"s": dt_query_ts - 60000, "e": dt_query_ts})
-                    #         unreceived_data.extend(x)
-                    # except Exception as e:
-                    #     print("Exception in CalculatePerMinArb.py at line 84")
-                    #     print(e)
-                    #     traceback.print_exc()
+                    try:
+                        if ticker in self.etflist:
+                            dt_query = datetime.datetime.now().replace(second=0, microsecond=0)
+                            dt_query_ts = int(dt_query.timestamp() * 1000)
+                            last_recvd_data_for_ticker = trade_per_min_WS.find(
+                                {"e": {"$lte": dt_query_ts}, "sym": ticker}).sort("e", -1).limit(1)
+                            x = [{legend: (
+                                item[legend] if legend in item.keys() and legend in ['ev', 'sym', 'v', 'av', 'op', 'vw',
+                                                                                     'o', 'c', 'h', 'l', 'a'] else (
+                                    dt_query_ts - 60000 if legend == 's' else dt_query_ts)) for legend in
+                                  ['ev', 'sym', 'v', 'av', 'op', 'vw', 'o', 'c', 'h', 'l', 'a', 's', 'e']} for item in
+                                 last_recvd_data_for_ticker]
+                            # for dict_data in x:
+                            #     dict_data.update({"s": dt_query_ts - 60000, "e": dt_query_ts})
+                            unreceived_data.extend(x)
+                    except Exception as e:
+                        print("Exception in CalculatePerMinArb.py at line 84")
+                        print(e)
+                        traceback.print_exc()
                     symbol = ticker
                     if symbol in self.trade_dict.keys():
                         priceT_1 = self.trade_dict[symbol].priceT
@@ -124,6 +124,7 @@ class ArbPerMin():
                         # NAV change % Calculation
                         holdingsdf = pd.DataFrame(*[holdings for holdings in holdingdata])
                         holdingsdf.set_index('symbol', inplace=True)
+                        holdingsdf['weight'] = holdingsdf['weight']/100
                         # holdingsdf contains Weights corresponding to each holding
                         navdf = self.tradedf.mul(holdingsdf['weight'], axis=0)['price_pct_chg'].dropna()
                         # nav = sum([holdingsdf.loc[sym, 'weight'] * self.tradedf.loc[sym, 'price_pct_chg'] for sym in
@@ -162,7 +163,7 @@ class ArbPerMin():
         end = time.time()
         print("Calculation time: {}".format(end - start))
         print(unreceived_data)
-        # trade_per_min_WS.insert_many(unreceived_data)
+        trade_per_min_WS.insert_many(unreceived_data)
         return self.arbdict
 
 
