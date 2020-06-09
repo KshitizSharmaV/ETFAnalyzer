@@ -55,11 +55,9 @@ class tradestruct():
 
 class ArbPerMin():
 
-    def __init__(self):
-        self.etflist = list(
-            pd.read_csv("NonChineseETFs.csv").columns.values)
-        f = open('etf-hold.json', 'r')
-        self.etfdict = json.load(f)
+    def __init__(self, etflist, etfdict):
+        self.etflist = etflist
+        self.etfdict = etfdict
         self.trade_dict = {}
 
     def calcArbitrage(self, tickerlist):
@@ -94,8 +92,8 @@ class ArbPerMin():
                                 item[legend] if legend in item.keys() and legend in ['ev', 'sym', 'v', 'av', 'op', 'vw',
                                                                                      'o', 'c', 'h', 'l', 'a'] else (
                                     dt_query_ts - 60000 if legend == 's' else dt_query_ts)) for legend in
-                                  ['ev', 'sym', 'v', 'av', 'op', 'vw', 'o', 'c', 'h', 'l', 'a', 's', 'e']} for item in
-                                 last_recvd_data_for_ticker]
+                                ['ev', 'sym', 'v', 'av', 'op', 'vw', 'o', 'c', 'h', 'l', 'a', 's', 'e']} for item in
+                                last_recvd_data_for_ticker]
                             # for dict_data in x:
                             #     dict_data.update({"s": dt_query_ts - 60000, "e": dt_query_ts})
                             unreceived_data.extend(x)
@@ -124,7 +122,7 @@ class ArbPerMin():
                         # NAV change % Calculation
                         holdingsdf = pd.DataFrame(*[holdings for holdings in holdingdata])
                         holdingsdf.set_index('symbol', inplace=True)
-                        holdingsdf['weight'] = holdingsdf['weight']/100
+                        holdingsdf['weight'] = holdingsdf['weight'] / 100
                         # holdingsdf contains Weights corresponding to each holding
                         navdf = self.tradedf.mul(holdingsdf['weight'], axis=0)['price_pct_chg'].dropna()
                         # nav = sum([holdingsdf.loc[sym, 'weight'] * self.tradedf.loc[sym, 'price_pct_chg'] for sym in
@@ -135,23 +133,35 @@ class ArbPerMin():
                         if len(navdf) >= 10:
                             abs_navdf = navdf.abs().sort_values(ascending=False)
                             moverdict = navdf.loc[abs_navdf.index][:10].to_dict()
-                            moverlist = [(item, moverdict[item]) for item in moverdict]
+                            moverdictlist = {}
+                            [moverdictlist.update({'ETFMover%' + str(i+1): [item, moverdict[item]]}) for item, i in
+                             zip(moverdict, range(len(moverdict)))]
+
                             abs_tradedf = self.tradedf['price_pct_chg'].abs().sort_values(ascending=False)
-                            changedict = abs_tradedf[:10].to_dict()
-                            changelist = [(item, changedict[item]) for item in changedict]
+                            changedict = abs_tradedf.loc[abs_navdf.index][:10].to_dict()
+                            changedictlist = {}
+                            [changedictlist.update({'Change%' + str(i+1): [item, changedict[item]]}) for item, i in
+                             zip(changedict, range(len(changedict)))]
+
                         # If less than 10 Holdings, Top Movers and Price Changes
                         else:
                             abs_navdf = navdf.abs().sort_values(ascending=False)
                             moverdict = navdf.loc[abs_navdf.index][:].to_dict()
-                            moverlist = [(item, moverdict[item]) for item in moverdict]
+                            moverdictlist = {}
+                            [moverdictlist.update({'ETFMover%' + str(i+1): [item, moverdict[item]]}) for item, i in
+                             zip(moverdict, range(len(moverdict)))]
+
                             abs_tradedf = self.tradedf['price_pct_chg'].abs().sort_values(ascending=False)
-                            changedict = abs_tradedf[:].to_dict()
-                            changelist = [(item, changedict[item]) for item in changedict]
+                            changedict = abs_tradedf.loc[abs_navdf.index][:].to_dict()
+                            changedictlist = {}
+                            [changedictlist.update({'Change%' + str(i+1): [item, changedict[item]]}) for item, i in
+                                 zip(changedict, range(len(changedict)))]
 
                         etfprice = self.tradedf.loc[etfname, 'priceT']
                         arbitrage = ((etfchange - nav) * etfprice) / 100
-                        self.arbdict.update({etfname: {'Arbitrage': arbitrage, 'ETF Price': etfprice,
-                                                       'ETF Change Price %': etfchange, 'Net Asset Value Change%': nav, 'Movers':moverlist, 'Change':changelist}})
+                        self.arbdict.update({etfname: {'Arbitrage in $': arbitrage, 'ETF Price': etfprice,
+                                                       'ETF Change Price %': etfchange, 'Net Asset Value Change%': nav,
+                                                       **moverdictlist, **changedictlist}})
                     except Exception as e:
                         # print(e)
                         traceback.print_exc(file=sys.stdout)

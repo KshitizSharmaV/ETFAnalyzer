@@ -1,3 +1,4 @@
+import json
 import sys, traceback
 # For Piyush System
 sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer', '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
@@ -56,7 +57,7 @@ class PerMinAnalysis():
         etfs_in_spread_list = [item[0] for item in spread_list]
         # For ETFs with no Quotes Live Data, Spread = 0
         [spread_list.append((etf, 0)) for etf in etflist if etf not in etfs_in_spread_list]
-        spreadDF = pd.DataFrame(spread_list, columns=['symbol', 'Spread'])
+        spreadDF = pd.DataFrame(spread_list, columns=['symbol', 'ETF Trading Spread in $'])
         if not spreadDF.empty:
             spreadDF = spreadDF.groupby(['symbol']).mean()
         else:
@@ -93,7 +94,9 @@ if __name__=='__main__':
     print("Tick Lists Generated")
     tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
     etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
-    ArbCalcObj = ArbPerMin()
+    with open('etf-hold.json', 'r') as f:
+        etfdict = json.load(f)
+    ArbCalcObj = ArbPerMin(etflist=etflist,etfdict=etfdict)
     PerMinAnlysObj = PerMinAnalysis()
     schedule.every().minute.at(":10").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)
     while True:
