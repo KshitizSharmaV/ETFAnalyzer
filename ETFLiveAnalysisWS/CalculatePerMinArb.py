@@ -163,7 +163,7 @@ class ArbPerMin():
         end = time.time()
         print("Calculation time: {}".format(end - start))
         print(unreceived_data)
-        trade_per_min_WS.insert_many(unreceived_data)
+        # trade_per_min_WS.insert_many(unreceived_data)
         return self.arbdict
 
 
