@@ -252,5 +252,21 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     res['SignalInfo']=analyzeSignalPerformane(res['Arbitrage']['Arbitrage'][0])
     return res
 
+
+############################################
+# ETF Comparison
+############################################
+from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData
+from FlaskAPI.Components.ETFComparison.ComparisonHelper import ETFandHoldingsData
+@app.route('/ETfComparison/<etfname>/<datefor>')
+def getComparisonData(etfname, datefor):
+    holdings_data = ETFandHoldingsData(etfname, datetime.strptime(datefor,'%Y%m%d'))
+    # print(type(holdings_data))
+    arbitrage_data = RetrieveETFArbitrageData(etfname=etfname,date=datefor,magnitudeOfArbitrageToFilterOn=0)
+    return_data_dict = {'ETFdata':holdings_data, 'PNLdata': arbitrage_data[2], 'ScatterPlotdata': arbitrage_data[3]}
+    return json.dumps(return_data_dict)
+
+
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
