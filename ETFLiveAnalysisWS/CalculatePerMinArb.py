@@ -82,6 +82,7 @@ class ArbPerMin():
                         self.trade_dict[symbol] = trade_obj
                 else:
                     # If ticker data not in last minute response
+                    x=[] # for storing the symbols last AM data present in DB
                     try:
                         if ticker in self.etflist:
                             dt_query = datetime.datetime.now().replace(second=0, microsecond=0)
@@ -107,7 +108,10 @@ class ArbPerMin():
                         trade_obj = tradestruct(symbol=symbol, priceT=priceT_1, priceT_1=priceT_1)
                         self.trade_dict[symbol] = trade_obj
                     else:
-                        trade_obj = tradestruct(symbol=symbol, priceT=0)
+                        priceTold = 0
+                        if x:
+                            priceTold = [item['vw'] for item in x if item['sym']==symbol][0]
+                        trade_obj = tradestruct(symbol=symbol, priceT=priceTold)
                         self.trade_dict[symbol] = trade_obj
 
             self.tradedf = pd.DataFrame([value.__dict__ for key, value in self.trade_dict.items()])

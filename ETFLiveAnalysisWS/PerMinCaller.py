@@ -90,7 +90,7 @@ class PerMinAnalysis():
 # Execution part. To be same from wherever PerMinAnalysisCycle() is called.
 if __name__=='__main__':
     # Below 3 Objects' life to be maintained throughout the day while market is open
-    # ListsCreator().create_list_files()
+    ListsCreator().create_list_files()
     print("Tick Lists Generated")
     tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
     etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
