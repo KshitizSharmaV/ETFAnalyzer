@@ -6,4 +6,6 @@ class LiveArbitrageAllETFs(object):
 		allETFsList =pd.read_csv('./CalculateETFArbitrage/final365list.csv')
 		ETFDBCategory = allETFsList['ETFdb.com Category']
 
-	def ETFDbCategoryList()
+	def ETFDbCategoryList():
+		# To Be worked on, not being used anywhere currently
+		pass
