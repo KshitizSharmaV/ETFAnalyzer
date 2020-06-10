@@ -16,7 +16,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         # Full day historical Arbitrage for ETF
         ArbitrageDF = FuncArbitrageData(etfname=etfname)
         mergedDF = ArbitrageDF.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        mergedDF =mergedDF[['Symbol','Timestamp','Arbitrage','Spread','VWPrice','TickVolume']]
+        mergedDF =mergedDF[['Symbol','Timestamp','Arbitrage','Spread','VWPrice','TickVolume','Net Asset Value Change%','ETF Change Price %']]
         mergedDF=mergedDF.round(5)
         
         helperObj=Helper()
@@ -98,7 +98,6 @@ def CategorizeSignals(ArbitrageDf=None):
     bins = [-0.1, 0.05, 0.10, 0.15, 0.20, np.inf]
     names = ['Weak', 'Good', 'Strong', '+ Strong', '++ Strong']
     ArbitrageDf['Group'] = pd.cut(ArbitrageDf['AbsArbitrage'], bins, labels=names)
-    print(ArbitrageDf)
     
     SignalCategorization = {
     'Weak':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
@@ -124,6 +123,7 @@ def CategorizeSignals(ArbitrageDf=None):
     
     SignalCategorization=pd.DataFrame(SignalCategorization).round(3).to_dict()
     SignalCategorization = {k: SignalCategorization[k] for k in names}
+    print("CategorizeSignals")
     print(SignalCategorization)
     return SignalCategorization
 

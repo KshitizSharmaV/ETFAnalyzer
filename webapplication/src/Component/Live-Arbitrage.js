@@ -17,63 +17,55 @@ class Live_Arbitrage extends React.Component{
     }
 
     state = {
-        seconds: (new Date()).getSeconds(),
         LiveData: {},
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:5000/ETfLiveArbitrage/AllTickers`).then(res =>{
-            console.log(res);
-            this.setState({
-                Arbitrage: res.data.Arbitrage,
-                Spread: res.data.Spread,
-                Symbol: res.data.Symbol,
-                VWPrice: res.data.VWPrice,
-                TickVolume: res.data.TickVolume,
-                time: (new Date()).toLocaleString(),
-            });
-            // console.log(this.state);
-        });
-        console.log(this.state.seconds);
         this.fetchETFLiveData()
     }
   
     fetchETFLiveData(){
+        this.updateData();
         setInterval(() => {
-            this.setState({
-                seconds : (this.state.seconds > 59) ? 1 : this.state.seconds + 1
-            });
-            console.log(this.state.seconds);
-            if (this.state.seconds == 13){
-                console.log("this is something")
-                axios.get(`http://localhost:5000/ETfLiveArbitrage/AllTickers`).then(res =>{
-                    this.setState({
-                        Arbitrage: res.data.Arbitrage,
-                        Spread: res.data.Spread,
-                        Symbol: res.data.Symbol,
-                        VWPrice: res.data.VWPrice,
-                        TickVolume: res.data.TickVolume,
-                        time: (new Date()).toLocaleString(),
-                    });
-                    console.log(this.state);
-                });
+            if ((new Date()).getSeconds() == 20){
+                this.updateData();
             }
         }, 1000)
+    }
+
+
+    updateData(){
+        axios.get(`http://localhost:5000/ETfLiveArbitrage/AllTickers`).then(res =>{
+            console.log(res);
+            this.setState({
+                Arbitrage: res.data['Arbitrage in $'],
+                Spread: res.data['ETF Trading Spread in $'],
+                Symbol: res.data.Symbol,
+                VWPrice: res.data.VWPrice,
+                TickVolume: res.data.TickVolume,
+                NAVChange_pct: res.data['Net Asset Value Change%'],
+                ETFPriceChange_pct: res.data['ETF Change Price %'],
+                ETFMover1: res.data['ETFMover%1'],
+                ETFMover2: res.data['ETFMover%2'],
+                Change1: res.data['Change%1'],
+                Change2: res.data['Change%2'],
+                
+                time: (new Date()).toLocaleString(),
+            });
+        });
     }
 
     render(){
         return (
             <Container fluid>
                 <Row>
-                    <Col xs={12} md={6}>
+                    <Col xs={12} md={12}>
+                    <p>{this.state.time}</p>
                         <div className="LiveArbitrageTable pt-1">
                             {
                                 (this.state.Symbol != null) ? <LiveTable data={this.state} /> : ""
                             }
                         </div>
-                    </Col>
-                    <Col xs={12} md={6}>
-                        <p>{this.state.time}</p>
                     </Col>
                 </Row>
             </Container>
@@ -115,8 +107,12 @@ const LiveTable = (props) => {
                     <td className={cls}>{props.data.Symbol[key]}</td>
                     <td className={cls}>{props.data.Arbitrage[key]}</td>
                     <td>{props.data.Spread[key]}</td>
+                    <td>{props.data.NAVChange_pct[key]}</td>
+                    <td>{props.data.ETFPriceChange_pct[key]}</td>
                     <td>{props.data.VWPrice[key]}</td>
                     <td>{props.data.TickVolume[key]}</td>
+                    <td>{props.data.ETFMover1[key][0]}</td>
+                    <td>{props.data.Change1[key][0]}</td>
                 </tr>
             )
         })
@@ -128,10 +124,14 @@ const LiveTable = (props) => {
           <thead className="TableHead">
             <tr>
                 <td>Symbol</td>
-                <td>Arbitrage</td>
-                <td>Spread</td>
-                <td>Price</td>
+                <td>$ Arbitrage</td>
+                <td>$ Spread</td>
+                <td>NAV Change %</td>
+                <td>ETF Change %</td>
+                <td>$ Price</td>
                 <td>Tick Volume</td>
+                <td>ETFMover</td>
+                <td>H Change</td>
             </tr>
           </thead>
           <tbody>
