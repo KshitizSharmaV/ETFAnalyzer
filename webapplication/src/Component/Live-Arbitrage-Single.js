@@ -9,6 +9,7 @@ import axios from 'axios';
 import { tsvParse, csvParse } from  "d3-dsv";
 import { timeParse } from "d3-time-format";
 import Card from 'react-bootstrap/Card'
+import ScatterPlot from './scatterplot';
 import ChartComponent from './StockPriceChart';
 
 
@@ -20,7 +21,7 @@ class Live_Arbitrage extends React.Component{
     state ={
         Full_Day_Arbitrage_Data: {},
         Full_Day_Prices : '',
-        
+        scatterPlotData:'',
         LiveArbitrage:'',
         LiveSpread:'',
         // Prices
@@ -54,11 +55,11 @@ class Live_Arbitrage extends React.Component{
         axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
             console.log(res);
             this.setState({
-                Full_Day_Arbitrage_Data: res.data.Arbitrage,
+                Full_Day_Arbitrage_Data: JSON.parse(res.data.Arbitrage),
                 Full_Day_Prices: {'data':tsvParse(res.data.Prices, this.parseData(this.state.parseDate))},
-                pnlstatementforday: <AppTable data={res.data.pnlstatementforday}/>,
-                SignalCategorization: <AppTable data={res.data.SignalCategorization}/>,
-
+                pnlstatementforday: <AppTable data={JSON.parse(res.data.pnlstatementforday)}/>,
+                SignalCategorization: <AppTable data={JSON.parse(res.data.SignalCategorization)}/>,
+                scatterPlotData: <ScatterPlot data={JSON.parse(res.data.scatterPlotData)}/>,
             });
             console.log(this.state.Full_Day_Prices);
         });    
@@ -67,7 +68,7 @@ class Live_Arbitrage extends React.Component{
 
         // Does Iterative calls
         setInterval(() => {
-            if ((new Date()).getSeconds() == 13){
+            if ((new Date()).getSeconds() == 24){
                 this.UpdateArbitragDataTables(true)
             }
         }, 1000)
@@ -110,7 +111,7 @@ class Live_Arbitrage extends React.Component{
                 <Col xs={12} md={3}>
                     <div className="">
                         <Card>
-                            <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>
+                            <Card.Header className="text-white" style={{'backgroundColor':'#292b2c'}}>
                                 <span className="h4 pull-left pr-2">{this.props.ETF}</span>
                                 H: <span className="text-muted">{this.state.HighPrice} </span>
                                 O: <span className="text-muted">{this.state.OpenPrice} </span>
@@ -144,6 +145,14 @@ class Live_Arbitrage extends React.Component{
                     <div className="DescriptionTable3">
                         <ChartComponent data={this.state.Full_Day_Prices} />
                     </div>
+
+                    <Card>
+                        <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>ETF Change % Vs NAV change %</Card.Header>
+                      <Card.Body>
+                        {this.state.scatterPlotData}                            
+                      </Card.Body>
+                    </Card>
+                
                 </Col>
             </Row>
         </Container>

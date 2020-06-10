@@ -24,13 +24,13 @@ class App extends Component {
   
   state={
     ETF:'XLK',
-    startDate:'20200511'
+    startDate:'20200608'
   };
 
   componentDidMount() {
 		this.setState({
 			ETF:'XLK',
-	   		startDate:'20200511'
+	   		startDate:'20200608'
 		});
   }
 

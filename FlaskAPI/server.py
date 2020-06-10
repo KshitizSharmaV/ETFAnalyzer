@@ -9,7 +9,6 @@ from mongoengine import connect
 import numpy as np
 import math
 import ast
-import json
 from datetime import datetime, timedelta
 import traceback
 import sys
@@ -122,7 +121,8 @@ def FetchPastArbitrageData(ETFName, date):
                          'Etf Mover',
                          'Most Change%',
                          'T', 'T+1']
-
+    print(date)
+    print(type(date))
     # Retreive data for Components
     data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
                                                                                      magnitudeOfArbitrageToFilterOn=0)
@@ -210,8 +210,9 @@ def SendLiveArbitrageDataAllTickers():
         live_prices = PerMinDataOperations().LiveFetchETFPrice()
         ndf = live_data.merge(live_prices, how='left', on='Symbol')
         ndf.dropna(inplace=True)
+        print("###################################$")
+        print(ndf.columns)
         ndf=ndf.round(4)
-        print(ndf)
         return ndf.to_dict()
     except Exception as e:
         print("Issue in Flask app while fetching ETF Description Data")
@@ -223,21 +224,20 @@ def SendLiveArbitrageDataAllTickers():
 # Live Arbitrage Single ETF
 ############################################
 import time
-from FlaskAPI.Components.LiveCalculations.helperLiveArbitrage import fecthArbitrageANDLivePrices, analyzeSignalPerformane, AnalyzeDaysPerformance, CategorizeSignals
+from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fecthArbitrageANDLivePrices, analyzeSignalPerformane, AnalyzeDaysPerformance, CategorizeSignals
 
 
 @app.route('/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage)
-    print(res['Prices'])
-    print(res['Arbitrage'])
+    print(res['Arbitrage'].columns)
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
-    #res['DaysPerformance']=AnalyzeDaysPerformance(res['Arbitrage'])
-    res['pnlstatementforday'] = AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname)
-    res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'])
-    res['Arbitrage'] = res['Arbitrage'].to_dict()
-    return res
+    res['pnlstatementforday'] = json.dumps(AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname))
+    res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage']))
+    res['scatterPlotData'] = json.dumps(res['Arbitrage'][['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records'))
+    res['Arbitrage'] = res['Arbitrage'].to_json()
+    return json.dumps(res)
 
 
 @app.route('/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
@@ -251,7 +251,6 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     res['Arbitrage']=res['Arbitrage'].to_dict()
     res['SignalInfo']=analyzeSignalPerformane(res['Arbitrage']['Arbitrage'][0])
     return res
-
 
 ############################################
 # ETF Comparison
