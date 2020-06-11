@@ -1,3 +1,4 @@
+import datetime
 import sys, traceback
 
 # For Piyush System
@@ -14,6 +15,18 @@ import ujson
 import json
 import pandas as pd
 import websocket
+import logging
+import os
+
+path = os.path.join(os.getcwd(), "Logs/")
+if not os.path.exists(path):
+    os.makedirs(path)
+filename = path + datetime.datetime.now().strftime("%Y%m%d") + "-PolygonLiveData.log"
+handler = logging.FileHandler(filename)
+logging.basicConfig(filename=filename, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='a')
+logger = logging.getLogger("PolygonLiveDataLogger")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(handler)
 
 try:
     import thread
@@ -36,6 +49,7 @@ def on_message(ws, message):
         loop.run_until_complete(PerMinDataOperations().do_insert(dataAM))
         # PerMinDataOperations().insertDataPerMin(data)
         print("Aggregates-Minute Inserted")
+        logger.debug("Aggregates-Minute Inserted")
     if dataQ:
         PerMinDataOperations().insertQuotesLive(dataQ)
         print("Quotes Inserted")
@@ -47,12 +61,15 @@ def on_message(ws, message):
 
 def on_error(ws, error):
     print("error : {}".format(error))
+    logger.exception(error)
     print("retrying...")
+    logger.debug('retrying...')
     main()
 
 
 def on_close(ws):
     print("Connection Closed")
+    logger.debug("Websocket Connection Closed")
 
 
 def on_open(ws):
@@ -67,6 +84,7 @@ def on_open(ws):
     print(tickerlistStr)
     subscription_data = {"action": "subscribe", "params": subs_list}
     ws.send(json.dumps(subscription_data))
+    logger.debug("Subscribed Polygon Websocket for Live data")
 
 
 def main():
@@ -77,6 +95,7 @@ def main():
                                 on_close=on_close)
     ws.on_open = on_open
     ws.run_forever()
+
 
 
 if __name__ == "__main__":

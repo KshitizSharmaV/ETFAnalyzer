@@ -11,6 +11,18 @@ sys.path.extend(['/home/ubuntu/ETFAnalyzer', '/home/ubuntu/ETFAnalyzer/ETFsList_
                  '/home/ubuntu/ETFAnalyzer/CalculateETFArbitrage'])
 sys.path.append("..")  # Remove in production - KTZ
 import datetime
+import logging
+import os
+
+path = os.path.join(os.getcwd(), "Logs/")
+if not os.path.exists(path):
+    os.makedirs(path)
+filename = path + datetime.datetime.now().strftime("%Y%m%d") + "-ArbPerMinLog.log"
+handler = logging.FileHandler(filename)
+logging.basicConfig(filename=filename, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='a')
+logger = logging.getLogger("ArbPerMinLogger")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(handler)
 import time
 import schedule
 from statistics import mean
@@ -37,6 +49,7 @@ class PerMinAnalysis():
         arbDF = pd.DataFrame.from_dict(obj.calcArbitrage(tickerlist), orient='index')
         endarb = time.time()
         print("Arbitrage time: {}".format(endarb - startarb))
+        logger.debug("Arbitrage time: {}".format(endarb - startarb))
         #######################################################
 
         # UTC Timestamps for pulling data from QuotesLiveData DB, below:
@@ -64,6 +77,7 @@ class PerMinAnalysis():
             spreadDF.set_index('symbol', inplace=True)
         endspread = time.time()
         print("Spread Time: {}".format(endspread - startspread))
+        logger.debug("Spread Time: {}".format(endspread - startspread))
         #######################################################
 
         # Results:
@@ -81,10 +95,12 @@ class PerMinAnalysis():
         cols = [cols[0]] + [cols[-1]] + cols[1:-1]
         mergeDF = mergeDF[cols]
         print("Saving following DF:")
+        logger.debug("Saving Merged DF:")
         print(mergeDF)
         SaveCalculatedArbitrage().insertIntoPerMinCollection(end_ts=end_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
         endtime = time.time()
         print("One whole Cycle time : {}".format(endtime - starttime))
+        logger.debug("One whole Cycle time : {}".format(endtime - starttime))
         #######################################################
 
 # Execution part. To be same from wherever PerMinAnalysisCycle() is called.
@@ -92,11 +108,13 @@ if __name__=='__main__':
     # Below 3 Objects' life to be maintained throughout the day while market is open
     # ListsCreator().create_list_files()
     print("Tick Lists Generated")
+    logger.debug("Tick Lists Generated")
     tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
     etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
     with open('etf-hold.json', 'r') as f:
         etfdict = json.load(f)
     ArbCalcObj = ArbPerMin(etflist=etflist,etfdict=etfdict)
+    logger.debug("ArbPerMin() object created for the day")
     PerMinAnlysObj = PerMinAnalysis()
     schedule.every().minute.at(":10").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)
     while True:

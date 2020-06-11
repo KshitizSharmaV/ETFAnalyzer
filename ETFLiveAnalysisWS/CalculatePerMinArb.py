@@ -15,21 +15,15 @@ sys.path.append("..")  # Remove in production - KTZ
 import datetime
 import time
 import pandas as pd
-from CommonServices.ThreadingRequests import IOBoundThreading
-from CommonServices.MultiProcessingTasks import CPUBonundThreading
-from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
-from CommonServices.RetryDecor import retry
 import logging
 import os
 
 path = os.path.join(os.getcwd(), "Logs/")
 if not os.path.exists(path):
     os.makedirs(path)
-
 filename = path + datetime.datetime.now().strftime("%Y%m%d") + "-ArbPerMinLog.log"
 handler = logging.FileHandler(filename)
 logging.basicConfig(filename=filename, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='a')
-# logger = logging.getLogger("EventLogger")
 logger = logging.getLogger("ArbPerMinLogger")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(handler)
@@ -90,6 +84,7 @@ class ArbPerMin():
             print("Exception in CalculatePerMinArb.py at line 84")
             print(e)
             traceback.print_exc()
+            logger.exception(e)
 
     def get_top_movers_and_changes(self, navdf, holdingsdf):
         abs_navdf = navdf.abs().sort_values(ascending=False)
@@ -114,12 +109,14 @@ class ArbPerMin():
     def calcArbitrage(self, tickerlist):
         dt = (datetime.datetime.now()).strftime("%Y-%m-%d %H:%M")
         print(dt)
+        logger.debug("started calcArbitrage for dt {}".format(dt))
         start = time.time()
         unreceived_data = []
         try:
             # Fetch all Aggregate data received this minute
             ticker_data_cursor = PerMinDataOperations().FetchAllTradeDataPerMin(DateTimeOfTrade=dt)
             ticker_data_dict = {ticker_data['sym']: ticker_data['vw'] for ticker_data in ticker_data_cursor}
+            logger.debug('Received data for {} tickers'.format(len(ticker_data_dict)))
             for ticker in tickerlist:  # tickerlist = ETFs + Holdings
                 x = []  # If ticker unreceived, List to store Old/Prev day data from DB, Will also serve as flag in update_trade_dict()
 
@@ -130,17 +127,14 @@ class ArbPerMin():
                     self.update_trade_dict(symbol, price, x)
                 else:
                     # If ticker data not present in last minute response
-                    x = self.fetch_price_for_unrcvd_etfs(
-                        ticker)  # store last AM data present in DB for given ETFs with current time
+                    x = self.fetch_price_for_unrcvd_etfs(ticker)  # store last AM data present in DB for given ETFs with current time
                     symbol = ticker
                     if x:
-                        price = [item['vw'] for item in x if item['sym'] == symbol][
-                        0]  # last stored price for given ETF in DB
+                        price = [item['vw'] for item in x if item['sym'] == symbol][0]  # last stored price for given ETF in DB
                         unreceived_data.extend(x) # To store data for unreceived ticker for this minute. Necessary for Live ETF Prices on live modules/
                     else:
                         price = 0
                     self.update_trade_dict(symbol, price, x)
-
 
             self.tradedf = pd.DataFrame([value.__dict__ for key, value in self.trade_dict.items()])
             self.arbdict = {} # Maintains Calculated arbitrage data only for current minute
@@ -172,17 +166,20 @@ class ArbPerMin():
                     except Exception as e:
                         print(e)
                         traceback.print_exc(file=sys.stdout)
+                        logger.exception(e)
                         pass
         except Exception as e1:
             print(e1)
+            logger.exception(e1)
             pass
         end = time.time()
         print("Calculation time: {}".format(end - start))
         # Storing unreceived data for Live ETF Price availability
         print(unreceived_data)
         trade_per_min_WS.insert_many(unreceived_data)
+        logger.debug('unreceived data length : {}'.format(len(unreceived_data)))
+        logger.debug('unreceived data stored, returning arb result')
         return self.arbdict
-
 
 if __name__ == '__main__':
     print(ArbPerMin(etflist=list(pd.read_csv("NonChineseETFs.csv").columns.values),
