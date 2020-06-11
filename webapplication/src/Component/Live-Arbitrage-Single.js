@@ -53,6 +53,7 @@ class Live_Arbitrage extends React.Component{
     fetchETFLiveData(){
         // Load the Historical Arbitrgae Data for Today 
         axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
+            console.log("fetchETFLiveData");
             console.log(res);
             this.setState({
                 Full_Day_Arbitrage_Data: JSON.parse(res.data.Arbitrage),
@@ -61,7 +62,6 @@ class Live_Arbitrage extends React.Component{
                 SignalCategorization: <AppTable data={JSON.parse(res.data.SignalCategorization)}/>,
                 scatterPlotData: <ScatterPlot data={JSON.parse(res.data.scatterPlotData)}/>,
             });
-            console.log(this.state.Full_Day_Prices);
         });    
         // Immediately Load the current Live arbitrage Data
         this.UpdateArbitragDataTables(false)
@@ -117,6 +117,7 @@ class Live_Arbitrage extends React.Component{
                                 O: <span className="text-muted">{this.state.OpenPrice} </span>
                                 C: <span className="text-muted">{this.state.ClosePrice} </span>
                                 L: <span className="text-muted">{this.state.LowPrice} </span>
+
                                 <div>Time: <span className="text-muted">{this.state.CurrentTime}</span></div>
                             </Card.Header>
                         
@@ -145,14 +146,13 @@ class Live_Arbitrage extends React.Component{
                     <div className="DescriptionTable3">
                         <ChartComponent data={this.state.Full_Day_Prices} />
                     </div>
+                    
+                    <Row>
+                        <Col xs={12} md={6}>
+                            {this.state.scatterPlotData}                            
+                        </Col>
+                    </Row>
 
-                    <Card>
-                        <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>ETF Change % Vs NAV change %</Card.Header>
-                      <Card.Body>
-                        {this.state.scatterPlotData}                            
-                      </Card.Body>
-                    </Card>
-                
                 </Col>
             </Row>
         </Container>

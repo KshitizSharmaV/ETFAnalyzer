@@ -48,7 +48,6 @@ def analysePerformance(df=None, BuySellIndex=None):
     singalDf={}
     for dateindex in BuySellIndex.index:
         idx = df.index.get_loc(dateindex)
-        
         resforward=df.iloc[(idx) : (idx + 6)]['ETF Change Price %']
         tempforward = list(resforward.values)
 

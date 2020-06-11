@@ -1126,5 +1126,13 @@ export const options = [
     {
         "element": "TECL",
         "index": 281
+    },
+    {
+        "element": "SPY",
+        "index": 282
+    },
+    {
+        "element": "SOXX",
+        "index": 283
     }
 ];

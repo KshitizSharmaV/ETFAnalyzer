@@ -231,7 +231,6 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
 def SendLiveArbitrageDataSingleTicker(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage)
-    print(res['Arbitrage'].columns)
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
     res['pnlstatementforday'] = json.dumps(AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname))
     res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage']))
@@ -245,7 +244,6 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage)
     
-    print(res['Prices'])
     print(res['Arbitrage'])
     res['Prices']=res['Prices'].to_dict()
     res['Arbitrage']=res['Arbitrage'].to_dict()
