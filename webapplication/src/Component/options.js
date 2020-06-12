@@ -1,1138 +1,210 @@
 export const options = [
-    {
-        "element": "XLK",
-        "index": 0
-    },
-    {
-        "element": "BMLP",
-        "index": 1
-    },
-    {
-        "element": "IHI",
-        "index": 2
-    },
-    {
-        "element": "SZK",
-        "index": 3
-    },
-    {
-        "element": "JHMC",
-        "index": 4
-    },
-    {
-        "element": "FHLC",
-        "index": 5
-    },
-    {
-        "element": "PUI",
-        "index": 6
-    },
-    {
-        "element": "KBWB",
-        "index": 7
-    },
-    {
-        "element": "FTXG",
-        "index": 8
-    },
-    {
-        "element": "XLV",
-        "index": 9
-    },
-    {
-        "element": "XBI",
-        "index": 10
-    },
-    {
-        "element": "RORE",
-        "index": 11
-    },
-    {
-        "element": "PSCM",
-        "index": 12
-    },
-    {
-        "element": "PASS",
-        "index": 13
-    },
-    {
-        "element": "IEO",
-        "index": 14
-    },
-    {
-        "element": "IYZ",
-        "index": 15
-    },
-    {
-        "element": "XLY",
-        "index": 16
-    },
-    {
-        "element": "PSCF",
-        "index": 17
-    },
-    {
-        "element": "MRRL",
-        "index": 18
-    },
-    {
-        "element": "PXE",
-        "index": 19
-    },
-    {
-        "element": "BNKU",
-        "index": 20
-    },
-    {
-        "element": "XLC",
-        "index": 21
-    },
-    {
-        "element": "XHB",
-        "index": 22
-    },
-    {
-        "element": "PPH",
-        "index": 23
-    },
-    {
-        "element": "XRT",
-        "index": 24
-    },
-    {
-        "element": "NUGT",
-        "index": 25
-    },
-    {
-        "element": "FDIS",
-        "index": 26
-    },
-    {
-        "element": "XWEB",
-        "index": 27
-    },
-    {
-        "element": "FDN",
-        "index": 28
-    },
-    {
-        "element": "RTM",
-        "index": 29
-    },
-    {
-        "element": "SEF",
-        "index": 30
-    },
-    {
-        "element": "USD",
-        "index": 31
-    },
-    {
-        "element": "QABA",
-        "index": 32
-    },
-    {
-        "element": "DRN",
-        "index": 33
-    },
-    {
-        "element": "KBE",
-        "index": 34
-    },
-    {
-        "element": "TAWK",
-        "index": 35
-    },
-    {
-        "element": "IBB",
-        "index": 36
-    },
-    {
-        "element": "UGE",
-        "index": 37
-    },
-    {
-        "element": "PSCE",
-        "index": 38
-    },
-    {
-        "element": "SCC",
-        "index": 39
-    },
-    {
-        "element": "WANT",
-        "index": 40
-    },
-    {
-        "element": "RXL",
-        "index": 41
-    },
-    {
-        "element": "EVX",
-        "index": 42
-    },
-    {
-        "element": "KRE",
-        "index": 43
-    },
-    {
-        "element": "DRV",
-        "index": 44
-    },
-    {
-        "element": "BNKD",
-        "index": 45
-    },
-    {
-        "element": "BTEC",
-        "index": 46
-    },
-    {
-        "element": "ROKT",
-        "index": 47
-    },
-    {
-        "element": "BBC",
-        "index": 48
-    },
-    {
-        "element": "SOXS",
-        "index": 49
-    },
-    {
-        "element": "GASX",
-        "index": 50
-    },
-    {
-        "element": "FXZ",
-        "index": 51
-    },
-    {
-        "element": "CNRG",
-        "index": 52
-    },
-    {
-        "element": "PTH",
-        "index": 53
-    },
-    {
-        "element": "XHE",
-        "index": 54
-    },
-    {
-        "element": "XLP",
-        "index": 55
-    },
-    {
-        "element": "HDGE",
-        "index": 56
-    },
-    {
-        "element": "FXD",
-        "index": 57
-    },
-    {
-        "element": "FTEC",
-        "index": 58
-    },
-    {
-        "element": "REZ",
-        "index": 59
-    },
-    {
-        "element": "XITK",
-        "index": 60
-    },
-    {
-        "element": "TECS",
-        "index": 61
-    },
-    {
-        "element": "IHF",
-        "index": 62
-    },
-    {
-        "element": "DUSL",
-        "index": 63
-    },
-    {
-        "element": "XLF",
-        "index": 64
-    },
-    {
-        "element": "ZIG",
-        "index": 65
-    },
-    {
-        "element": "IYG",
-        "index": 66
-    },
-    {
-        "element": "PBE",
-        "index": 67
-    },
-    {
-        "element": "DDG",
-        "index": 68
-    },
-    {
-        "element": "ZBIO",
-        "index": 69
-    },
-    {
-        "element": "SCHH",
-        "index": 70
-    },
-    {
-        "element": "FINU",
-        "index": 71
-    },
-    {
-        "element": "SOXX",
-        "index": 72
-    },
-    {
-        "element": "XLB",
-        "index": 73
-    },
-    {
-        "element": "FRI",
-        "index": 74
-    },
-    {
-        "element": "IECS",
-        "index": 75
-    },
-    {
-        "element": "XPH",
-        "index": 76
-    },
-    {
-        "element": "IYC",
-        "index": 77
-    },
-    {
-        "element": "SIJ",
-        "index": 78
-    },
-    {
-        "element": "SKYY",
-        "index": 79
-    },
-    {
-        "element": "IYE",
-        "index": 80
-    },
-    {
-        "element": "PKB",
-        "index": 81
-    },
-    {
-        "element": "RETL",
-        "index": 82
-    },
-    {
-        "element": "RYU",
-        "index": 83
-    },
-    {
-        "element": "FTXL",
-        "index": 84
-    },
-    {
-        "element": "PPA",
-        "index": 85
-    },
-    {
-        "element": "PYZ",
-        "index": 86
-    },
-    {
-        "element": "FXU",
-        "index": 87
-    },
-    {
-        "element": "AMZA",
-        "index": 88
-    },
-    {
-        "element": "RWR",
-        "index": 89
-    },
-    {
-        "element": "FMAT",
-        "index": 90
-    },
-    {
-        "element": "XLI",
-        "index": 91
-    },
-    {
-        "element": "REK",
-        "index": 92
-    },
-    {
-        "element": "ITB",
-        "index": 93
-    },
-    {
-        "element": "BBH",
-        "index": 94
-    },
-    {
-        "element": "RYE",
-        "index": 95
-    },
-    {
-        "element": "BBP",
-        "index": 96
-    },
-    {
-        "element": "IEDI",
-        "index": 97
-    },
-    {
-        "element": "IAI",
-        "index": 98
-    },
-    {
-        "element": "PSCT",
-        "index": 99
-    },
-    {
-        "element": "TDV",
-        "index": 100
-    },
-    {
-        "element": "XLE",
-        "index": 101
-    },
-    {
-        "element": "JHMA",
-        "index": 102
-    },
-    {
-        "element": "LABU",
-        "index": 103
-    },
-    {
-        "element": "PPTY",
-        "index": 104
-    },
-    {
-        "element": "JHME",
-        "index": 105
-    },
-    {
-        "element": "XSD",
-        "index": 106
-    },
-    {
-        "element": "VPC",
-        "index": 107
-    },
-    {
-        "element": "REML",
-        "index": 108
-    },
-    {
-        "element": "KBWP",
-        "index": 109
-    },
-    {
-        "element": "DIG",
-        "index": 110
-    },
-    {
-        "element": "UYM",
-        "index": 111
-    },
-    {
-        "element": "EWRE",
-        "index": 112
-    },
-    {
-        "element": "DPST",
-        "index": 113
-    },
-    {
-        "element": "ROOF",
-        "index": 114
-    },
-    {
-        "element": "MORL",
-        "index": 115
-    },
-    {
-        "element": "FTXR",
-        "index": 116
-    },
-    {
-        "element": "FUTY",
-        "index": 117
-    },
-    {
-        "element": "XOP",
-        "index": 118
-    },
-    {
-        "element": "PSL",
-        "index": 119
-    },
-    {
-        "element": "PXJ",
-        "index": 120
-    },
-    {
-        "element": "PSI",
-        "index": 121
-    },
-    {
-        "element": "FTXO",
-        "index": 122
-    },
-    {
-        "element": "IGN",
-        "index": 123
-    },
-    {
-        "element": "RTH",
-        "index": 124
-    },
-    {
-        "element": "IHE",
-        "index": 125
-    },
-    {
-        "element": "FXH",
-        "index": 126
-    },
-    {
-        "element": "BBRE",
-        "index": 127
-    },
-    {
-        "element": "PSCI",
-        "index": 128
-    },
-    {
-        "element": "ROM",
-        "index": 129
-    },
-    {
-        "element": "VCR",
-        "index": 130
-    },
-    {
-        "element": "NAIL",
-        "index": 131
-    },
-    {
-        "element": "FIVG",
-        "index": 132
-    },
-    {
-        "element": "MLPQ",
-        "index": 133
-    },
-    {
-        "element": "ONLN",
-        "index": 134
-    },
-    {
-        "element": "QQQ",
-        "index": 135
-    },
-    {
-        "element": "NRGO",
-        "index": 136
-    },
-    {
-        "element": "AMLP",
-        "index": 137
-    },
-    {
-        "element": "XLU",
-        "index": 138
-    },
-    {
-        "element": "FBT",
-        "index": 139
-    },
-    {
-        "element": "JHMS",
-        "index": 140
-    },
-    {
-        "element": "SKF",
-        "index": 141
-    },
-    {
-        "element": "PJP",
-        "index": 142
-    },
-    {
-        "element": "VNQ",
-        "index": 143
-    },
-    {
-        "element": "VGT",
-        "index": 144
-    },
-    {
-        "element": "INDS",
-        "index": 145
-    },
-    {
-        "element": "CWEB",
-        "index": 146
-    },
-    {
-        "element": "SMN",
-        "index": 147
-    },
-    {
-        "element": "WCLD",
-        "index": 148
-    },
-    {
-        "element": "XTN",
-        "index": 149
-    },
-    {
-        "element": "ERY",
-        "index": 150
-    },
-    {
-        "element": "UTES",
-        "index": 151
-    },
-    {
-        "element": "HOMZ",
-        "index": 152
-    },
-    {
-        "element": "RHS",
-        "index": 153
-    },
-    {
-        "element": "FIDU",
-        "index": 154
-    },
-    {
-        "element": "RDOG",
-        "index": 155
-    },
-    {
-        "element": "UXI",
-        "index": 156
-    },
-    {
-        "element": "SRS",
-        "index": 157
-    },
-    {
-        "element": "IYF",
-        "index": 158
-    },
-    {
-        "element": "TPOR",
-        "index": 159
-    },
-    {
-        "element": "PTF",
-        "index": 160
-    },
-    {
-        "element": "VDE",
-        "index": 161
-    },
-    {
-        "element": "IGE",
-        "index": 162
-    },
-    {
-        "element": "JHMH",
-        "index": 163
-    },
-    {
-        "element": "DUG",
-        "index": 164
-    },
-    {
-        "element": "PBW",
-        "index": 165
-    },
-    {
-        "element": "CLIX",
-        "index": 166
-    },
-    {
-        "element": "JNUG",
-        "index": 167
-    },
-    {
-        "element": "NURE",
-        "index": 168
-    },
-    {
-        "element": "MLPA",
-        "index": 169
-    },
-    {
-        "element": "XNTK",
-        "index": 170
-    },
-    {
-        "element": "IYM",
-        "index": 171
-    },
-    {
-        "element": "FIW",
-        "index": 172
-    },
-    {
-        "element": "PXQ",
-        "index": 173
-    },
-    {
-        "element": "QTEC",
-        "index": 174
-    },
-    {
-        "element": "OIH",
-        "index": 175
-    },
-    {
-        "element": "KIE",
-        "index": 176
-    },
-    {
-        "element": "FINZ",
-        "index": 177
-    },
-    {
-        "element": "IYT",
-        "index": 178
-    },
-    {
-        "element": "XSW",
-        "index": 179
-    },
-    {
-        "element": "LABD",
-        "index": 180
-    },
-    {
-        "element": "XHS",
-        "index": 181
-    },
-    {
-        "element": "JHMU",
-        "index": 182
-    },
-    {
-        "element": "IAT",
-        "index": 183
-    },
-    {
-        "element": "PEZ",
-        "index": 184
-    },
-    {
-        "element": "IFRA",
-        "index": 185
-    },
-    {
-        "element": "UPW",
-        "index": 186
-    },
-    {
-        "element": "IEFN",
-        "index": 187
-    },
-    {
-        "element": "FXR",
-        "index": 188
-    },
-    {
-        "element": "RGI",
-        "index": 189
-    },
-    {
-        "element": "ZMLP",
-        "index": 190
-    },
-    {
-        "element": "VHT",
-        "index": 191
-    },
-    {
-        "element": "XAR",
-        "index": 192
-    },
-    {
-        "element": "IGM",
-        "index": 193
-    },
-    {
-        "element": "RYT",
-        "index": 194
-    },
-    {
-        "element": "IYW",
-        "index": 195
-    },
-    {
-        "element": "IYK",
-        "index": 196
-    },
-    {
-        "element": "IEHS",
-        "index": 197
-    },
-    {
-        "element": "UCC",
-        "index": 198
-    },
-    {
-        "element": "VAW",
-        "index": 199
-    },
-    {
-        "element": "XME",
-        "index": 200
-    },
-    {
-        "element": "IEZ",
-        "index": 201
-    },
-    {
-        "element": "PHO",
-        "index": 202
-    },
-    {
-        "element": "ITA",
-        "index": 203
-    },
-    {
-        "element": "GASL",
-        "index": 204
-    },
-    {
-        "element": "SMH",
-        "index": 205
-    },
-    {
-        "element": "VPU",
-        "index": 206
-    },
-    {
-        "element": "PSCD",
-        "index": 207
-    },
-    {
-        "element": "PSCH",
-        "index": 208
-    },
-    {
-        "element": "PSJ",
-        "index": 209
-    },
-    {
-        "element": "SDP",
-        "index": 210
-    },
-    {
-        "element": "NEED",
-        "index": 211
-    },
-    {
-        "element": "PNQI",
-        "index": 212
-    },
-    {
-        "element": "SOXL",
-        "index": 213
-    },
-    {
-        "element": "SSG",
-        "index": 214
-    },
-    {
-        "element": "KBWR",
-        "index": 215
-    },
-    {
-        "element": "SRVR",
-        "index": 216
-    },
-    {
-        "element": "XLRE",
-        "index": 217
-    },
-    {
-        "element": "FCG",
-        "index": 218
-    },
-    {
-        "element": "VIS",
-        "index": 219
-    },
-    {
-        "element": "JHMT",
-        "index": 220
-    },
-    {
-        "element": "IAK",
-        "index": 221
-    },
-    {
-        "element": "KBWY",
-        "index": 222
-    },
-    {
-        "element": "MLPX",
-        "index": 223
-    },
-    {
-        "element": "ICF",
-        "index": 224
-    },
-    {
-        "element": "PXI",
-        "index": 225
-    },
-    {
-        "element": "PAVE",
-        "index": 226
-    },
-    {
-        "element": "REW",
-        "index": 227
-    },
-    {
-        "element": "HAIL",
-        "index": 228
-    },
-    {
-        "element": "DRIP",
-        "index": 229
-    },
-    {
-        "element": "SLX",
-        "index": 230
-    },
-    {
-        "element": "PILL",
-        "index": 231
-    },
-    {
-        "element": "PBS",
-        "index": 232
-    },
-    {
-        "element": "AIRR",
-        "index": 233
-    },
-    {
-        "element": "IDU",
-        "index": 234
-    },
-    {
-        "element": "FITE",
-        "index": 235
-    },
-    {
-        "element": "IYH",
-        "index": 236
-    },
-    {
-        "element": "REM",
-        "index": 237
-    },
-    {
-        "element": "ERX",
-        "index": 238
-    },
-    {
-        "element": "MLPB",
-        "index": 239
-    },
-    {
-        "element": "PEJ",
-        "index": 240
-    },
-    {
-        "element": "NRGU",
-        "index": 241
-    },
-    {
-        "element": "XTL",
-        "index": 242
-    },
-    {
-        "element": "BIZD",
-        "index": 243
-    },
-    {
-        "element": "ARKG",
-        "index": 244
-    },
-    {
-        "element": "NETL",
-        "index": 245
-    },
-    {
-        "element": "RCD",
-        "index": 246
-    },
-    {
-        "element": "SIMS",
-        "index": 247
-    },
-    {
-        "element": "IETC",
-        "index": 248
-    },
-    {
-        "element": "RYH",
-        "index": 249
-    },
-    {
-        "element": "RYF",
-        "index": 250
-    },
-    {
-        "element": "NRGD",
-        "index": 251
-    },
-    {
-        "element": "VDC",
-        "index": 252
-    },
-    {
-        "element": "XES",
-        "index": 253
-    },
-    {
-        "element": "MORT",
-        "index": 254
-    },
-    {
-        "element": "FREL",
-        "index": 255
-    },
-    {
-        "element": "FENY",
-        "index": 256
-    },
-    {
-        "element": "TDIV",
-        "index": 257
-    },
-    {
-        "element": "FXG",
-        "index": 258
-    },
-    {
-        "element": "PFI",
-        "index": 259
-    },
-    {
-        "element": "BUYN",
-        "index": 260
-    },
-    {
-        "element": "FXL",
-        "index": 261
-    },
-    {
-        "element": "PSR",
-        "index": 262
-    },
-    {
-        "element": "PSCU",
-        "index": 263
-    },
-    {
-        "element": "SBIO",
-        "index": 264
-    },
-    {
-        "element": "PRN",
-        "index": 265
-    },
-    {
-        "element": "FSTA",
-        "index": 266
-    },
-    {
-        "element": "DFEN",
-        "index": 267
-    },
-    {
-        "element": "IYR",
-        "index": 268
-    },
-    {
-        "element": "VOX",
-        "index": 269
-    },
-    {
-        "element": "FXN",
-        "index": 270
-    },
-    {
-        "element": "GUSH",
-        "index": 271
-    },
-    {
-        "element": "CNCR",
-        "index": 272
-    },
-    {
-        "element": "MLPI",
-        "index": 273
-    },
-    {
-        "element": "URE",
-        "index": 274
-    },
-    {
-        "element": "CURE",
-        "index": 275
-    },
-    {
-        "element": "LACK",
-        "index": 276
-    },
-    {
-        "element": "UTSL",
-        "index": 277
-    },
-    {
-        "element": "VMOT",
-        "index": 278
-    },
-    {
-        "element": "IGV",
-        "index": 279
-    },
-    {
-        "element": "WDRW",
-        "index": 280
-    },
-    {
-        "element": "TECL",
-        "index": 281
-    },
-    {
-        "element": "SPY",
-        "index": 282
-    },
-    {
-        "element": "SOXX",
-        "index": 283
-    }
+    { "element": "AMLP", "index": 0 },
+    { "element": "ARKG", "index": 1 },
+    { "element": "BBH", "index": 2 },
+    { "element": "BBRE", "index": 3 },
+    { "element": "CGW", "index": 4 },
+    { "element": "CIBR", "index": 5 },
+    { "element": "DIA", "index": 6 },
+    { "element": "DLN", "index": 7 },
+    { "element": "ERX", "index": 8 },
+    { "element": "ESGU", "index": 9 },
+    { "element": "EWQ", "index": 10 },
+    { "element": "FBT", "index": 11 },
+    { "element": "FCOM", "index": 12 },
+    { "element": "FDIS", "index": 13 },
+    { "element": "FDN", "index": 14 },
+    { "element": "FENY", "index": 15 },
+    { "element": "FEX", "index": 16 },
+    { "element": "FHLC", "index": 17 },
+    { "element": "FIDU", "index": 18 },
+    { "element": "FINX", "index": 19 },
+    { "element": "FIVG", "index": 20 },
+    { "element": "FIW", "index": 21 },
+    { "element": "FNCL", "index": 22 },
+    { "element": "FNX", "index": 23 },
+    { "element": "FREL", "index": 24 },
+    { "element": "FSTA", "index": 25 },
+    { "element": "FTA", "index": 26 },
+    { "element": "FTCS", "index": 27 },
+    { "element": "FTEC", "index": 28 },
+    { "element": "FUTY", "index": 29 },
+    { "element": "FXG", "index": 30 },
+    { "element": "FXH", "index": 31 },
+    { "element": "FXL", "index": 32 },
+    { "element": "FXU", "index": 33 },
+    { "element": "GSLC", "index": 34 },
+    { "element": "GUSH", "index": 35 },
+    { "element": "IAT", "index": 36 },
+    { "element": "IBB", "index": 37 },
+    { "element": "ICF", "index": 38 },
+    { "element": "IDU", "index": 39 },
+    { "element": "IEV", "index": 40 },
+    { "element": "IGE", "index": 41 },
+    { "element": "IGM", "index": 42 },
+    { "element": "IGV", "index": 43 },
+    { "element": "IHE", "index": 44 },
+    { "element": "IHF", "index": 45 },
+    { "element": "IHI", "index": 46 },
+    { "element": "IJH", "index": 47 },
+    { "element": "IJJ", "index": 48 },
+    { "element": "IJK", "index": 49 },
+    { "element": "IJR", "index": 50 },
+    { "element": "IJS", "index": 51 },
+    { "element": "IJT", "index": 52 },
+    { "element": "IOO", "index": 53 },
+    { "element": "ITA", "index": 54 },
+    { "element": "ITB", "index": 55 },
+    { "element": "IUSG", "index": 56 },
+    { "element": "IUSV", "index": 57 },
+    { "element": "IVE", "index": 58 },
+    { "element": "IVOG", "index": 59 },
+    { "element": "IVOO", "index": 60 },
+    { "element": "IVV", "index": 61 },
+    { "element": "IVW", "index": 62 },
+    { "element": "IWP", "index": 63 },
+    { "element": "IWS", "index": 64 },
+    { "element": "IXJ", "index": 65 },
+    { "element": "IXN", "index": 66 },
+    { "element": "IYC", "index": 67 },
+    { "element": "IYE", "index": 68 },
+    { "element": "IYF", "index": 69 },
+    { "element": "IYG", "index": 70 },
+    { "element": "IYH", "index": 71 },
+    { "element": "IYJ", "index": 72 },
+    { "element": "IYK", "index": 73 },
+    { "element": "IYM", "index": 74 },
+    { "element": "IYR", "index": 75 },
+    { "element": "IYT", "index": 76 },
+    { "element": "IYW", "index": 77 },
+    { "element": "IYZ", "index": 78 },
+    { "element": "JKD", "index": 79 },
+    { "element": "JKE", "index": 80 },
+    { "element": "JNUG", "index": 81 },
+    { "element": "KBE", "index": 82 },
+    { "element": "KBWB", "index": 83 },
+    { "element": "KIE", "index": 84 },
+    { "element": "KRE", "index": 85 },
+    { "element": "KXI", "index": 86 },
+    { "element": "LABU", "index": 87 },
+    { "element": "MDY", "index": 88 },
+    { "element": "MDYG", "index": 89 },
+    { "element": "MDYV", "index": 90 },
+    { "element": "MGC", "index": 91 },
+    { "element": "MGK", "index": 92 },
+    { "element": "MGV", "index": 93 },
+    { "element": "MLPA", "index": 94 },
+    { "element": "MLPX", "index": 95 },
+    { "element": "MTUM", "index": 96 },
+    { "element": "NAIL", "index": 97 },
+    { "element": "NOBL", "index": 98 },
+    { "element": "NUGT", "index": 99 },
+    { "element": "OEF", "index": 100 },
+    { "element": "OIH", "index": 101 },
+    { "element": "PBW", "index": 102 },
+    { "element": "PEJ", "index": 103 },
+    { "element": "PEY", "index": 104 },
+    { "element": "PHO", "index": 105 },
+    { "element": "PJP", "index": 106 },
+    { "element": "PNQI", "index": 107 },
+    { "element": "PPA", "index": 108 },
+    { "element": "PSCH", "index": 109 },
+    { "element": "PSCT", "index": 110 },
+    { "element": "PSI", "index": 111 },
+    { "element": "PSJ", "index": 112 },
+    { "element": "PTH", "index": 113 },
+    { "element": "PWB", "index": 114 },
+    { "element": "PWV", "index": 115 },
+    { "element": "QLD", "index": 116 },
+    { "element": "QQQ", "index": 117 },
+    { "element": "QTEC", "index": 118 },
+    { "element": "REM", "index": 119 },
+    { "element": "REZ", "index": 120 },
+    { "element": "RHS", "index": 121 },
+    { "element": "ROM", "index": 122 },
+    { "element": "RPV", "index": 123 },
+    { "element": "RSP", "index": 124 },
+    { "element": "RWL", "index": 125 },
+    { "element": "RWR", "index": 126 },
+    { "element": "RYH", "index": 127 },
+    { "element": "RYT", "index": 128 },
+    { "element": "RYU", "index": 129 },
+    { "element": "SCHD", "index": 130 },
+    { "element": "SCHG", "index": 131 },
+    { "element": "SCHH", "index": 132 },
+    { "element": "SCHM", "index": 133 },
+    { "element": "SCHV", "index": 134 },
+    { "element": "SCHX", "index": 135 },
+    { "element": "SKYY", "index": 136 },
+    { "element": "SLY", "index": 137 },
+    { "element": "SLYG", "index": 138 },
+    { "element": "SLYV", "index": 139 },
+    { "element": "SMH", "index": 140 },
+    { "element": "SOXL", "index": 141 },
+    { "element": "SOXX", "index": 142 },
+    { "element": "SPLG", "index": 143 },
+    { "element": "SPLV", "index": 144 },
+    { "element": "SPMD", "index": 145 },
+    { "element": "SPSM", "index": 146 },
+    { "element": "SPXU", "index": 147 },
+    { "element": "SPY", "index": 148 },
+    { "element": "SPYD", "index": 149 },
+    { "element": "SPYG", "index": 150 },
+    { "element": "SPYV", "index": 151 },
+    { "element": "SRVR", "index": 152 },
+    { "element": "SSO", "index": 153 },
+    { "element": "SUSA", "index": 154 },
+    { "element": "SUSL", "index": 155 },
+    { "element": "TDIV", "index": 156 },
+    { "element": "TECL", "index": 157 },
+    { "element": "TQQQ", "index": 158 },
+    { "element": "USMV", "index": 159 },
+    { "element": "USSG", "index": 160 },
+    { "element": "VAW", "index": 161 },
+    { "element": "VBK", "index": 162 },
+    { "element": "VCR", "index": 163 },
+    { "element": "VDC", "index": 164 },
+    { "element": "VDE", "index": 165 },
+    { "element": "VFH", "index": 166 },
+    { "element": "VGT", "index": 167 },
+    { "element": "VHT", "index": 168 },
+    { "element": "VIOO", "index": 169 },
+    { "element": "VIS", "index": 170 },
+    { "element": "VLUE", "index": 171 },
+    { "element": "VNQ", "index": 172 },
+    { "element": "VO", "index": 173 },
+    { "element": "VOE", "index": 174 },
+    { "element": "VOO", "index": 175 },
+    { "element": "VOOG", "index": 176 },
+    { "element": "VOOV", "index": 177 },
+    { "element": "VOT", "index": 178 },
+    { "element": "VOX", "index": 179 },
+    { "element": "VPU", "index": 180 },
+    { "element": "VTV", "index": 181 },
+    { "element": "VUG", "index": 182 },
+    { "element": "VV", "index": 183 },
+    { "element": "XAR", "index": 184 },
+    { "element": "XBI", "index": 185 },
+    { "element": "XHB", "index": 186 },
+    { "element": "XHE", "index": 187 },
+    { "element": "XLB", "index": 188 },
+    { "element": "XLC", "index": 189 },
+    { "element": "XLE", "index": 190 },
+    { "element": "XLF", "index": 191 },
+    { "element": "XLI", "index": 192 },
+    { "element": "XLK", "index": 193 },
+    { "element": "XLP", "index": 194 },
+    { "element": "XLRE", "index": 195 },
+    { "element": "XLU", "index": 196 },
+    { "element": "XLV", "index": 197 },
+    { "element": "XLY", "index": 198 },
+    { "element": "XME", "index": 199 },
+    { "element": "XMLV", "index": 200 },
+    { "element": "XMMO", "index": 201 },
+    { "element": "XNTK", "index": 202 },
+    { "element": "XOP", "index": 203 },
+    { "element": "XRT", "index": 204 },
+    { "element": "XSD", "index": 205 },
+    { "element": "XSLV", "index": 206 },
+    { "element": "XT", "index": 207 }
 ];
