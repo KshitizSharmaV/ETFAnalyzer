@@ -97,4 +97,6 @@ trade_per_min_WS_motor = motor_db.TradePerMinWS
 
 quotesWS_collection = db.QuotesLiveData
 
+etfholdings_collection = db.ETFHoldings
+
 connection.close()
