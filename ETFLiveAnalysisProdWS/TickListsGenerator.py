@@ -48,24 +48,29 @@ class ListsCreator():
             return self.convertDataToDict(df,etfname) if df is not None else self.raiseError(errorType=2)
                 
     def create_list_files(self):
-        AllEtfNames = list(pd.read_csv("../CSVFiles/NonChineseETFs.csv").columns.values)
-        
-        ThreadingResults = CPUBonundThreading(self.ETFHoldJsonData, AllEtfNames)
+        try:
+            AllEtfNames = list(pd.read_csv("../CSVFiles/NonChineseETFs.csv").columns.values)
+            
+            ThreadingResults = CPUBonundThreading(self.ETFHoldJsonData, AllEtfNames)
 
-        AllHoldingsList=[]
-        etfdicts = []
-        for res in ThreadingResults:
-            etfdicts.append(res['ETFHoldingsData'])
-            AllHoldingsList=AllHoldingsList+res['HoldingsList']
+            AllHoldingsList=[]
+            etfdicts = []
+            for res in ThreadingResults:
+                etfdicts.append(res['ETFHoldingsData'])
+                AllHoldingsList=AllHoldingsList+res['HoldingsList']
 
-        #print(len(etfdicts))
-        out_file = open("../CSVFiles/etf-hold.json", "w")
-        json.dump(etfdicts, out_file, indent=6)
-        out_file.close()
+            #print(len(etfdicts))
+            out_file = open("../CSVFiles/etf-hold.json", "w")
+            json.dump(etfdicts, out_file, indent=6)
+            out_file.close()
 
-        AllTickerSet = set(AllHoldingsList+AllEtfNames)
-        #print(len(AllTickerSet))
-        RelevantHoldings().write_to_csv(etflist=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
+            AllTickerSet = set(AllHoldingsList+AllEtfNames)
+            #print(len(AllTickerSet))
+            RelevantHoldings().write_to_csv(etflist=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
+            return "Tick Lists Generated Successfully"
+        except Exception as e:
+            errorMessage = "####*** Error in generating Tick List in TickListsGenerator.py" + '\n'+traceback.print_exc()
+            return errorMessage
 
 if __name__=='__main__':
     ListsCreator().create_list_files()
