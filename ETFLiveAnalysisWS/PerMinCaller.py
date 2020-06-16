@@ -109,9 +109,9 @@ if __name__=='__main__':
     ListsCreator().create_list_files()
     print("Tick Lists Generated")
     logger.debug("Tick Lists Generated")
-    tickerlist = list(pd.read_csv("tickerlist.csv").columns.values)
-    etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
-    with open('etf-hold.json', 'r') as f:
+    tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
+    etflist = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
+    with open('../CSVFiles/etf-hold.json', 'r') as f:
         etfdict = json.load(f)
     ArbCalcObj = ArbPerMin(etflist=etflist,etfdict=etfdict)
     logger.debug("ArbPerMin() object created for the day")
