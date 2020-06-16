@@ -1,11 +1,10 @@
 import sys, traceback
+sys.path.append("..")
 import pandas as pd
-from CommonServices.ImportExtensions import  Importer
 from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from CommonServices.ThreadingRequests import IOBoundThreading
 from CommonServices.LogCreater import  CreateLogger
 logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='QuotesLiveFetchLog.log', loggerName='QuotesLiveFetch')
-Importer().extend_sys_paths()
 
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from MongoDB.PerMinDataOperations import PerMinDataOperations
