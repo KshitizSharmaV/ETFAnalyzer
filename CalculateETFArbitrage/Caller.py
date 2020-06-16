@@ -40,7 +40,7 @@ logger2.addHandler(handler2)
 
 etfwhichfailed = []
 # MAKE A LIST OF WORKING ETFs.
-workingdf = pd.read_csv("NonChineseETFs.csv")
+workingdf = pd.read_csv("../CSVFiles/250M_WorkingETFs.csv")
 # workinglist = workingdf['Symbol'].to_list()
 workinglist = workingdf.columns.to_list()
 print("List of working ETFs:")
