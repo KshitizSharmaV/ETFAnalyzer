@@ -41,12 +41,12 @@ logger.addHandler(handler)
 
 def startCronJobForETFHoldings():
     finalETFlistDF = pd.DataFrame()
-    list_of_365_etfs_df = pd.read_csv('./CSVFiles/250M_WorkingETFs.csv')
+    list_of_200_etfs_df = pd.read_csv('./CSVFiles/250M_WorkingETFs.csv')
     for url in ['https://etfdb.com/etfs/sector/', 'https://etfdb.com/etfs/country/us/']:
         Download523TickersList().fetchTickerDataDescription(url)
         df = pd.read_csv('./ETFDailyData/ETFTickersDescription/' + datetime.now().strftime(
             "%Y%m%d") + '/etfs_details_type_fund_flow.csv')
-        df = df.loc[df['Symbol'].isin(list_of_365_etfs_df['Symbol'].tolist())]
+        df = df.loc[df['Symbol'].isin(list_of_200_etfs_df['Symbol'].tolist())]
         finalETFlistDF = pd.concat([finalETFlistDF, df], ignore_index=True).drop_duplicates(subset='Symbol')
     print(finalETFlistDF)
 
@@ -54,10 +54,10 @@ def startCronJobForETFHoldings():
     # Pull ETF list into a dataframe
     ETFListDF = PullHoldingsListClass().ReturnetflistDF()
     
-    print(list_of_365_etfs_df['Symbol'].tolist())
-    print(len(list_of_365_etfs_df['Symbol'].tolist()))
+    print(list_of_200_etfs_df['Symbol'].tolist())
+    print(len(list_of_200_etfs_df['Symbol'].tolist()))
     # For each ETF download all holdings and save to DB
-    for etf in list_of_365_etfs_df['Symbol'].tolist():
+    for etf in list_of_200_etfs_df['Symbol'].tolist():
         # for etf in ['DIET']:
         print("Processing for {} etf".format(etf))
         logger.debug("Processing for {} etf".format(etf))
