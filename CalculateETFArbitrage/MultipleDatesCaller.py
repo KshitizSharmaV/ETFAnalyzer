@@ -44,7 +44,7 @@ dates = ['2020-04-01', '2020-04-02', '2020-04-15', '2020-04-16', '2020-04-27', '
 for date in dates:
     etfwhichfailed = []
     # MAKE A LIST OF WORKING ETFs.
-    workingdf = pd.read_csv("NonChineseETFs.csv")
+    workingdf = pd.read_csv("../CSVFiles/250M_WorkingETFs.csv")
     # workinglist = workingdf['Symbol'].to_list()
     workinglist = workingdf.columns.to_list()
     print("List of working ETFs:")
