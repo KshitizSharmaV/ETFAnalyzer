@@ -166,6 +166,6 @@ class ArbPerMin():
         return self.arbdict
 
 if __name__ == '__main__':
-    print(ArbPerMin(etflist=list(pd.read_csv("NonChineseETFs.csv").columns.values),
-                    etfdict=json.load(open('etf-hold.json', 'r'))).calcArbitrage(
-        tickerlist=list(pd.read_csv("tickerlist.csv").columns.values)))
+    print(ArbPerMin(etflist=list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values),
+                    etfdict=json.load(open('../CSVFiles/etf-hold.json', 'r'))).calcArbitrage(
+        tickerlist=list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)))
