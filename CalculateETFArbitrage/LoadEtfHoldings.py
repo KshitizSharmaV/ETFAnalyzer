@@ -75,6 +75,7 @@ class LoadHoldingsdata(object):
                 MongoDBConnectors().get_mongoengine_readWrite_production_production()
             else:
                 MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+                # MongoDBConnectors().get_mongoengine_devlocal_devlocal()
 
             etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
                 '-FundHoldingsDate').first()
@@ -113,6 +114,7 @@ class LoadHoldingsdata(object):
                 MongoDBConnectors().get_mongoengine_readWrite_production_production()
             else:
                 MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+                # MongoDBConnectors().get_mongoengine_devlocal_devlocal()
             etfdata = ETF.objects(ETFTicker=etfname).order_by('-FundHoldingsDate').first()
             print(etfdata.ETFTicker)
             holdingsdatadf = pd.DataFrame(etfdata.to_mongo().to_dict()['holdings'])
