@@ -41,7 +41,7 @@ logger.addHandler(handler)
 
 def startCronJobForETFHoldings():
     finalETFlistDF = pd.DataFrame()
-    list_of_365_etfs_df = pd.read_csv('./CalculateETFArbitrage/final365list.csv')
+    list_of_365_etfs_df = pd.read_csv('./CSVFiles/250M_WorkingETFs.csv')
     for url in ['https://etfdb.com/etfs/sector/', 'https://etfdb.com/etfs/country/us/']:
         Download523TickersList().fetchTickerDataDescription(url)
         df = pd.read_csv('./ETFDailyData/ETFTickersDescription/' + datetime.now().strftime(
