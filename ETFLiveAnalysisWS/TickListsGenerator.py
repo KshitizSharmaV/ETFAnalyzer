@@ -6,7 +6,7 @@ import datetime
 
 class ListsCreator():
     def create_list_files(self):
-        workinglist = list(pd.read_csv("NonChineseETFs.csv").columns.values)
+        workinglist = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
         holdingslist = []
         etfdicts = []
         for etfname in workinglist:
@@ -26,14 +26,14 @@ class ListsCreator():
             except:
                 pass
 
-        out_file = open("etf-hold.json", "w")
+        out_file = open("../CSVFiles/etf-hold.json", "w")
         json.dump(etfdicts, out_file, indent=6)
         out_file.close()
         holdingslist = holdingslist + workinglist
         # tickerlist = ["AM." + x for x in holdingslist]
         tickerset = set(holdingslist)
 
-        RelevantHoldings().write_to_csv(etflist=list(tickerset), filename="tickerlist.csv")
+        RelevantHoldings().write_to_csv(etflist=list(tickerset), filename="../CSVFiles/tickerlist.csv")
 
 if __name__=='__main__':
     ListsCreator().create_list_files()
