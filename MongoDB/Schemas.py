@@ -30,7 +30,7 @@ else:
         Will need to specify username password file in MongoDB/MongoDBConnections.py __init__() '''
     # motor_client = MongoDBConnectors().get_motorasync_readWrite_devlocal_production()
     ''' Dev Local to Dev Local '''
-    # motor_client = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+    # motor_client = MongoDBConnectors().get_motorasync_devlocal_devlocal()
 
 motor_db = motor_client.ETF_db
 
