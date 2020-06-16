@@ -1,6 +1,10 @@
 import sys  # Remove in production - KTZ
 import traceback
-
+sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/HoldingsDataScripts',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/CommonServices',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage'])
 sys.path.append("..")  # Remove in production - KTZ
 import pandas as pd
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
@@ -32,7 +36,7 @@ class RelevantHoldings():
             # self.listofetfs = [str(etf.Symbol) for etf in etflistdocument.etflist]
             # print(self.listofetfs)
             # print(len(self.listofetfs))
-            etfdf = pd.read_csv("final365list.csv")
+            etfdf = pd.read_csv("../CSVFiles/250M_WorkingETFs.csv")
             self.listofetfs = etfdf['Symbol']
             print(self.listofetfs)
             print(len(self.listofetfs))
