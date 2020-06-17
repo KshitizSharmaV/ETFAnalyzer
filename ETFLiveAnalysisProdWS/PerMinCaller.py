@@ -21,8 +21,9 @@ logger = logObj.createLogFile(dirName="Logs/",logFileName="-PerMinCaller.log",lo
 class PerMinAnalysis():
     def __init__(self):
         self.perMinDataObj = PerMinDataOperations()
-    
-    def PerMinAnalysisCycle(self, obj):
+        self.spreadDF = pd.DataFrame()
+
+    def get_ts_for_fetching_data(self):
         #######################################################
         # UTC Timestamps for pulling data from QuotesLiveData DB, below:
         #######################################################
@@ -30,6 +31,29 @@ class PerMinAnalysis():
         end_dt_ts = int(end_dt.timestamp() * 1000)
         start_dt = end_dt - datetime.timedelta(minutes=1)
         start_dt_ts = int(start_dt.timestamp() * 1000)
+        return end_dt,end_dt_ts,start_dt,start_dt_ts
+
+    def calculate_spread_for_minute(self):
+
+        #######################################################
+        # ETF Spread Calculation
+        #######################################################
+        timestamps = self.get_ts_for_fetching_data()
+        end_dt_ts = timestamps[1]
+        start_dt_ts = timestamps[3]
+        QuotesResultsCursor = self.perMinDataObj.FetchQuotesLiveDataForSpread(start_dt_ts, end_dt_ts)
+        QuotesDataDf = pd.DataFrame(list(QuotesResultsCursor))
+        QuotesDataDf['ETF Trading Spread in $'] = QuotesDataDf['askprice'] - QuotesDataDf['bidprice']
+        self.spreadDF = QuotesDataDf.groupby(['symbol']).mean()
+
+    def PerMinAnalysisCycle(self, obj):
+        #######################################################
+        # UTC Timestamps for pulling data from QuotesLiveData DB, below:
+        #######################################################
+        timestamps = self.get_ts_for_fetching_data()
+        end_dt_ts = timestamps[1]
+        start_dt = timestamps[2]
+        start_dt_ts = timestamps[3]
 
         #######################################################
         # ETF Arbitrage Calculation
@@ -40,15 +64,15 @@ class PerMinAnalysis():
         #######################################################
         #ETF Spread Calculation
         #######################################################
-        QuotesResultsCursor = self.perMinDataObj.FetchQuotesLiveDataForSpread(start_dt_ts, end_dt_ts)
-        QuotesDataDf = pd.DataFrame(list(QuotesResultsCursor))
-        QuotesDataDf['ETF Trading Spread in $'] = QuotesDataDf['askprice'] - QuotesDataDf['bidprice']
-        spreadDF = QuotesDataDf.groupby(['symbol']).mean()
+        # QuotesResultsCursor = self.perMinDataObj.FetchQuotesLiveDataForSpread(start_dt_ts, end_dt_ts)
+        # QuotesDataDf = pd.DataFrame(list(QuotesResultsCursor))
+        # QuotesDataDf['ETF Trading Spread in $'] = QuotesDataDf['askprice'] - QuotesDataDf['bidprice']
+        # spreadDF = QuotesDataDf.groupby(['symbol']).mean()
         
         #######################################################
         # Results:
         #######################################################
-        mergeDF = arbDF.merge(spreadDF, how='outer', left_index=True, right_index=True)
+        mergeDF = arbDF.merge(self.spreadDF, how='outer', left_index=True, right_index=True)
         mergeDF.reset_index(inplace=True)
         mergeDF.rename(columns={"index":"Symbol"}, inplace=True)
         cols = list(mergeDF.columns)
@@ -59,7 +83,7 @@ class PerMinAnalysis():
         logger.debug("arbDF")
         logger.debug(arbDF)
         logger.debug("spreadDF")
-        logger.debug(spreadDF)
+        logger.debug(self.spreadDF)
         logger.debug("mergeDF")
         logger.debug(mergeDF)
         
@@ -91,10 +115,10 @@ if __name__=='__main__':
 
     logger.debug("ArbPerMin() object created for the day")
     PerMinAnlysObj = PerMinAnalysis()
-    
-    PerMinAnlysObj.PerMinAnalysisCycle(ArbCalcObj)
-    
-    schedule.every().minute.at(":05").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)
+    # # Line 119 not needed, can cause error.
+    # PerMinAnlysObj.PerMinAnalysisCycle(ArbCalcObj)
+    schedule.every().minute.at(":00").do(PerMinAnlysObj.calculate_spread_for_minute)
+    schedule.every().minute.at(":04").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)
     while True:
         schedule.run_pending()
         time.sleep(1)
