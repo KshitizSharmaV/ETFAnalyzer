@@ -13,7 +13,7 @@ from CommonServices.LogCreater import CreateLogger
 from CommonServices import ImportExtensions
 
 logObj = CreateLogger()
-logger = logObj.createLogFile(dirName="Logs/",logFileName="-TradesLiveLog.log",loggerName="CalculateArbPerMinLog")
+logger = logObj.createLogFile(dirName="Logs/",logFileName="-TradesLiveLog.log",loggerName="TradesLiveLog")
 
 
 try:

@@ -61,13 +61,6 @@ class PerMinAnalysis():
         startarb = time.time()
         arbDF = obj.calcArbitrage(end_dt_ts=end_dt_ts,start_dt_ts=start_dt_ts,start_dt=start_dt)
 
-        #######################################################
-        #ETF Spread Calculation
-        #######################################################
-        # QuotesResultsCursor = self.perMinDataObj.FetchQuotesLiveDataForSpread(start_dt_ts, end_dt_ts)
-        # QuotesDataDf = pd.DataFrame(list(QuotesResultsCursor))
-        # QuotesDataDf['ETF Trading Spread in $'] = QuotesDataDf['askprice'] - QuotesDataDf['bidprice']
-        # spreadDF = QuotesDataDf.groupby(['symbol']).mean()
         
         #######################################################
         # Results:

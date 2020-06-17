@@ -62,6 +62,7 @@ class Description extends React.Component{
   
   fetchETFDescriptionData(){
     axios.get(`http://localhost:5000/ETfDescription/EtfData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
+      console.log(res);
         this.setState({
           DescriptionData : res.data.ETFDataObject,
           HoldingsData : res.data.HoldingsDatObject,

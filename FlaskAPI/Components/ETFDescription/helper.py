@@ -2,32 +2,68 @@ from mongoengine import connect
 import datetime
 from PolygonTickData.HistoricOHLCgetter import HistoricOHLC
 from PolygonTickData.Helper import Helper
+import pandas as pd
+
+tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
 
 def fetchETFsWithSameIssuer(connection=None, Issuer=None):
     CollectionName = connection.ETF_db.ETFHoldings
-    query = {'Issuer': Issuer}
-    dataD = CollectionName.find(query, {'FundHoldingsDate': 1, 'ETFTicker': 1, 'TotalAssetsUnderMgmt': 1, 'ETFName': 1,
-                                        '_id': 0}).sort('-FundHoldingsDate')
-    # Search How to loop over mongo cursor and extract data - Do Something
+    
+    dataD=CollectionName.aggregate([
+        {"$match":{
+            'Issuer':Issuer
+            }},
+        {"$group":{
+            "_id":"$ETFTicker",
+            "FundHoldingsDate":{"$last":'$FundHoldingsDate'},
+            "TotalAssetsUnderMgmt":{"$last":"$TotalAssetsUnderMgmt"},
+            "ETFName":{"$last":"$ETFName"},
+            }},
+        {"$project":{
+              "ETFTicker":"$_id",
+              "FundHoldingsDate":"$FundHoldingsDate",
+              "TotalAssetsUnderMgmt":"$TotalAssetsUnderMgmt",
+              "ETFName":"$ETFName"
+            }}
+        ])
+
     ETFWithSameIssuer = {}
     for item in dataD:
-        if item['ETFTicker'] not in list(item.keys()):
-            ETFWithSameIssuer[item['ETFTicker']] = {'ETFName': item['ETFName'],
-                                               'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
+        etfTicker = item['ETFTicker']
+        if etfTicker not in tickerlist:
+            ETFWithSameIssuer[etfTicker] = {'ETFName': item['ETFName'],
+                                            'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
+        
     return ETFWithSameIssuer
 
 
 def fetchETFsWithSameETFdbCategory(connection=None,ETFdbCategory=None):
     CollectionName = connection.ETF_db.ETFHoldings
     # Find ETFs with same ETFdbCategory
-    data = CollectionName.find({'ETFdbCategory': ETFdbCategory},
-                               {'FundHoldingsDate': 1, 'ETFTicker': 1, 'TotalAssetsUnderMgmt': 1, 'ETFName': 1,
-                                '_id': 0}).sort('-FundHoldingsDate')
+    dataD=CollectionName.aggregate([
+        {"$match":{
+            'ETFdbCategory':ETFdbCategory
+            }},
+        {"$group":{
+            "_id":"$ETFTicker",
+            "FundHoldingsDate":{"$last":'$FundHoldingsDate'},
+            "TotalAssetsUnderMgmt":{"$last":"$TotalAssetsUnderMgmt"},
+            "ETFName":{"$last":"$ETFName"},
+            }},
+        {"$project":{
+              "ETFTicker":"$_id",
+              "FundHoldingsDate":"$FundHoldingsDate",
+              "TotalAssetsUnderMgmt":"$TotalAssetsUnderMgmt",
+              "ETFName":"$ETFName"
+            }}
+        ])
+
     ETFWithSameETFDBCategory = {}
-    for item in data:
-        if item['ETFTicker'] not in list(item.keys()):
-            ETFWithSameETFDBCategory[item['ETFTicker']] = {'ETFName': item['ETFName'],
-                                               'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
+    for item in dataD:
+        etfTicker = item['ETFTicker']
+        if etfTicker not in tickerlist:
+            ETFWithSameETFDBCategory[etfTicker] = {'ETFName': item['ETFName'],
+                                                'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
     return ETFWithSameETFDBCategory
 
 

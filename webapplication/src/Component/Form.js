@@ -60,20 +60,8 @@ class Former extends Component{
 
   	// Submit funtion to send state to parent to render 
   	submit = () => {
-  		const tempDate=this.state.date;
   		var passdate=''
-	    if (tempDate.getMonth() < 9){
-	      if (tempDate.getDate() < 10){
-	      	passdate=tempDate.getFullYear() + '0' + (tempDate.getMonth()+1) + '0' + tempDate.getDate();
-	      }
-	      passdate=tempDate.getFullYear() + '0' + (tempDate.getMonth()+1) + '' + tempDate.getDate();
-	    }
-	    else {
-	      if (tempDate.getDate() < 10){
-	      	passdate=tempDate.getFullYear() + '' + (tempDate.getMonth()+1) + '0' + tempDate.getDate();
-	      }
-	      passdate=tempDate.getFullYear() + '' + (tempDate.getMonth()+1) + '' + tempDate.getDate();
-	    }
+  		passdate = this.state.date.getFullYear() + ("0" + (this.state.date.getMonth() + 1)).slice(-2) + ("0" + this.state.date.getDate()).slice(-2)
 		this.props.SubmitFn(this.state.ETF, passdate);
 	}
 
