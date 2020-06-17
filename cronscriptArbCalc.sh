@@ -1,5 +1,5 @@
 #!/bin/bash
-PID=$(pidof python)
+PID=$(pgrep -f ProcessCaller.py)
 while [ -e /proc/$PID ]; do
   sleep .6
 done
