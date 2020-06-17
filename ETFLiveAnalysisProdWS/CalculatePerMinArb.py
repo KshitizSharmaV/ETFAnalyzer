@@ -57,35 +57,31 @@ class ArbPerMin():
                 logger.exception(e)
                 pass
     
-    def TradePricesForTickers(self,DateTimeOfTrade=None):
-        TradesDataCursor = PerMinDataOperations().FetchAllTradeDataPerMinProd(DateTimeOfTrade=DateTimeOfTrade)
+    def TradePricesForTickers(self,start_dt_ts, end_dt_ts):
+        TradesDataCursor = PerMinDataOperations().FetchAllTradeDataPerMin(start_dt_ts, end_dt_ts)
         TradePriceDf=pd.DataFrame(list(TradesDataCursor))
         TradePriceDf.set_index('sym', inplace=True)
         return TradePriceDf
 
-    def IntializingPreviousMinTradeDf(self,Current_Min=None):
-        Prev_Min = Current_Min - datetime.timedelta(minutes=1)
-        Prev_Min_ts = int(Prev_Min.timestamp() * 1000)
-        return self.TradePricesForTickers(DateTimeOfTrade=Prev_Min_ts)
+    def IntializingPreviousMinTradeDf(self,end_dt,end_dt_ts):
+        start_dt = end_dt - datetime.timedelta(minutes=1)
+        start_dt_ts = int(start_dt.timestamp() * 1000)
+        return self.TradePricesForTickers(start_dt_ts, end_dt_ts)
 
-    def calcArbitrage(self):
-        ##*** Testing Please remove if you see uncommented in Code - KTZ
-        #Current_Min = datetime.datetime(2020,6,11,13,27).replace(second=0,microsecond=0)
-        ##*** Testing Please remove if you see uncommented in Code - KTZ
-        Current_Min = (datetime.datetime.now()).strftime("%Y-%m-%d %H:%M")
-        Current_Min_ts = int(Current_Min.timestamp() * 1000)
+    def calcArbitrage(self,start_dt=None,end_dt_ts=None,start_dt_ts=None):
         
-        logger.debug("Started calcArbitrage for dt {}".format(Current_Min_ts))
+        logger.debug("Started calcArbitrage for dt {}".format(end_dt_ts))
         start = time.time()
         try:
             # Fetch all Aggregate data received this minute
-            self.TradesDataDfCurrentMin = self.TradePricesForTickers(DateTimeOfTrade=Current_Min_ts)
-            self.TradesDataDfPreviousMin = self.IntializingPreviousMinTradeDf(Current_Min=Current_Min)if self.TradesDataDfPreviousMin is None else self.TradesDataDfPreviousMin 
-            
+            self.TradesDataDfCurrentMin = self.TradePricesForTickers(start_dt_ts, end_dt_ts)
+
+            self.TradesDataDfPreviousMin = self.IntializingPreviousMinTradeDf(start_dt, start_dt_ts)if self.TradesDataDfPreviousMin is None else self.TradesDataDfPreviousMin 
+
             # Concating Prev Min Data df To New Min data, that way T_1 is maintained in lifecycle
             self.TradesDataDfCurrentMin=pd.concat([self.TradesDataDfCurrentMin,
                 self.TradesDataDfPreviousMin[~self.TradesDataDfPreviousMin.index.isin(self.TradesDataDfCurrentMin.index)]])
-            # Merge Current & Old Minute to calculation %Change, from above If Ticker doesn't come in T Min, Pct_change will become 0
+
             PriceChange = pd.merge(self.TradesDataDfCurrentMin,self.TradesDataDfPreviousMin,left_index=True,right_index=True,how='left')
             PriceChange.columns = ['priceT','priceT_1']
             PriceChange['price_pct_chg'] = -PriceChange.pct_change(axis=1)['priceT_1']*100
@@ -95,16 +91,19 @@ class ArbPerMin():
             tempDf=pd.DataFrame(columns=PriceChange.columns,index=NotavailableInDf).fillna(0)
             PriceChange = pd.concat([PriceChange,tempDf])
 
+
+            logger.debug("Price Change")
+            logger.debug(PriceChange)
             partial_arbitrtage_func = partial(self.calculation_for_each_etf, PriceChange)
             arbitrage_threadingresults = CPUBonundThreading(partial_arbitrtage_func, self.etfdict)
             arbdict={}
             [arbdict.update(item) for item in arbitrage_threadingresults]
             arbdict=pd.DataFrame.from_dict(arbdict, orient='index')
+            arbdict.index.name  = 'symbol'
             self.TradesDataDfPreviousMin=self.TradesDataDfCurrentMin
         except Exception as e:
             traceback.print_exc()
             logger.exception(traceback.print_exc())
         
-        print("Calculation time: {}".format(time.time() - start))
         return arbdict
         

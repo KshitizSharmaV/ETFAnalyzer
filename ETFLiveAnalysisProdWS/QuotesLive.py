@@ -1,10 +1,11 @@
 import sys, traceback
 sys.path.append("..")
+import datetime
 import pandas as pd
 from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from CommonServices.ThreadingRequests import IOBoundThreading
 from CommonServices.LogCreater import  CreateLogger
-logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='QuotesLiveFetchLog.log', loggerName='QuotesLiveFetch')
+logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-QuotesLiveFetchLog.log', loggerName='QuotesLiveFetch')
 
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from MongoDB.PerMinDataOperations import PerMinDataOperations
@@ -28,22 +29,24 @@ class QuotesLiveFetcher():
             responseData = {"symbol":response['symbol']}
             responseData.update(**response['last'])
         except:
-            print("No quotes data for {}".format(response['symbol']))
+            #print("No quotes data for {}".format(response['symbol']))
             logger.debug("No quotes data for {}".format(response['symbol']))
             responseData = None
         return responseData
 
     def fetch_save_Last_Quotes(self):
         try:
-            print("Fetching")
+            #print("Fetching")
             responseData = self.getDataFromPolygon(methodToBeCalled=self.extractQuotesDataFromResponses, getUrls=self.getUrls)
             responseData = list(responseData)
-            print("Inserting")
+            #print("Inserting")
+            #print(datetime.datetime.now())
+            #print(responseData)
             PerMinDataOperations().insertQuotesLive(quotesData=responseData)
-            print("Inserted Successfully")
+            #print("Inserted Successfully")
             logger.debug("Quotes Inserted")
         except  Exception as e:
-            print("Insertion failed")
+            #print("Insertion failed")
             logger.exception(e)
             pass
 

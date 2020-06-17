@@ -3,12 +3,20 @@ import json
 import datetime
 import traceback
 
+
 sys.path.append("..")
+from CommonServices import ImportExtensions
 import pandas as pd
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 from CalculateETFArbitrage.GetRelevantHoldings import RelevantHoldings
 from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from MongoDB.Schemas import etfholdings_collection
+from CommonServices.LogCreater import CreateLogger
+
+
+logObj = CreateLogger()
+logger = logObj.createLogFile(dirName="Logs/",logFileName="-TickListGenerator.log",loggerName="TickListGenerator")
+
 
 class ListsCreator():
 
@@ -23,12 +31,12 @@ class ListsCreator():
     def raiseError(self,errorType=None):
         # Raise Error & send email For failling to add data to etf-hold.json
         if errorType==2:
-            #mail("Failed To Load Data For ETF-Hold.json on second try also + etfname")
-            print("Failed To Load Data For ETF-Hold.json")
-            print(df)
-            print(etfname)
-            print((datetime.datetime.now() - datetime.timedelta(days=1)))
-            traceback.print_exc()
+            
+            logger.debug("Failed To Load Data For ETF-Hold.json")
+            logger.debug(df)
+            logger.debug(etfname)
+            logger.debug((datetime.datetime.now() - datetime.timedelta(days=1)))
+            logger.debug(traceback.print_exc())
             return None
         else:
             print("Error Type 1: Failed From CalculateETFArbitrage,Going for 2nd Try through PyMongo")
@@ -36,7 +44,6 @@ class ListsCreator():
     def ETFHoldJsonData(self,etfname):
         try:
             df=None
-            # Fetch data using Yesterday's date
             df = LoadHoldingsdata().getHoldingsDatafromDB(etfname,(datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
             return self.convertDataToDict(df,etfname)
         except Exception as e:
@@ -49,7 +56,7 @@ class ListsCreator():
                 
     def create_list_files(self):
         try:
-            AllEtfNames = list(pd.read_csv("../CSVFiles/NonChineseETFs.csv").columns.values)
+            AllEtfNames = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
             
             ThreadingResults = CPUBonundThreading(self.ETFHoldJsonData, AllEtfNames)
 
@@ -59,18 +66,18 @@ class ListsCreator():
                 etfdicts.append(res['ETFHoldingsData'])
                 AllHoldingsList=AllHoldingsList+res['HoldingsList']
 
-            #print(len(etfdicts))
             out_file = open("../CSVFiles/etf-hold.json", "w")
             json.dump(etfdicts, out_file, indent=6)
             out_file.close()
 
             AllTickerSet = set(AllHoldingsList+AllEtfNames)
-            #print(len(AllTickerSet))
             RelevantHoldings().write_to_csv(etflist=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
-            return "Tick Lists Generated Successfully"
+            logger.debug("Tick Lists Generated Successfully")
+            return True
         except Exception as e:
-            errorMessage = "####*** Error in generating Tick List in TickListsGenerator.py" + '\n'+traceback.print_exc()
-            return errorMessage
+            errorMessage = "Error in generating Tick List in TickListsGenerator.py" + '\n'+traceback.print_exc()
+            logger.debug(errorMessage)
+            return False
 
 if __name__=='__main__':
     ListsCreator().create_list_files()
