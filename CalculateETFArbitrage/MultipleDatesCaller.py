@@ -39,8 +39,7 @@ logger2.setLevel(logging.ERROR)
 logger.addHandler(handler)
 logger2.addHandler(handler2)
 
-dates = ['2020-04-01', '2020-04-02', '2020-04-15', '2020-04-16', '2020-04-27', '2020-05-11', '2020-05-12', '2020-05-13', '2020-05-14', '2020-05-18', '2020-05-19', '2020-05-20', '2020-05-21',
-         '2020-05-22', '2020-05-26', '2020-05-27', '2020-05-28', '2020-05-29']
+dates = ['2020-06-15']
 for date in dates:
     etfwhichfailed = []
     # MAKE A LIST OF WORKING ETFs.
