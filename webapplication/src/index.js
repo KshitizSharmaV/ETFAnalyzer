@@ -4,7 +4,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom'
 
 
 import Former from './Component/Form.js';
-import Comparison from './Component/ETF-Comparison';
+import ETFComparison from './Component/ETF-Comparison';
 import Description from './Component/ETF-Description';
 import HistoricalArbitrage from './Component/Historical-Arbitrage';
 import Live_Arbitrage from './Component/Live-Arbitrage';
@@ -67,7 +67,7 @@ class App extends Component {
           </div>
         </div>
       </div>
-      <Route path="/ETF-Comparison" render={Comparison} />
+      <Route path="/ETF-Comparison" render={() => <ETFComparison startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} />} />
       <Route path="/ETF-Description" render={() => <Description startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} />} />
       <Route path="/HistoricalArbitrage" render={() => <HistoricalArbitrage startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />} />
       <Route path="/Live-Arbitrage-Single" render={() => <Live_Arbitrage_Single ETF={this.state.ETF} />} />

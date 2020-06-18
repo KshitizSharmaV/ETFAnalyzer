@@ -60,6 +60,8 @@ def fetchOHLCDailyData(ETFName,StartDate):
 
 @app.route('/ETfDescription/EtfData/<ETFName>/<date>')
 def SendETFHoldingsData(ETFName, date):
+    print("date**********")
+    print(date)
     req = request.__dict__['environ']['REQUEST_URI']
     try:
         # connect_mongoengine = MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
@@ -207,11 +209,10 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 def SendLiveArbitrageDataAllTickers():
     try:
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
+        live_data.rename(columns={'symbol': 'Symbol'},inplace=True)
         live_prices = PerMinDataOperations().LiveFetchETFPrice()
         ndf = live_data.merge(live_prices, how='left', on='Symbol')
         ndf.dropna(inplace=True)
-        print("###################################$")
-        print(ndf.columns)
         ndf=ndf.round(4)
         return ndf.to_dict()
     except Exception as e:
@@ -255,13 +256,13 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
 ############################################
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData
 from FlaskAPI.Components.ETFComparison.ComparisonHelper import ETFandHoldingsData
-@app.route('/ETfComparison/<etfname>/<datefor>')
+@app.route('/ETFComparison/<etfname>/<datefor>')
 def getComparisonData(etfname, datefor):
     holdings_data = ETFandHoldingsData(etfname, datetime.strptime(datefor,'%Y%m%d'))
-    # print(type(holdings_data))
     arbitrage_data = RetrieveETFArbitrageData(etfname=etfname,date=datefor,magnitudeOfArbitrageToFilterOn=0)
+    print(type(holdings_data))
     return_data_dict = {'ETFdata':holdings_data, 'PNLdata': arbitrage_data[2], 'ScatterPlotdata': arbitrage_data[3]}
-    return json.dumps(return_data_dict)
+    return return_data_dict
 
 
 

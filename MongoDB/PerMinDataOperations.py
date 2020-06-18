@@ -23,8 +23,6 @@ class PerMinDataOperations():
 
     # Fetch from QuotesLiveData Collection
     def FetchQuotesLiveDataForSpread(self, startts, endts):
-        print(startts)
-        print(endts)
         quotes_data_for_etf = quotesWS_collection.find({'timestamp': {'$gt': startts, '$lte': endts}},{'_id':0,'symbol': 1, 'askprice': 1, 'bidprice': 1})
         return quotes_data_for_etf
 
@@ -40,10 +38,10 @@ class PerMinDataOperations():
             print("Went Inside 1")
             day_start_dt = datetime.datetime.strptime(' '.join([str(datetime.datetime.now().date()), '09:15']),'%Y-%m-%d %H:%M')
             day_start_ts = int(day_start_dt.timestamp() * 1000)
-            print("FetchFullDayPerMinArbitrage"+ str(day_start_ts))
+            print("FetchFullDayPerMinArbitrage "+ str(day_start_ts))
             # Get data for today
             full_day_data_cursor = arbitrage_per_min.find(
-            {"Timestamp": {"$gte": day_start_ts}, "ArbitrageData.Symbol": etfname},
+            {"Timestamp": {"$gte": day_start_ts}, "ArbitrageData.symbol": etfname},
             {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
         else:
             lastworkinDay=LastWorkingDay(datetime.datetime.now().date())
@@ -55,19 +53,19 @@ class PerMinDataOperations():
             print("FetchFullDayPerMinArbitrage"+ str(day_end_dt))
             # Get last woring day data
             full_day_data_cursor = arbitrage_per_min.find(
-            {"Timestamp": {"$gte": day_start_ts,"$lte": day_end_dt}, "ArbitrageData.Symbol": etfname},
+            {"Timestamp": {"$gte": day_start_ts,"$lte": day_end_dt}, "ArbitrageData.symbol": etfname},
             {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
 
         data = []
         [data.append({'Timestamp': item['Timestamp'], 
-                    'Symbol': item['ArbitrageData'][0]['Symbol'],
+                    'Symbol': item['ArbitrageData'][0]['symbol'],
                     'Arbitrage': item['ArbitrageData'][0]['Arbitrage in $'], 
                     'Spread': item['ArbitrageData'][0]['ETF Trading Spread in $'],
                     'ETF Change Price %': item['ArbitrageData'][0]['ETF Change Price %'],
                     'Net Asset Value Change%': item['ArbitrageData'][0]['Net Asset Value Change%']})
                     for item in full_day_data_cursor]
         full_day_data_df = pd.DataFrame.from_records(data)
-        print("FetchFullDayPerMinArbitrage")
+
         print(full_day_data_df)
         return full_day_data_df
 
@@ -127,11 +125,11 @@ class PerMinDataOperations():
         data = []
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
-                {"Timestamp": dt_ts, "ArbitrageData.Symbol": etfname},
+                {"Timestamp": dt_ts, "ArbitrageData.symbol": etfname},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
             
             [data.append({'Timestamp': item['Timestamp'], 
-                'Symbol': item['ArbitrageData'][0]['Symbol'],
+                'Symbol': item['ArbitrageData'][0]['symbol'],
                 'Arbitrage': item['ArbitrageData'][0]['Arbitrage in $'], 
                 'Spread': item['ArbitrageData'][0]['ETF Trading Spread in $'],
                 'ETF Change Price %': item['ArbitrageData'][0]['ETF Change Price %'],

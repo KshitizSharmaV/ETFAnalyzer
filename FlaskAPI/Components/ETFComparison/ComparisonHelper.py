@@ -35,7 +35,7 @@ def ETFandHoldingsData(ETFName, date):
         print(ETFDataObject)
         print(allData['HoldingsDatObject'])
 
-        return json.dumps(allData)
+        return allData
 
     except Exception as e:
         print("Issue in Flask app while fetching ETF Description Data")
