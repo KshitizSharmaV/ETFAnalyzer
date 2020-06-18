@@ -27,7 +27,7 @@ class Live_Arbitrage extends React.Component{
     fetchETFLiveData(){
         this.updateData();
         setInterval(() => {
-            if ((new Date()).getSeconds() == 20){
+            if ((new Date()).getSeconds() == 8){
                 this.updateData();
             }
         }, 1000)

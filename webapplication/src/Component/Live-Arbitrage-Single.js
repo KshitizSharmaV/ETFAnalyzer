@@ -68,7 +68,7 @@ class Live_Arbitrage extends React.Component{
 
         // Does Iterative calls
         setInterval(() => {
-            if ((new Date()).getSeconds() == 24){
+            if ((new Date()).getSeconds() == 8){
                 this.UpdateArbitragDataTables(true)
             }
         }, 1000)
