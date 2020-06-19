@@ -1,4 +1,6 @@
 import sys
+import traceback
+
 sys.path.append('..')
 
 import datetime
@@ -38,47 +40,60 @@ class PerMinAnalysis():
         #######################################################
         # ETF Spread Calculation
         #######################################################
-        timestamps = self.get_ts_for_fetching_data()
-        end_dt_ts = timestamps[1]
-        start_dt_ts = timestamps[3]
-        QuotesResultsCursor = self.perMinDataObj.FetchQuotesLiveDataForSpread(start_dt_ts, end_dt_ts)
-        QuotesDataDf = pd.DataFrame(list(QuotesResultsCursor))
-        QuotesDataDf['ETF Trading Spread in $'] = QuotesDataDf['askprice'] - QuotesDataDf['bidprice']
-        self.spreadDF = QuotesDataDf.groupby(['symbol']).mean()
+        try:
+            timestamps = self.get_ts_for_fetching_data()
+            end_dt_ts = timestamps[1]
+            start_dt_ts = timestamps[3]
+            QuotesResultsCursor = self.perMinDataObj.FetchQuotesLiveDataForSpread(start_dt_ts, end_dt_ts)
+            QuotesDataDf = pd.DataFrame(list(QuotesResultsCursor))
+            QuotesDataDf['ETF Trading Spread in $'] = QuotesDataDf['askprice'] - QuotesDataDf['bidprice']
+            self.spreadDF = QuotesDataDf.groupby(['symbol']).mean()
+        except Exception as e:
+            traceback.print_exc()
+            logger.exception(e)
+            for col in self.spreadDF.columns:
+                self.spreadDF[col].values[:]=0
+            pass
 
     def PerMinAnalysisCycle(self, obj):
-        #######################################################
-        # UTC Timestamps for pulling data from QuotesLiveData DB, below:
-        #######################################################
-        timestamps = self.get_ts_for_fetching_data()
-        end_dt_ts = timestamps[1]
-        start_dt = timestamps[2]
-        start_dt_ts = timestamps[3]
+        try:
+            #######################################################
+            # UTC Timestamps for pulling data from QuotesLiveData DB, below:
+            #######################################################
+            timestamps = self.get_ts_for_fetching_data()
+            end_dt_ts = timestamps[1]
+            start_dt = timestamps[2]
+            start_dt_ts = timestamps[3]
 
-        #######################################################
-        # ETF Arbitrage Calculation
-        #######################################################
-        startarb = time.time()
-        arbDF = obj.calcArbitrage(end_dt_ts=end_dt_ts,start_dt_ts=start_dt_ts,start_dt=start_dt)
+            #######################################################
+            # ETF Arbitrage Calculation
+            #######################################################
+            startarb = time.time()
+            arbDF = obj.calcArbitrage(end_dt_ts=end_dt_ts,start_dt_ts=start_dt_ts,start_dt=start_dt)
 
-        
-        #######################################################
-        # Results:
-        #######################################################
-        mergeDF = arbDF.merge(self.spreadDF, how='outer', left_index=True, right_index=True)
-        mergeDF.reset_index(inplace=True)
-        mergeDF.rename(columns={"index":"Symbol"}, inplace=True)
-        cols = list(mergeDF.columns)
-        cols = [cols[0]] + [cols[-1]] + cols[1:-1]
-        mergeDF = mergeDF[cols]
-        SaveCalculatedArbitrage().insertIntoPerMinCollection(end_ts=end_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
-        
-        logger.debug("arbDF")
-        logger.debug(arbDF)
-        logger.debug("spreadDF")
-        logger.debug(self.spreadDF)
-        logger.debug("mergeDF")
-        logger.debug(mergeDF)
+
+            #######################################################
+            # Results:
+            #######################################################
+            mergeDF = arbDF.merge(self.spreadDF, how='outer', left_index=True, right_index=True)
+            mergeDF.reset_index(inplace=True)
+            mergeDF.rename(columns={"index":"Symbol"}, inplace=True)
+            cols = list(mergeDF.columns)
+            cols = [cols[0]] + [cols[-1]] + cols[1:-1]
+            mergeDF = mergeDF[cols]
+            SaveCalculatedArbitrage().insertIntoPerMinCollection(end_ts=end_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
+
+            logger.debug("arbDF")
+            logger.debug(arbDF)
+            logger.debug("spreadDF")
+            logger.debug(self.spreadDF)
+            logger.debug("mergeDF")
+            logger.debug(mergeDF)
+            
+        except Exception as e:
+            traceback.print_exc()
+            logger.exception(e)
+            pass
         
 
 # Execution part. To be same from wherever PerMinAnalysisCycle() is called.
