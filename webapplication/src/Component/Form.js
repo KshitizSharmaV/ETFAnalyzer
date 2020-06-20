@@ -89,9 +89,6 @@ class Former extends Component{
 	      <Navbar  className="bg-dark">
 	        <Nav>
 	          <Nav.Item>
-	            <Nav.Link style={{color: 'white'}} as={Link} to="/ETF-Comparison" eventKey="ETF-Comparison">ETF-Comparison</Nav.Link>
-	          </Nav.Item>
-	          <Nav.Item>
 	            <Nav.Link style={{color: 'white'}} as={Link} to="/ETF-Description" eventKey="ETF-Description">ETF-Description</Nav.Link>
 	          </Nav.Item>
 	          <Nav.Item>
