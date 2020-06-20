@@ -5,9 +5,9 @@ from pandas.tseries.offsets import BDay
 
 def HolidayCheck(dateToCheck):
 	cal=USFederalHolidayCalendar()
-	currentYear = datetime.datetime.now().year
-	startDate = currentYear+'-01-01'
-	endDate = (currentYear+1)+'-01-01'
+	currentYear = dateToCheck.year
+	startDate = str(currentYear)+'-01-01'
+	endDate = str(currentYear+1)+'-01-01'
 	
 	# holidays=cal.holidays(start='2020-01-01', end='2021-01-01').to_pydatetime()
 	Federalholidays=cal.holidays(start=startDate, end=endDate).to_pydatetime()
@@ -16,7 +16,8 @@ def HolidayCheck(dateToCheck):
 		return True
 	else:
 		weekno = datetime.datetime.today().weekday()
-		return True if weekno>5 else False
+		print(weekno)
+		return True if weekno>=5 else False
 	
 def LastWorkingDay(dateToCheck):
 	return dateToCheck - BDay(1)
