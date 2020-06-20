@@ -1,11 +1,13 @@
 import pandas as pd
 import traceback
 from PolygonTickData.Helper import Helper
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import numpy as np
 import sys
 
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import calculateArbitrageResults
+
+daylightSavingAdjutment = 4 if date(2020,3,8)< datetime.now().date()< date(2020,11,1) else 5
 
 # Fetch Arbitrage & Price Data
 def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None):
@@ -20,8 +22,8 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         mergedDF=mergedDF.round(5)
         
         helperObj=Helper()
-        PriceDF['date'] = PriceDF['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4))
-        mergedDF['Timestamp'] = mergedDF['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=4)).time()))
+        PriceDF['date'] = PriceDF['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment))
+        mergedDF['Timestamp'] = mergedDF['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment)).time()))
         
         #res=jsonify(Full_Day_Prices=PriceDF[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=mergedDF.to_dict())
         res={}

@@ -3,7 +3,6 @@ import pandas as pd
 import datetime
 import time
 import numpy as np
-import talib
 
 # Load the ETF Prices for the ETF to be analyzed
 def LoadETFPrices(etfname, dateOfAnalysis, year, TradesData):
