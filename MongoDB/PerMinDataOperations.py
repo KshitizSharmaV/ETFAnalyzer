@@ -2,8 +2,9 @@ import datetime
 from MongoDB.Schemas import trade_per_min_WS_motor, trade_per_min_WS, quotesWS_collection, arbitrage_per_min
 import pandas as pd
 from time import time
+import calendar
 from CommonServices.Holidays import HolidayCheck,LastWorkingDay,isTimeBetween
-
+import calendar
 
 class PerMinDataOperations():
 
@@ -13,7 +14,7 @@ class PerMinDataOperations():
         # Day Light Savings
         # Summer UTC 13 to 20
         # Winter UTC 14 to 21
-
+        self.daylightSavingAdjutment = 4 if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else 5
         self.StartHour = 13 if datetime.date(2020,3,8)<datetime.datetime.now().date()<datetime.date(2020,11,1) else 14
         self.EndHour = 20 if datetime.date(2020,3,8)<datetime.datetime.now().date()<datetime.date(2020,11,1) else 21
         self.UTCStartTime =  datetime.time(self.StartHour,30)
@@ -55,9 +56,12 @@ class PerMinDataOperations():
             lastworkinDay=LastWorkingDay(todaysDate)
             start_dt = lastworkinDay
             end_dt =  lastworkinDay.replace(hour=self.EndHour,minute=00,second=0, microsecond=0)
+            end_dt=end_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         
         start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
-
+        # Fix for breaking code
+        start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+        
         FetchDataForTimeObject = {}
         print(start_dt)
         print(end_dt)
@@ -76,9 +80,9 @@ class PerMinDataOperations():
             {"Timestamp": {"$gte": markettimeStatus['start_dt'],"$lte": markettimeStatus['end_dt']}, "ArbitrageData.symbol": etfname},
             {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
         else:
-            print("FetchFullDayPerMinArbitrage start"+ str(markettimeStatus['start_dt']))
+            print("FetchFullDayPerMinArbitrage start "+ str(markettimeStatus['start_dt']))
             full_day_data_cursor = arbitrage_per_min.find(
-            {"Timestamp": {"$gte": day_start_ts}, "ArbitrageData.symbol": etfname},
+            {"Timestamp": {"$gte": markettimeStatus['start_dt']}, "ArbitrageData.symbol": etfname},
             {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
     
         data = []
@@ -103,7 +107,7 @@ class PerMinDataOperations():
             full_day_prices_etf_cursor = trade_per_min_WS.find({"e": {"$gte": markettimeStatus['start_dt'],'$lte':markettimeStatus['end_dt']}, "sym": etfname},
                                         {"_id": 0, "sym": 1, "vw": 1,"o":1,"c":1,"h":1,"l":1,"v":1,"e": 1})
         else:
-            print("FetchFullDayPerMinArbitrage start"+ str(markettimeStatus['start_dt']))
+            print("FetchFullDayPerMin Prices start "+ str(markettimeStatus['start_dt']))
             full_day_prices_etf_cursor = trade_per_min_WS.find({"e": {"$gte": markettimeStatus['start_dt']}, "sym": etfname},
                                         {"_id": 0, "sym": 1, "vw": 1,"o":1,"c":1,"h":1,"l":1,"v":1,"e": 1})
         temp = []
@@ -132,6 +136,8 @@ class PerMinDataOperations():
         # Next day of market before 9:30 am or holiday
         elif (currentTime >= self.DAYendTime) and (currentTime < datetime.time(self.StartHour,30)) or ifaholiday:
             dt=LastWorkingDay(todaysDate).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
+        # Fix for adjustment datetime to unix timestamp
+        dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         return int(dt.timestamp() * 1000)
 
     #  Live arbitrage for 1 etf or all etf
