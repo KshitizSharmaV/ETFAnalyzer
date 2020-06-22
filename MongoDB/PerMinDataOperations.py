@@ -2,14 +2,13 @@ import datetime
 from MongoDB.Schemas import trade_per_min_WS_motor, trade_per_min_WS, quotesWS_collection, arbitrage_per_min
 import pandas as pd
 from time import time
-import calendar
 from CommonServices.Holidays import HolidayCheck,LastWorkingDay,isTimeBetween
-import calendar
+
 
 class PerMinDataOperations():
 
     def __init__(self):
-        self.DAYendTime = datetime.time(00,00)
+        self.DAYendTime = datetime.time(23,59)
 
         # Day Light Savings
         # Summer UTC 13 to 20
@@ -127,6 +126,10 @@ class PerMinDataOperations():
         currentTime = now.time()
         todaysDate = now.date()
         ifaholiday = HolidayCheck(todaysDate)
+        dt=None
+        print(now.time())
+        print(self.UTCEndTime)
+        print(self.DAYendTime)
         # Current Market 930 to 4
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
             dt = now.replace(second=0, microsecond=0)
@@ -137,6 +140,7 @@ class PerMinDataOperations():
         elif (currentTime >= self.DAYendTime) and (currentTime < datetime.time(self.StartHour,30)) or ifaholiday:
             dt=LastWorkingDay(todaysDate).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
         # Fix for adjustment datetime to unix timestamp
+        print(dt)
         dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         return int(dt.timestamp() * 1000)
 
