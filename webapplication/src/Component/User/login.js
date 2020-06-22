@@ -19,7 +19,7 @@ const divStyle = {
   paddingTop: '10%',
 };
 
-const userPool = new CognitoUserPool({UserPoolId: 'ap-south-1_x8YZmKVyG', ClientId: '2j72c46s52rm3us8rj720tsknd'});
+const userPool = new CognitoUserPool({UserPoolId: 'us-east-1_rLN94MOu0', ClientId: '5fhruc7d6tfo0o1kr41ltfass5'});
 
 export const signIn = (
   email,
@@ -39,6 +39,8 @@ export const signIn = (
   cognitoUser.authenticateUser(authDetails, {
     onSuccess(result) {
       localStorage.setItem("username", email);
+      localStorage.setItem("Secret-Token", result.getIdToken().jwtToken)
+      localStorage.setItem("Expiry-Timestamp", result.getIdToken().getExpiration())
       localStorage.setItem("TimeStamp", result.idToken.payload["custom:timestamp"] || 0);
       console.log(result.idToken.payload.sub);
       

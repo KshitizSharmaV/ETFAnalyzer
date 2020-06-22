@@ -6,7 +6,8 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import '../static/css/NavStyle.css';
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router'
 import { options } from "./options";
 import moment from 'moment'
 import {
@@ -23,14 +24,19 @@ import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 const userPool = new CognitoUserPool({UserPoolId: 'ap-south-1_x8YZmKVyG', ClientId: '2j72c46s52rm3us8rj720tsknd'});
 
-export function logout(username) {
+export function logout(username, history) {
 	var cognitoUser = new CognitoUser({
 	  Username: username,
 	  Pool: userPool
 	});
-  
+	console.log('signout')
 	// call SigOut on User
 	cognitoUser.signOut();
+	localStorage.removeItem('username')
+	localStorage.removeItem("Secret-Token")
+    localStorage.removeItem("Expiry-Timestamp")
+	history.push('/Login')
+	console.log(cognitoUser)
 }
 
 class Former extends Component{
@@ -124,7 +130,7 @@ class Former extends Component{
 	              Submit
 	            </Button>
 	        </Form>
-			<Button variant="dark" onClick={() => {logout(localStorage.getItem("username"))}}>
+			<Button variant="dark" onClick={() => {logout(localStorage.getItem("username"), this.props.history)}}>
 				logout
 			</Button>
 	      </Navbar>
@@ -134,4 +140,4 @@ class Former extends Component{
 
 }
 
-export default Former;
+export default withRouter(Former);

@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import {Link} from 'react-router-dom'
 
 import {
   AuthenticationDetails,
@@ -22,7 +23,7 @@ const divStyle = {
   paddingTop: '10%',
 };
 
-const userPool = new CognitoUserPool({UserPoolId: 'ap-south-1_x8YZmKVyG', ClientId: '2j72c46s52rm3us8rj720tsknd'});
+const userPool = new CognitoUserPool({UserPoolId: 'us-east-1_rLN94MOu0', ClientId: '5fhruc7d6tfo0o1kr41ltfass5'});
 
 class SignUpFormPage extends React.Component {
   constructor(props){
@@ -30,7 +31,9 @@ class SignUpFormPage extends React.Component {
   }
 
   state = {
+    Name:"",
     Email: "",
+    Phone: "",
     Password: "",
     CnfrmPassword : "",
   }
@@ -40,12 +43,25 @@ class SignUpFormPage extends React.Component {
       <Container fluid>
         <Row className="justify-content-center">
           <Col className="etfArbitrageTable align-item-center" style={divStyle} xs={12} md={3}>
+            
             <Form>
+            <Form.Group controlId="formBasicName">
+                <Form.Label>Full Name</Form.Label>
+                <Form.Control value={this.state.Name} onChange={(e) => this.setState({Name: e.target.value})} type="name" placeholder="Enter your Full Name" />
+              </Form.Group>
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control value={this.state.Email} onChange={(e) => this.setState({Email: e.target.value})} type="email" placeholder="Enter email" />
                 <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group controlId="formBasicPhone">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control value={this.state.Phone} onChange={(e) => this.setState({Phone: e.target.value})} type="text" placeholder="Enter Phone No." />
+                <Form.Text className="text-muted">
+                  We'll never share your phone number with anyone else.
                 </Form.Text>
               </Form.Group>
   
@@ -59,9 +75,12 @@ class SignUpFormPage extends React.Component {
                 <Form.Control type="password" placeholder="Confirm Password" />
               </Form.Group>
               
-              <Button variant="primary" onClick={() => {signUp(this.state.Email, this.state.Password, this.state.CnfrmPassword, this.props.history)}} >
+              <Button variant="primary" onClick={() => {signUp(this.state.Name, this.state.Email, this.state.Phone, this.state.Password, this.state.CnfrmPassword, this.props.history)}} >
                 Submit
               </Button>
+              <Col lg={24}>
+                Or <Link to="/login">login to your account!</Link>
+              </Col>
             </Form>
           </Col>
         </Row>
@@ -71,13 +90,17 @@ class SignUpFormPage extends React.Component {
 };
 
 const signUp = (
+  name,
   email,
+  phone,
   password,
   ConfirmPassword,
   history,
 ) => {
+  console.log(name);
   console.log(email);
   console.log(password);
+  console.log(phone);
   if (password !== ConfirmPassword){
     alert("Passwords Don't match");
     return;
@@ -85,13 +108,23 @@ const signUp = (
   const userTimestamp = moment().unix();
   const stringUserTimestamp = userTimestamp.toString();
 const user = {
+    name,
     email,
+    phone,
     password,
   };
 const attributesToBeAdded = [
     {
+      Name: "name",
+      Value: user.name,
+    },
+    {
       Name: "email",
       Value: user.email,
+    },
+    {
+      Name: "phone_number",
+      Value: user.phone,
     }
   ];
 const attrList = attributesToBeAdded.map(
@@ -99,7 +132,7 @@ const attrList = attributesToBeAdded.map(
       return new CognitoUserAttribute(attr);
     }
   );
-userPool.signUp(email , password, attrList, [], (err, result) => {
+userPool.signUp(email, password, attrList, [], (err, result) => {
     if (err) {
       console.log(err);
       alert(err.message);
@@ -114,7 +147,7 @@ userPool.signUp(email , password, attrList, [], (err, result) => {
       console.log(localStorage.getItem("userID"));
       console.log(localStorage.getItem("username"));
       console.log(history);
-      history.push('/EmailVerification  ');
+      history.push('/EmailVerification');
     }
   });
   return;

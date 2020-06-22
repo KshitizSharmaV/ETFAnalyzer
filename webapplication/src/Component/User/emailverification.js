@@ -1,5 +1,5 @@
 import React from "react";
-
+import { withRouter } from 'react-router'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
@@ -15,7 +15,7 @@ import {
 
 import ForgotPassword from './forgotpassword';
 
-const userPool = new CognitoUserPool({UserPoolId: 'ap-south-1_x8YZmKVyG', ClientId: '2j72c46s52rm3us8rj720tsknd'});
+const userPool = new CognitoUserPool({UserPoolId: 'us-east-1_rLN94MOu0', ClientId: '5fhruc7d6tfo0o1kr41ltfass5'});
 
 const divStyle = {
   paddingTop: '10%',
@@ -24,7 +24,8 @@ const divStyle = {
 const confirmUser = (
   userId ,
   username ,
-  code
+  code,
+  history
 ) => {
   console.log(code);
   const userData = {
@@ -40,6 +41,7 @@ const confirmUser = (
       // setLoading(false);
       localStorage.setItem("UserAccountVerified", true);
       alert("You are verified now");
+      history.push('/Login')
     }
   });
 };
@@ -65,7 +67,7 @@ class EmailVerification extends React.Component {
                 <Form.Label>Enter Verification Code</Form.Label>
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
-              <Button variant="primary" onClick={() => confirmUser(this.state.userId, this.state.username, this.state.Code)}>
+              <Button variant="primary" onClick={() => confirmUser(this.state.userId, this.state.username, this.state.Code, this.props.history)}>
                 Submit
               </Button>
             </Form>
@@ -77,5 +79,5 @@ class EmailVerification extends React.Component {
 };
 
 
-export default EmailVerification;
+export default withRouter(EmailVerification);
 
