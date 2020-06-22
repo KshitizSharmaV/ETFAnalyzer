@@ -13,7 +13,7 @@ const renderActiveShape = (props) => {
   const sy = cy + (outerRadius + 10) * sin;
   const mx = cx + (outerRadius + 30) * cos;
   const my = cy + (outerRadius + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 11;
   const ey = my;
   const textAnchor = cos >= 0 ? 'start' : 'end';
 
@@ -85,16 +85,15 @@ class PieChartGraph extends PureComponent {
   
   render() {
     return (
-    
-      <PieChart  width={350} height={300}>
+
+    <ResponsiveContainer width="100%" height={250} padding={{ top: 1, right: 30, left: 20, bottom: 1 }}>
+      <PieChart>
         <Pie
         activeIndex={this.state.activeIndex}
         activeShape={renderActiveShape}
         data={this.state.data}
-        cx={175}
-        cy={150}
-        innerRadius={25}
-        outerRadius={90}
+        innerRadius={30}
+        outerRadius={80}
         fill="#8884d8"
         dataKey="value"
         onMouseEnter={this.onPieEnter}
@@ -104,7 +103,7 @@ class PieChartGraph extends PureComponent {
           }
         </Pie>
       </PieChart>
-    
+    </ResponsiveContainer>
     );
   }
 }

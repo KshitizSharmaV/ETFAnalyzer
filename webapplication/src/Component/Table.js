@@ -68,7 +68,7 @@ const AppTable = (props) => {
 
   return (
     <div className="Table">
-      <Table striped bordered hover variant="dark" style={TableStyling}>
+      <Table size="sm" striped bordered hover variant="dark" style={TableStyling}>
       <thead className="TableHead">
         <tr>{getHeader()}</tr>
       </thead>

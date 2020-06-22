@@ -100,11 +100,19 @@ class Live_Arbitrage extends React.Component{
 
     render(){
         return (
-            <Container fluid>
-            <Row className="mt-1">
+            <Row>
                 <Col xs={12} md={4}>
-                    <div className="LiveArbitrageTable">
-                        <LiveTable data={this.state.Full_Day_Arbitrage_Data} />
+                    <div className="FullPageDiv">
+                        <Card>
+                          <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>
+                              Live Arbitrage
+                          </Card.Header>
+                          <Card.Body style={{'backgroundColor':'#292b2c'}}>
+                            <div className="FullPageDiv">
+                                <LiveTable data={this.state.Full_Day_Arbitrage_Data} />
+                            </div>
+                          </Card.Body>
+                        </Card>
                     </div>
                 </Col>
 
@@ -121,7 +129,7 @@ class Live_Arbitrage extends React.Component{
                                 <div>Time: <span className="text-muted">{this.state.CurrentTime}</span></div>
                             </Card.Header>
                         
-                              <Card.Body>
+                              <Card.Body className="text-white"style={{'backgroundColor':'#292b2c'}}>
                                 <div><h5><span className={this.state.LiveColor}>ETF Status: {this.state.ETFStatus}</span></h5></div>
                                 <div><h5><span className={this.state.LiveColor}>Signal: {this.state.Signal}</span></h5></div>
                                 <div><span className={this.state.LiveColor}>Strength: {this.state.SignalStrength}</span></div>
@@ -155,7 +163,6 @@ class Live_Arbitrage extends React.Component{
 
                 </Col>
             </Row>
-        </Container>
         )
     }
 
@@ -219,7 +226,7 @@ const LiveTable = (props) => {
 
     return (
         <div className="Table">
-          <Table striped bordered hover variant="dark"  style={TableStyling}>
+          <Table size="sm" striped bordered hover variant="dark"  style={TableStyling}>
           <thead className="TableHead">
             <tr>
                 <td>Time</td>

@@ -11,3 +11,7 @@ h1, p {
   overflow: hidden;
   overflow-x: scroll;	
 } 
+
+.CustomBackGroundColor{
+	background-color:#292b2c;
+}

@@ -57,18 +57,16 @@ class Live_Arbitrage extends React.Component{
 
     render(){
         return (
-            <Container fluid>
-                <Row>
-                    <Col xs={12} md={12}>
-                    <p>{this.state.time}</p>
-                        <div className="LiveArbitrageTable pt-1">
-                            {
-                                (this.state.Symbol != null) ? <LiveTable data={this.state} /> : ""
-                            }
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
+            <Row>
+                <Col xs={12} md={12}>
+                <p>{this.state.time}</p>
+                    <div className="LiveArbitrageTable pt-1">
+                        {
+                            (this.state.Symbol != null) ? <LiveTable data={this.state} /> : ""
+                        }
+                    </div>
+                </Col>
+            </Row>
         )
     }
 }

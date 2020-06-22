@@ -18,7 +18,7 @@ td {
 
 /* Description Table with one kind of css */
 .DescriptionTable {
-    height: 38vh;
+    height: 27vh;
     overflow: auto;
 }
 
@@ -44,7 +44,7 @@ td {
 
 /* Description Table 2 with one kind of css */
 .DescriptionTable2 {
-    height: 60vh;
+    height: 50vh;
     overflow: auto;
 }
 

@@ -10,6 +10,7 @@ import ChartComponent from './StockPriceChart';
 import ScatterPlot from './scatterplot';
 import PieChartGraph from './PieChart';
 
+import '../static/css/Live_Arbitrage.css';
 // Code to display chaer
 import { tsvParse, csvParse } from  "d3-dsv";
 import { timeParse } from "d3-time-format";
@@ -22,19 +23,16 @@ class HistoricalArbitrage extends React.Component{
 			etfArbitrageTableData : '',
 			historicalArbitrageData:'',
 			scatterPlotData:'',
-			PNLOverDates:'',
 			LoadingStatement: "Loading.. PNL for " + this.props.ETF,
 			parseDate : timeParse("%Y-%m-%d %H:%M:%S"),
 			etfPriceData:''
 		}
 		this.fetchDataForADateAndETF = this.fetchDataForADateAndETF.bind(this);
-		this.fetchDataCommonToAllDates = this.fetchDataCommonToAllDates.bind(this);
 	}
 
 	componentDidMount() {
 		this.fetchDataForADateAndETF();
-		this.fetchDataCommonToAllDates();
-  	}
+	}
   	
   	// Use instead of unsafe to update
   	componentDidUpdate(prevProps,prevState) {
@@ -51,20 +49,26 @@ class HistoricalArbitrage extends React.Component{
   		// This data is common for a particular etf. eg for XLK, this data will remain same for all dates
   		// Only update when etfname changes
   		if (condition1) {
-  			this.state.PNLOverDates='';
   			this.state.LoadingStatement= "Loading.. PNL for " + this.props.ETF;
-		    this.fetchDataCommonToAllDates()
 		}
 	}
 	
 	render(){
 
   		return(
-  		<Container fluid>
-  		<Row>
+  			<Row>
 	          <Col className="etfArbitrageTable" xs={12} md={5}>
-	            <StockDesriptionHeader startDate = {this.props.startDate} ETF={this.props.ETF} />
-		      	{this.state.etfArbitrageTableData}
+	          	<Card>
+				  <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>
+					  {this.props.ETF}
+					  {this.props.startDate}
+				  </Card.Header>
+				  <Card.Body style={{'backgroundColor':'#292b2c'}}>
+			  		<div className="FullPageDiv">
+				    	{this.state.etfArbitrageTableData}
+			    	</div>
+				  </Card.Body>
+				</Card>
 	          </Col>
 
 	          <Col xs={12} md={7}>
@@ -72,7 +76,7 @@ class HistoricalArbitrage extends React.Component{
 					<Col xs={12} md={8}>
 						<Card>
 						  <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>Price Chart</Card.Header>
-						  <Card.Body>
+						  <Card.Body style={{'backgroundColor':'#292b2c'}}>
 						    <ChartComponent data={this.state.etfPriceData} />
 						  </Card.Body>
 						</Card>
@@ -81,7 +85,7 @@ class HistoricalArbitrage extends React.Component{
 	          		<Col xs={12} md={4}>
 						<Card>
 							<Card.Header className="text-white" style={{'background-color':'#292b2c'}}>Holdings</Card.Header>
-						  <Card.Body>
+						  <Card.Body style={{'backgroundColor':'#292b2c'}}>
 						  	<p>ETF Movers(Weighted)</p>
 						    <PieChartGraph data={this.state.etfmoversDictCount} element={"Count"}/>
 						    <p>Holdings with most movement</p>
@@ -98,23 +102,15 @@ class HistoricalArbitrage extends React.Component{
 					<Col xs={12} md={6}>
 						<Card>
 							<Card.Header className="text-white" style={{'background-color':'#292b2c'}}>ETF Change % Vs NAV change %</Card.Header>
-						  <Card.Body>
+						  <Card.Body style={{'backgroundColor':'#292b2c'}}>
 							{this.state.scatterPlotData}						  	
 						  </Card.Body>
 						</Card>
 					</Col>
-
-					<Col xs={12} md={12}>
-						<h5>PNL For all Dates for ETF</h5>
-			          	{
-		                    (this.state.PNLOverDates) ? this.state.PNLOverDates : this.state.LoadingStatement
-		                }
-	                </Col>
-                </Row>
+				</Row>
 	          </Col>
 	        </Row>
-         </Container>
-  		)
+        )
   	}
 
 
@@ -133,17 +129,6 @@ class HistoricalArbitrage extends React.Component{
 			console.log(this.state.etfPriceData);
 		});
 	}
-
-   	// Fetch Data which is common to an ETF across all dates
-   	fetchDataCommonToAllDates(url){
-   		console.log("All Dates ETFCALled");
-		axios.get(`http://localhost:5000/PastArbitrageData/CommonDataAcrossEtf/${this.props.ETF}`).then(res =>{
-			console.log(res.data.PNLOverDates);
-			this.setState({
-			 	PNLOverDates: <AppTable data={JSON.parse(res.data.PNLOverDates)}/>
-			});
-   		});
-   	}
 
    	// Parse Data For Stock Price Chart
    	parseData(parse) {

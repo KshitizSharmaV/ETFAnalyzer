@@ -94,10 +94,10 @@ def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilte
 	# Dvision By ETF Type
 	# Some etfs have inverse signal, IF TRUE, than we stick with momentum and keep buying with it
 	if etfname in MaintainSignal:
-		pnlstatementforday = {'PNL% Sell Pos. (T+1)':-PNLBuyPositionsT_1,'PNL% Buy Pos. (T+1)':-PNLSellPositionsT_1,'Magnitue Of Arbitrage':0}
+		pnlstatementforday = {'PNL% Sell Pos. (T+1)':-PNLBuyPositionsT_1,'PNL% Buy Pos. (T+1)':-PNLSellPositionsT_1,'Magnitue Of Arbitrage':magnitudeOfArbitrageToFilterOn}
 		arbitrageBuySellSignals['Over Bought/Sold'] = arbitrageBuySellSignals['Over Bought/Sold'].map({-111.0: 'Sell', 111.0: 'Buy'})
 	else:
-		pnlstatementforday = {'PNL% Sell Pos. (T+1)':PNLSellPositionsT_1,'PNL% Buy Pos. (T+1)':PNLBuyPositionsT_1,'Magnitue Of Arbitrage':0}
+		pnlstatementforday = {'PNL% Sell Pos. (T+1)':PNLSellPositionsT_1,'PNL% Buy Pos. (T+1)':PNLBuyPositionsT_1,'Magnitue Of Arbitrage':magnitudeOfArbitrageToFilterOn}
 		arbitrageBuySellSignals['Over Bought/Sold'] = arbitrageBuySellSignals['Over Bought/Sold'].map({111.0: 'Sell', -111.0: 'Buy'})
 
 	# Count the stats of Signal Right Buy, Right Sell, Total Buy & Total Sell
@@ -149,7 +149,13 @@ def retrievePNLForAllDays(etfname=None, magnitudeOfArbitrageToFilterOn=0):
 	for i in s:
 		allData, pricedf, pnlstatementforday, scatterPlotData=AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=i, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
 		PNLOverDates[str(i['dateOfAnalysis'].date())]=pnlstatementforday
-	return PNLOverDates
+	PNLOverDates=pd.DataFrame(PNLOverDates).T
+	del PNLOverDates['Magnitue Of Arbitrage']
+	PNLOverDates.columns = ['Sell Return%','Buy Return%','# T.Buy','# R.Buy','# T.Sell','# R.Sell']
+	PNLOverDates['% R.Buy']= round(PNLOverDates['# R.Buy']/PNLOverDates['# T.Buy'],2)
+	PNLOverDates['% R.Sell']= round(PNLOverDates['# R.Sell']/PNLOverDates['# T.Sell'],2)
+	PNLOverDates = PNLOverDates [['Sell Return%','Buy Return%','# T.Buy','# R.Buy','% R.Buy','# T.Sell','# R.Sell','% R.Sell']]
+	return PNLOverDates.T.to_dict()
 
 
 

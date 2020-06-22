@@ -9,24 +9,24 @@
 }
 
 /* Description Table 2 with one kind of css */
-.LiveArbitrageTable {
+.FullPageDiv {
     height: 90vh;
     overflow: auto;
 }
 
-.LiveArbitrageTable::-webkit-scrollbar-track {
+.FullPageDiv::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.37);
     border-radius: 10px;
     background-color: #F5F5F5;
 }
 
-.LiveArbitrageTable::-webkit-scrollbar {
+.FullPageDiv::-webkit-scrollbar {
     /* display: none; */
     width: 10px;
     background-color: #F5F5F5;
 }
 
-.LiveArbitrageTable::-webkit-scrollbar-thumb {
+.FullPageDiv::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
     background-color: #555;

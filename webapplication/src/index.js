@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom'
-
+import Container from 'react-bootstrap/Container'
 
 import Former from './Component/Form.js';
 import ETFComparison from './Component/ETF-Comparison';
@@ -14,6 +14,7 @@ import SignInFormPage from './Component/User/login';
 import SignUpFormPage from './Component/User/signup';
 import EmailVerification from './Component/User/emailverification';
 import { createBrowserHistory } from "history";
+
 
 // StylesSheets
 import './static/css/style.css';
@@ -67,13 +68,15 @@ class App extends Component {
           </div>
         </div>
       </div>
-      <Route path="/ETF-Description" render={() => <Description startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} />} />
-      <Route path="/HistoricalArbitrage" render={() => <HistoricalArbitrage startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />} />
-      <Route path="/Live-Arbitrage-Single" render={() => <Live_Arbitrage_Single ETF={this.state.ETF} />} />
-      <Route path="/Live-Arbitrage" render={() => <Live_Arbitrage ETF={this.state.ETF} />} />
-      <Route path="/SignUp" render={() => <SignUpFormPage />} />
-      <Route path="/Login" render={SignInFormPage} />
-      <Route path="/EmailVerification" render={() => <EmailVerification />} />
+      <Container fluid style={{'backgroundColor':'#292b2c'}}>
+        <Route path="/ETF-Description" render={() => <Description startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} />} />
+        <Route path="/HistoricalArbitrage" render={() => <HistoricalArbitrage startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />} />
+        <Route path="/Live-Arbitrage-Single" render={() => <Live_Arbitrage_Single ETF={this.state.ETF} />} />
+        <Route path="/Live-Arbitrage" render={() => <Live_Arbitrage ETF={this.state.ETF} />} />
+        <Route path="/SignUp" render={() => <SignUpFormPage />} />
+        <Route path="/Login" render={SignInFormPage} />
+        <Route path="/EmailVerification" render={() => <EmailVerification />} />
+      </Container>
     </ Router>
     );
   }
