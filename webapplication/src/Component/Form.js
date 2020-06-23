@@ -39,6 +39,7 @@ export function logout(username, history) {
 	console.log(cognitoUser)
 }
 
+
 class Former extends Component{
 	state={
 	    arr : options,
@@ -52,7 +53,7 @@ class Former extends Component{
 	}
 
 	constructor(props){
-    	super(props);
+		super(props);
 	}
 	
 	// handling date change as well as checking if date lies between 16-17 as data provided has only that
@@ -90,6 +91,20 @@ class Former extends Component{
 	setValues = selectValues => this.setState({ ETF: selectValues[0].element });
 
   render(){
+	  let button;
+	  if (localStorage.getItem('Secret-Token')){
+		button = <Button variant="dark" onClick={() => {logout(localStorage.getItem("username"), this.props.history, this.state.isLoggedIn)}}>logout</Button>
+		}
+		else{
+			button = [
+			<Button variant="dark" onClick={() => {this.props.history.push('/Login')}}>
+				Login
+			</Button>,
+			<Button variant="dark" onClick={() => {this.props.history.push('/Signup')}}>
+				Signup
+			</Button>
+			]
+		}
   	return (
 	    <Nav className="bg-dark justify-content-between nav">
 	      <Navbar  className="bg-dark">
@@ -130,9 +145,7 @@ class Former extends Component{
 	              Submit
 	            </Button>
 	        </Form>
-			<Button variant="dark" onClick={() => {logout(localStorage.getItem("username"), this.props.history)}}>
-				logout
-			</Button>
+			{button}
 	      </Navbar>
 	    </Nav>
 	  )

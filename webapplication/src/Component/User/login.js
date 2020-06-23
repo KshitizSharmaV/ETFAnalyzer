@@ -136,7 +136,7 @@ class SignInFormPage extends React.Component {
           <Col className="etfArbitrageTable align-item-center" style={divStyle} xs={12} md={3}>
             <Form>
               <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label style={{color:'white'}}>Email address</Form.Label>
                 <Form.Control value={this.state.Email} onChange={(e) => this.setState({Email: e.target.value})} type="email" placeholder="Enter email" />
                 <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
@@ -144,16 +144,16 @@ class SignInFormPage extends React.Component {
               </Form.Group>
     
               <Form.Group value={this.state.Password} onChange={(e) => this.setState({Password: e.target.value})} controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label style={{color:'white'}}>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
 
               <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
+                <Form.Check  style={{color:'white'}} type="checkbox" label="Check me out" />
               </Form.Group>
               
               <Button variant="primary" onClick={() => {signIn(this.state.Email, this.state.Password, this.props.history)}} >
-                Submit
+                Login
               </Button>
               <br />
               <br />
