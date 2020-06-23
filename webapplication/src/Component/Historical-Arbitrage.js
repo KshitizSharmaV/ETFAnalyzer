@@ -1,14 +1,16 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 import axios from 'axios';
 import AppTable from './Table.js';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import StockDesriptionHeader from './StockDesriptionHeader';
 import ChartComponent from './StockPriceChart';
 import ScatterPlot from './scatterplot';
 import PieChartGraph from './PieChart';
+import Modal from 'react-bootstrap/Modal'
 
 import '../static/css/Live_Arbitrage.css';
 // Code to display chaer
@@ -59,11 +61,17 @@ class HistoricalArbitrage extends React.Component{
   			<Row>
 	          <Col className="etfArbitrageTable" xs={12} md={5}>
 	          	<Card>
-				  <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>
-					  {this.props.ETF}
-					  {this.props.startDate}
-				  </Card.Header>
-				  <Card.Body style={{'backgroundColor':'#292b2c'}}>
+				    <Card.Header className="modalCustomHeader text-white CustomBackGroundColor">
+					  <div class="row">
+                        <div class="col-md-10">
+                          {this.props.ETF} {this.props.startDate}
+                        </div>
+                        <div class="col-md-2 float-right">
+                          <PieCharts etfmoversDictCount={this.state.etfmoversDictCount} highestChangeDictCount={this.state.highestChangeDictCount}/>
+                        </div>
+                      </div>
+					</Card.Header>
+				  <Card.Body className="BlackHeaderForModal">
 			  		<div className="FullPageDiv">
 				    	{this.state.etfArbitrageTableData}
 			    	</div>
@@ -73,41 +81,40 @@ class HistoricalArbitrage extends React.Component{
 
 	          <Col xs={12} md={7}>
 	          	<Row>
-					<Col xs={12} md={8}>
+					<Col xs={12} md={7}>
 						<Card>
-						  <Card.Header className="text-white" style={{'background-color':'#292b2c'}}>Price Chart</Card.Header>
-						  <Card.Body style={{'backgroundColor':'#292b2c'}}>
+						  <Card.Header className="modalCustomHeader text-white CustomBackGroundColor">Price Chart</Card.Header>
+						  <Card.Body className="BlackHeaderForModal">
 						    <ChartComponent data={this.state.etfPriceData} />
 						  </Card.Body>
 						</Card>
 	          		</Col>
 
-	          		<Col xs={12} md={4}>
-						<Card>
-							<Card.Header className="text-white" style={{'background-color':'#292b2c'}}>Holdings</Card.Header>
-						  <Card.Body style={{'backgroundColor':'#292b2c'}}>
-						  	<p>ETF Movers(Weighted)</p>
-						    <PieChartGraph data={this.state.etfmoversDictCount} element={"Count"}/>
-						    <p>Holdings with most movement</p>
-					    	<PieChartGraph data={this.state.highestChangeDictCount} element={"Count"}/>
-						  </Card.Body>
-						</Card>
-	          		</Col>
-					
-					<Col xs={12} md={6}>
-						<h5>PNL Statemens for day</h5>
-						{this.state.PNLStatementForTheDay}
-					</Col>
+	          		<Col xs={12} md={5}>
+						<Row>
+							<Col xs={12} md={12}>
+								<Card className="CustomCard">
+									<Card.Header className="CustomCardHeader text-white">
+										ETF Change % Vs NAV change %
+									</Card.Header>
+								  	<Card.Body className="CustomCardBody text-white">
+										{this.state.scatterPlotData}						  	
+								  	</Card.Body>
+								</Card>
+							</Col>
 
-					<Col xs={12} md={6}>
-						<Card>
-							<Card.Header className="text-white" style={{'background-color':'#292b2c'}}>ETF Change % Vs NAV change %</Card.Header>
-						  <Card.Body style={{'backgroundColor':'#292b2c'}}>
-							{this.state.scatterPlotData}						  	
-						  </Card.Body>
-						</Card>
-					</Col>
-				</Row>
+							<Col xs={12} md={12}>
+								<Card className="CustomCard">
+									<Card.Header className="CustomCardHeader text-white">
+									PNL</Card.Header>
+								  	<Card.Body className="CustomCardBody text-white">
+										{this.state.PNLStatementForTheDay}
+								  	</Card.Body>
+								</Card>
+							</Col>
+						</Row>
+	          		</Col>
+	          	</Row>
 	          </Col>
 	        </Row>
         )
@@ -143,8 +150,62 @@ class HistoricalArbitrage extends React.Component{
 			return d;
 		};
 	}
-
 }
+
+
+const PieCharts = (props) =>{
+	  const [show, setShow] = useState(false);
+
+	  const handleClose = () => setShow(false);
+	  const handleShow = () => setShow(true);
+	  console.log(props);
+	  return (
+	    <>
+	      <Button variant="warning" size="sm" onClick={handleShow}>
+	        Etf Movers
+	      </Button>
+
+	      <Modal dialogClassName="my-modal" show={show} onHide={handleClose}>
+	        <Modal.Header closeButton>
+	          <Modal.Title>
+	          	Underlying Holdings
+	          </Modal.Title>
+	        </Modal.Header>
+	        <Modal.Body>
+	        	<Row>
+	          		<Col xs={12} md={12}>
+						<Card>
+							<Card.Header className="CustomCardHeader text-white CustomBackGroundColor">Holdings</Card.Header>
+							<Card.Body className="CustomCardBody text-white">
+								<Row>
+									<Col xs={12} md={6}>
+										<center><h5>Etf Movers</h5></center>
+										<PieChartGraph data={props.etfmoversDictCount} element={"Count"}/>
+									</Col>
+									<Col xs={12} md={6}>
+										<center><h5>Market Movers</h5></center>
+										<PieChartGraph data={props.highestChangeDictCount} element={"Count"}/>
+									</Col>
+								</Row>
+							</Card.Body>
+						</Card>
+					</Col>
+				</Row>
+	        </Modal.Body>
+	        <Modal.Footer>
+	          <Button variant="secondary" onClick={handleClose}>
+	            Close
+	          </Button>
+	          <Button variant="primary" onClick={handleClose}>
+	            Save Changes
+	          </Button>
+	        </Modal.Footer>
+	      </Modal>
+	    </>
+	  );
+	}
+
+
 
 
 export default HistoricalArbitrage;
