@@ -1,9 +1,9 @@
 import sys, traceback
 sys.path.append('..')
+from CommonServices.ImportExtensions import *
 import pandas as pd
 import getpass
 from pymongo import *
-from CommonServices import ImportExtensions
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import AnalyzeArbitrageDataForETF
 from  CommonServices.LogCreater import CreateLogger
@@ -22,7 +22,7 @@ class CalculateAndSavePnLData():
     def retrievePNLForAllDays(self, magnitudeOfArbitrageToFilterOn=0):
         date_list = self.returnres()
         date_list.sort()
-        etflist = pd.read_csv('/home/piyush/Desktop/etf0406/ETFAnalyzer/CSVFiles/250M_WorkingETFs.csv').columns.to_list()
+        etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
         # final_res = []
         for date in date_list:
             all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
@@ -87,7 +87,7 @@ class CalculateAndSavePnLData():
         return(dates)
     
     def Save_PnLData(self, data):
-        result = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.insert_many(data)
+        result = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.insert_many(data)
         print('inserted %d docs' % (len(result.inserted_ids),))
         logger.debug('inserted %d docs' % (len(result.inserted_ids),))
         
