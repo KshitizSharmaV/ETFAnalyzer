@@ -34,7 +34,8 @@ export function logout(username, history) {
 	cognitoUser.signOut();
 	localStorage.removeItem('username')
 	localStorage.removeItem("Secret-Token")
-    localStorage.removeItem("Expiry-Timestamp")
+	localStorage.removeItem("Expiry-Timestamp")
+	localStorage.clear()
 	history.push('/Login')
 	console.log(cognitoUser)
 }
