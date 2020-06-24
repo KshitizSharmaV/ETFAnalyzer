@@ -41,6 +41,7 @@ export const signIn = (
       localStorage.setItem("username", email);
       localStorage.setItem("Secret-Token", result.getIdToken().jwtToken)
       localStorage.setItem("Expiry-Timestamp", result.getIdToken().getExpiration())
+      localStorage.setItem("Login-TimeStamp", result.getIdToken().getIssuedAt())
       localStorage.setItem("TimeStamp", result.idToken.payload["custom:timestamp"] || 0);
       console.log(result.idToken.payload.sub);
       

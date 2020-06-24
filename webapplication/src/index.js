@@ -41,7 +41,7 @@ catch(e){
 
 const PrivateRoute = ({ component: Component, path, ...rest }) => (
   <Route path={path} {...rest} render={(props) => (
-    localStorage.getItem("Secret-Token") ? (localStorage.getItem("Expiry-Timestamp")>Math.floor(new Date().getTime()/1000)? 
+    localStorage.getItem("Secret-Token") ? ((parseInt(localStorage.getItem("Login-TimeStamp"))+8*60*60)>Math.floor(new Date().getTime()/1000)?
       <Component {...props} {...rest}/>
       : <Redirect to='/Login' />) : <Redirect to='/Login' />
   )} />
