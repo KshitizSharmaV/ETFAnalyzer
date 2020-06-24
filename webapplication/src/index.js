@@ -25,6 +25,7 @@ import {
 
 // StylesSheets
 import './static/css/style.css';
+import { ETF_Description } from './Pages/ETF_Description';
 
 const history = createBrowserHistory();
 
@@ -100,7 +101,7 @@ class App extends Component {
         {/* <Route path="/Live-Arbitrage-Single" render={() => <Live_Arbitrage_Single ETF={this.state.ETF} />} /> */}
         {/* <Route path="/Live-Arbitrage" render={() => <Live_Arbitrage ETF={this.state.ETF} />} /> */}
         
-        <PrivateRoute path="/ETF-Description" startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} component={Description}/>
+        <PrivateRoute path="/ETF-Description" startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} component={ETF_Description}/>
         <PrivateRoute path="/HistoricalArbitrage" component={HistoricalArbitrage} startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />
         <PrivateRoute path="/Live-Arbitrage-Single" component={Live_Arbitrage_Single} ETF={this.state.ETF} />
         <PrivateRoute path="/Live-Arbitrage" component={Live_Arbitrage} ETF={this.state.ETF} />

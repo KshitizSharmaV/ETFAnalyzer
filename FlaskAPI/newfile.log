@@ -1,0 +1,658 @@
+2020-06-24 20:31:57,273 Using selector: KqueueSelector
+2020-06-24 20:31:57,284  * Debugger is active!
+2020-06-24 20:31:57,291  * Debugger PIN: 812-770-723
+2020-06-24 20:32:41,054 127.0.0.1 - - [24/Jun/2020 20:32:41] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2020-06-24 20:43:11,240 127.0.0.1 - - [24/Jun/2020 20:43:11] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 20:43:29,730 127.0.0.1 - - [24/Jun/2020 20:43:29] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:43:41,283 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:43:41,284 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:43:41,284 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:43:41,285 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:43:41,286 127.0.0.1 - - [24/Jun/2020 20:43:41] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 20:43:41,303 127.0.0.1 - - [24/Jun/2020 20:43:41] "[35m[1mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 500 -
+2020-06-24 20:43:58,775 127.0.0.1 - - [24/Jun/2020 20:43:58] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:44:38,819 127.0.0.1 - - [24/Jun/2020 20:44:38] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:45:38,299 127.0.0.1 - - [24/Jun/2020 20:45:38] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:45:58,814 127.0.0.1 - - [24/Jun/2020 20:45:58] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:46:34,904 127.0.0.1 - - [24/Jun/2020 20:46:34] "[33mGET /static/js/7.chunk.js HTTP/1.1[0m" 404 -
+2020-06-24 20:46:35,516 127.0.0.1 - - [24/Jun/2020 20:46:35] "[33mGET /manifest.json HTTP/1.1[0m" 404 -
+2020-06-24 20:46:38,315 127.0.0.1 - - [24/Jun/2020 20:46:38] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:46:44,056 127.0.0.1 - - [24/Jun/2020 20:46:44] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 20:46:59,321 127.0.0.1 - - [24/Jun/2020 20:46:59] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 20:47:14,092 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:47:14,092 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:47:14,115 127.0.0.1 - - [24/Jun/2020 20:47:14] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 20:47:14,116 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:47:14,116 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:47:14,125 127.0.0.1 - - [24/Jun/2020 20:47:14] "[35m[1mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 500 -
+2020-06-24 20:57:42,305 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:57:42,307 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:57:42,309 127.0.0.1 - - [24/Jun/2020 20:57:42] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 20:57:59,433 127.0.0.1 - - [24/Jun/2020 20:57:59] "[35m[1mGET /PastArbitrageData/XLK/20200608 HTTP/1.1[0m" 500 -
+2020-06-24 20:58:00,297 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:58:00,297 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:58:00,298 127.0.0.1 - - [24/Jun/2020 20:58:00] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 20:59:05,659 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:59:05,660 18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+2020-06-24 20:59:05,661 127.0.0.1 - - [24/Jun/2020 20:59:05] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 21:02:49,773 Command saslStart with request id 1458777923 started on server ('18.213.229.80', 27017)
+2020-06-24 21:02:50,003 Command saslStart with request id 1458777923 on server ('18.213.229.80', 27017) succeeded in 230140 microseconds
+2020-06-24 21:02:50,015 Command saslContinue with request id 2007237709 started on server ('18.213.229.80', 27017)
+2020-06-24 21:02:50,244 Command saslContinue with request id 2007237709 on server ('18.213.229.80', 27017) succeeded in 228981 microseconds
+2020-06-24 21:02:50,245 Command saslContinue with request id 823564440 started on server ('18.213.229.80', 27017)
+2020-06-24 21:02:50,474 Command saslContinue with request id 823564440 on server ('18.213.229.80', 27017) succeeded in 228764 microseconds
+2020-06-24 21:02:50,481 Command find with request id 1115438165 started on server ('18.213.229.80', 27017)
+2020-06-24 21:02:50,713 Command find with request id 1115438165 on server ('18.213.229.80', 27017) succeeded in 230846 microseconds
+2020-06-24 21:02:53,477 127.0.0.1 - - [24/Jun/2020 21:02:53] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 21:38:09,312 Command find with request id 261433719 started on server ('18.213.229.80', 27017)
+2020-06-24 21:38:09,319 127.0.0.1 - - [24/Jun/2020 21:38:09] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 21:38:09,619 Command find with request id 261433719 on server ('18.213.229.80', 27017) succeeded in 306384 microseconds
+2020-06-24 21:38:10,053 Command saslStart with request id 511142630 started on server ('18.213.229.80', 27017)
+2020-06-24 21:38:10,268 Command saslStart with request id 511142630 on server ('18.213.229.80', 27017) succeeded in 215156 microseconds
+2020-06-24 21:38:10,269 Command saslContinue with request id 839594410 started on server ('18.213.229.80', 27017)
+2020-06-24 21:38:10,323 127.0.0.1 - - [24/Jun/2020 21:38:10] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 21:38:10,484 Command saslContinue with request id 839594410 on server ('18.213.229.80', 27017) succeeded in 215381 microseconds
+2020-06-24 21:38:10,484 Command saslContinue with request id 1350266113 started on server ('18.213.229.80', 27017)
+2020-06-24 21:38:10,615 127.0.0.1 - - [24/Jun/2020 21:38:10] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 21:38:10,700 Command saslContinue with request id 1350266113 on server ('18.213.229.80', 27017) succeeded in 215104 microseconds
+2020-06-24 21:38:10,700 Command find with request id 1951398138 started on server ('18.213.229.80', 27017)
+2020-06-24 21:38:10,917 Command find with request id 1951398138 on server ('18.213.229.80', 27017) succeeded in 216923 microseconds
+2020-06-24 21:38:10,937 127.0.0.1 - - [24/Jun/2020 21:38:10] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 21:38:11,120 Starting new HTTPS connection (1): api.polygon.io:443
+2020-06-24 21:38:11,912 127.0.0.1 - - [24/Jun/2020 21:38:11] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 21:38:12,282 https://api.polygon.io:443 "GET /v2/aggs/ticker/XLK/range/1/day/1998-12-16/2020-06-24?apiKey=M_PKVL_rqHZI7VM9ZYO_hwPiConz5rIklx893F HTTP/1.1" 200 None
+2020-06-24 21:38:13,427 127.0.0.1 - - [24/Jun/2020 21:38:13] "[37mGET /ETfDescription/getOHLCDailyData/XLK/1998-12-16%2000:00:00 HTTP/1.1[0m" 200 -
+2020-06-24 21:47:37,892 Command saslStart with request id 1391731064 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:38,120 Command saslStart with request id 1391731064 on server ('18.213.229.80', 27017) succeeded in 227722 microseconds
+2020-06-24 21:47:38,132 Command saslContinue with request id 432109524 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:38,569 Command saslContinue with request id 432109524 on server ('18.213.229.80', 27017) succeeded in 436465 microseconds
+2020-06-24 21:47:38,569 Command saslContinue with request id 1822559361 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:38,784 Command find with request id 48439519 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:38,786 Command find with request id 226693620 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:38,789 127.0.0.1 - - [24/Jun/2020 21:47:38] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 21:47:38,796 Command saslContinue with request id 1822559361 on server ('18.213.229.80', 27017) succeeded in 226664 microseconds
+2020-06-24 21:47:38,797 Command find with request id 403681562 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:39,003 Command find with request id 48439519 on server ('18.213.229.80', 27017) succeeded in 219616 microseconds
+2020-06-24 21:47:39,018 Command find with request id 226693620 on server ('18.213.229.80', 27017) succeeded in 230640 microseconds
+2020-06-24 21:47:39,036 Command find with request id 403681562 on server ('18.213.229.80', 27017) succeeded in 239481 microseconds
+2020-06-24 21:47:39,037 127.0.0.1 - - [24/Jun/2020 21:47:39] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 21:47:39,062 Command find with request id 1674303725 started on server ('18.213.229.80', 27017)
+2020-06-24 21:47:39,289 Command find with request id 1674303725 on server ('18.213.229.80', 27017) succeeded in 226712 microseconds
+2020-06-24 21:47:39,304 127.0.0.1 - - [24/Jun/2020 21:47:39] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:47:39,716 127.0.0.1 - - [24/Jun/2020 21:47:39] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 21:47:40,012 127.0.0.1 - - [24/Jun/2020 21:47:40] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 21:47:40,019 127.0.0.1 - - [24/Jun/2020 21:47:40] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 21:47:40,045 Starting new HTTPS connection (1): api.polygon.io:443
+2020-06-24 21:47:41,437 https://api.polygon.io:443 "GET /v2/aggs/ticker/XLK/range/1/day/1998-12-16/2020-06-24?apiKey=M_PKVL_rqHZI7VM9ZYO_hwPiConz5rIklx893F HTTP/1.1" 200 None
+2020-06-24 21:47:42,346 127.0.0.1 - - [24/Jun/2020 21:47:42] "[37mGET /ETfDescription/getOHLCDailyData/XLK/1998-12-16%2000:00:00 HTTP/1.1[0m" 200 -
+2020-06-24 21:48:08,224 Command find with request id 1791608793 started on server ('18.213.229.80', 27017)
+2020-06-24 21:48:08,452 Command find with request id 1791608793 on server ('18.213.229.80', 27017) succeeded in 227191 microseconds
+2020-06-24 21:48:08,480 Command find with request id 1700769364 started on server ('18.213.229.80', 27017)
+2020-06-24 21:48:08,882 Command find with request id 1700769364 on server ('18.213.229.80', 27017) succeeded in 401649 microseconds
+2020-06-24 21:48:08,885 127.0.0.1 - - [24/Jun/2020 21:48:08] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:49:08,977 Command find with request id 446941412 started on server ('18.213.229.80', 27017)
+2020-06-24 21:49:09,299 Command find with request id 446941412 on server ('18.213.229.80', 27017) succeeded in 321991 microseconds
+2020-06-24 21:49:09,325 Command find with request id 1993997925 started on server ('18.213.229.80', 27017)
+2020-06-24 21:49:09,708 Command find with request id 1993997925 on server ('18.213.229.80', 27017) succeeded in 382818 microseconds
+2020-06-24 21:49:09,711 127.0.0.1 - - [24/Jun/2020 21:49:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:50:08,505 Command find with request id 1785742192 started on server ('18.213.229.80', 27017)
+2020-06-24 21:50:08,734 Command find with request id 1785742192 on server ('18.213.229.80', 27017) succeeded in 228110 microseconds
+2020-06-24 21:50:08,763 Command find with request id 1885054119 started on server ('18.213.229.80', 27017)
+2020-06-24 21:50:09,102 Command find with request id 1885054119 on server ('18.213.229.80', 27017) succeeded in 339316 microseconds
+2020-06-24 21:50:09,106 127.0.0.1 - - [24/Jun/2020 21:50:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:51:08,593 Command find with request id 1835246221 started on server ('18.213.229.80', 27017)
+2020-06-24 21:51:08,905 Command find with request id 1835246221 on server ('18.213.229.80', 27017) succeeded in 311945 microseconds
+2020-06-24 21:51:08,932 Command find with request id 675614486 started on server ('18.213.229.80', 27017)
+2020-06-24 21:51:09,316 Command find with request id 675614486 on server ('18.213.229.80', 27017) succeeded in 383813 microseconds
+2020-06-24 21:51:09,319 127.0.0.1 - - [24/Jun/2020 21:51:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:52:08,866 Command find with request id 1720494784 started on server ('18.213.229.80', 27017)
+2020-06-24 21:52:09,101 Command find with request id 1720494784 on server ('18.213.229.80', 27017) succeeded in 234710 microseconds
+2020-06-24 21:52:09,127 Command find with request id 488527833 started on server ('18.213.229.80', 27017)
+2020-06-24 21:52:09,528 Command find with request id 488527833 on server ('18.213.229.80', 27017) succeeded in 400753 microseconds
+2020-06-24 21:52:09,532 127.0.0.1 - - [24/Jun/2020 21:52:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:53:08,843 Command find with request id 808530661 started on server ('18.213.229.80', 27017)
+2020-06-24 21:53:09,070 Command find with request id 808530661 on server ('18.213.229.80', 27017) succeeded in 227139 microseconds
+2020-06-24 21:53:09,096 Command find with request id 1845784858 started on server ('18.213.229.80', 27017)
+2020-06-24 21:53:09,537 Command find with request id 1845784858 on server ('18.213.229.80', 27017) succeeded in 440793 microseconds
+2020-06-24 21:53:09,540 127.0.0.1 - - [24/Jun/2020 21:53:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:54:08,499 Command find with request id 778662571 started on server ('18.213.229.80', 27017)
+2020-06-24 21:54:08,727 Command find with request id 778662571 on server ('18.213.229.80', 27017) succeeded in 227726 microseconds
+2020-06-24 21:54:08,754 Command find with request id 642551035 started on server ('18.213.229.80', 27017)
+2020-06-24 21:54:09,339 Command find with request id 642551035 on server ('18.213.229.80', 27017) succeeded in 584564 microseconds
+2020-06-24 21:54:09,343 127.0.0.1 - - [24/Jun/2020 21:54:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:55:08,737 Command find with request id 984580318 started on server ('18.213.229.80', 27017)
+2020-06-24 21:55:08,965 Command find with request id 984580318 on server ('18.213.229.80', 27017) succeeded in 228101 microseconds
+2020-06-24 21:55:08,993 Command find with request id 1479904491 started on server ('18.213.229.80', 27017)
+2020-06-24 21:55:09,222 Command find with request id 1479904491 on server ('18.213.229.80', 27017) succeeded in 228609 microseconds
+2020-06-24 21:55:09,225 127.0.0.1 - - [24/Jun/2020 21:55:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 21:56:08,202 Command find with request id 857151853 started on server ('18.213.229.80', 27017)
+2020-06-24 21:56:08,537 Command find with request id 857151853 on server ('18.213.229.80', 27017) succeeded in 334611 microseconds
+2020-06-24 21:56:08,562 Command find with request id 830889295 started on server ('18.213.229.80', 27017)
+2020-06-24 21:56:08,947 Command find with request id 830889295 on server ('18.213.229.80', 27017) succeeded in 384403 microseconds
+2020-06-24 21:56:08,950 127.0.0.1 - - [24/Jun/2020 21:56:08] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 22:00:20,306 Command find with request id 1987760720 started on server ('18.213.229.80', 27017)
+2020-06-24 22:00:20,313 Command find with request id 2038808308 started on server ('18.213.229.80', 27017)
+2020-06-24 22:00:20,645 Command find with request id 2038808308 on server ('18.213.229.80', 27017) succeeded in 331829 microseconds
+2020-06-24 22:00:20,662 Command find with request id 1987760720 on server ('18.213.229.80', 27017) succeeded in 355704 microseconds
+2020-06-24 22:00:20,675 127.0.0.1 - - [24/Jun/2020 22:00:20] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:00:21,458 127.0.0.1 - - [24/Jun/2020 22:00:21] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:00:57,153 Command find with request id 378614662 started on server ('18.213.229.80', 27017)
+2020-06-24 22:00:57,158 Command find with request id 382578173 started on server ('18.213.229.80', 27017)
+2020-06-24 22:00:57,384 Command find with request id 382578173 on server ('18.213.229.80', 27017) succeeded in 224109 microseconds
+2020-06-24 22:00:57,400 Command find with request id 378614662 on server ('18.213.229.80', 27017) succeeded in 241578 microseconds
+2020-06-24 22:00:57,422 127.0.0.1 - - [24/Jun/2020 22:00:57] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:00:58,356 127.0.0.1 - - [24/Jun/2020 22:00:58] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:04:35,025 Command find with request id 1293452602 started on server ('18.213.229.80', 27017)
+2020-06-24 22:04:35,028 Command find with request id 80923233 started on server ('18.213.229.80', 27017)
+2020-06-24 22:04:35,247 Command find with request id 80923233 on server ('18.213.229.80', 27017) succeeded in 218048 microseconds
+2020-06-24 22:04:35,266 Command find with request id 1293452602 on server ('18.213.229.80', 27017) succeeded in 240398 microseconds
+2020-06-24 22:04:35,280 127.0.0.1 - - [24/Jun/2020 22:04:35] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:04:36,456 127.0.0.1 - - [24/Jun/2020 22:04:36] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:05:58,938 Command find with request id 1832619855 started on server ('18.213.229.80', 27017)
+2020-06-24 22:05:58,940 Command find with request id 1631437711 started on server ('18.213.229.80', 27017)
+2020-06-24 22:05:59,160 Command find with request id 1631437711 on server ('18.213.229.80', 27017) succeeded in 220020 microseconds
+2020-06-24 22:05:59,179 Command find with request id 1832619855 on server ('18.213.229.80', 27017) succeeded in 240547 microseconds
+2020-06-24 22:05:59,180 127.0.0.1 - - [24/Jun/2020 22:05:59] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:05:59,993 127.0.0.1 - - [24/Jun/2020 22:05:59] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:07:18,653 Command find with request id 1925228542 started on server ('18.213.229.80', 27017)
+2020-06-24 22:07:18,656 Command find with request id 1179996045 started on server ('18.213.229.80', 27017)
+2020-06-24 22:07:18,876 Command find with request id 1179996045 on server ('18.213.229.80', 27017) succeeded in 219510 microseconds
+2020-06-24 22:07:18,894 Command find with request id 1925228542 on server ('18.213.229.80', 27017) succeeded in 240540 microseconds
+2020-06-24 22:07:18,917 127.0.0.1 - - [24/Jun/2020 22:07:18] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:07:19,807 127.0.0.1 - - [24/Jun/2020 22:07:19] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:07:54,945 Command find with request id 1750911869 started on server ('18.213.229.80', 27017)
+2020-06-24 22:07:54,952 Command find with request id 607367442 started on server ('18.213.229.80', 27017)
+2020-06-24 22:07:55,171 Command find with request id 607367442 on server ('18.213.229.80', 27017) succeeded in 218675 microseconds
+2020-06-24 22:07:55,185 Command find with request id 1750911869 on server ('18.213.229.80', 27017) succeeded in 239319 microseconds
+2020-06-24 22:07:55,214 127.0.0.1 - - [24/Jun/2020 22:07:55] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:07:56,353 127.0.0.1 - - [24/Jun/2020 22:07:56] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:39:01,147 Command find with request id 190711622 started on server ('18.213.229.80', 27017)
+2020-06-24 22:39:01,149 Command find with request id 1244629630 started on server ('18.213.229.80', 27017)
+2020-06-24 22:39:01,368 Command find with request id 1244629630 on server ('18.213.229.80', 27017) succeeded in 218324 microseconds
+2020-06-24 22:39:01,384 Command find with request id 190711622 on server ('18.213.229.80', 27017) succeeded in 235880 microseconds
+2020-06-24 22:39:01,385 127.0.0.1 - - [24/Jun/2020 22:39:01] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:39:04,579 127.0.0.1 - - [24/Jun/2020 22:39:04] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:40:05,187 Command find with request id 206174488 started on server ('18.213.229.80', 27017)
+2020-06-24 22:40:05,188 Command find with request id 1283497205 started on server ('18.213.229.80', 27017)
+2020-06-24 22:40:05,193 127.0.0.1 - - [24/Jun/2020 22:40:05] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 22:40:05,408 Command find with request id 1283497205 on server ('18.213.229.80', 27017) succeeded in 218752 microseconds
+2020-06-24 22:40:05,420 Command find with request id 206174488 on server ('18.213.229.80', 27017) succeeded in 232409 microseconds
+2020-06-24 22:40:05,433 127.0.0.1 - - [24/Jun/2020 22:40:05] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:40:06,324 127.0.0.1 - - [24/Jun/2020 22:40:06] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:40:06,614 127.0.0.1 - - [24/Jun/2020 22:40:06] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 22:40:06,620 127.0.0.1 - - [24/Jun/2020 22:40:06] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 22:40:07,386 Starting new HTTPS connection (1): api.polygon.io:443
+2020-06-24 22:40:09,492 https://api.polygon.io:443 "GET /v2/aggs/ticker/XLK/range/1/day/1998-12-16/2020-06-24?apiKey=M_PKVL_rqHZI7VM9ZYO_hwPiConz5rIklx893F HTTP/1.1" 200 None
+2020-06-24 22:40:10,826 127.0.0.1 - - [24/Jun/2020 22:40:10] "[37mGET /ETfDescription/getOHLCDailyData/XLK/1998-12-16%2000:00:00 HTTP/1.1[0m" 200 -
+2020-06-24 22:49:34,621 Command find with request id 901189829 started on server ('18.213.229.80', 27017)
+2020-06-24 22:49:34,850 Command find with request id 901189829 on server ('18.213.229.80', 27017) succeeded in 228239 microseconds
+2020-06-24 22:49:34,877 Command find with request id 95293712 started on server ('18.213.229.80', 27017)
+2020-06-24 22:49:35,104 Command find with request id 95293712 on server ('18.213.229.80', 27017) succeeded in 226879 microseconds
+2020-06-24 22:49:35,109 127.0.0.1 - - [24/Jun/2020 22:49:35] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 22:49:36,295 Command find with request id 1726100569 started on server ('18.213.229.80', 27017)
+2020-06-24 22:49:36,300 Command find with request id 215675860 started on server ('18.213.229.80', 27017)
+2020-06-24 22:49:36,311 127.0.0.1 - - [24/Jun/2020 22:49:36] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 22:49:36,598 Command find with request id 215675860 on server ('18.213.229.80', 27017) succeeded in 297596 microseconds
+2020-06-24 22:49:36,604 Command find with request id 1726100569 on server ('18.213.229.80', 27017) succeeded in 308809 microseconds
+2020-06-24 22:49:36,622 127.0.0.1 - - [24/Jun/2020 22:49:36] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:49:38,473 127.0.0.1 - - [24/Jun/2020 22:49:38] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:51:08,695 Command find with request id 895945460 started on server ('18.213.229.80', 27017)
+2020-06-24 22:51:08,965 Command find with request id 895945460 on server ('18.213.229.80', 27017) succeeded in 269721 microseconds
+2020-06-24 22:51:08,991 Command find with request id 13456 started on server ('18.213.229.80', 27017)
+2020-06-24 22:51:09,375 Command find with request id 13456 on server ('18.213.229.80', 27017) succeeded in 383644 microseconds
+2020-06-24 22:51:09,378 127.0.0.1 - - [24/Jun/2020 22:51:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 22:52:08,678 Command find with request id 46554618 started on server ('18.213.229.80', 27017)
+2020-06-24 22:52:08,908 Command find with request id 46554618 on server ('18.213.229.80', 27017) succeeded in 230119 microseconds
+2020-06-24 22:52:08,936 Command find with request id 759417218 started on server ('18.213.229.80', 27017)
+2020-06-24 22:52:09,382 Command find with request id 759417218 on server ('18.213.229.80', 27017) succeeded in 446364 microseconds
+2020-06-24 22:52:09,386 127.0.0.1 - - [24/Jun/2020 22:52:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 22:53:08,670 Command find with request id 2048121945 started on server ('18.213.229.80', 27017)
+2020-06-24 22:53:08,897 Command find with request id 2048121945 on server ('18.213.229.80', 27017) succeeded in 227102 microseconds
+2020-06-24 22:53:08,925 Command find with request id 770151852 started on server ('18.213.229.80', 27017)
+2020-06-24 22:53:09,152 Command find with request id 770151852 on server ('18.213.229.80', 27017) succeeded in 226570 microseconds
+2020-06-24 22:53:09,155 127.0.0.1 - - [24/Jun/2020 22:53:09] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 22:54:08,335 Command find with request id 603291624 started on server ('18.213.229.80', 27017)
+2020-06-24 22:54:08,563 Command find with request id 603291624 on server ('18.213.229.80', 27017) succeeded in 226892 microseconds
+2020-06-24 22:54:08,585 Command find with request id 1774377061 started on server ('18.213.229.80', 27017)
+2020-06-24 22:54:08,812 Command find with request id 1774377061 on server ('18.213.229.80', 27017) succeeded in 226575 microseconds
+2020-06-24 22:54:08,816 127.0.0.1 - - [24/Jun/2020 22:54:08] "[37mGET /ETfLiveArbitrage/AllTickers HTTP/1.1[0m" 200 -
+2020-06-24 22:54:49,419 Command find with request id 560874499 started on server ('18.213.229.80', 27017)
+2020-06-24 22:54:49,432 Command find with request id 1311978010 started on server ('18.213.229.80', 27017)
+2020-06-24 22:54:49,514 127.0.0.1 - - [24/Jun/2020 22:54:49] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 22:54:49,651 Command find with request id 560874499 on server ('18.213.229.80', 27017) succeeded in 231059 microseconds
+2020-06-24 22:54:49,651 Command find with request id 1311978010 on server ('18.213.229.80', 27017) succeeded in 218860 microseconds
+2020-06-24 22:54:49,703 127.0.0.1 - - [24/Jun/2020 22:54:49] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:54:50,381 127.0.0.1 - - [24/Jun/2020 22:54:50] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:56:14,035 Command find with request id 743780607 started on server ('18.213.229.80', 27017)
+2020-06-24 22:56:14,041 Command find with request id 218352662 started on server ('18.213.229.80', 27017)
+2020-06-24 22:56:14,043 127.0.0.1 - - [24/Jun/2020 22:56:14] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 22:56:14,254 Command find with request id 743780607 on server ('18.213.229.80', 27017) succeeded in 218573 microseconds
+2020-06-24 22:56:14,271 Command find with request id 218352662 on server ('18.213.229.80', 27017) succeeded in 229792 microseconds
+2020-06-24 22:56:14,292 127.0.0.1 - - [24/Jun/2020 22:56:14] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:56:14,968 127.0.0.1 - - [24/Jun/2020 22:56:14] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:56:15,264 127.0.0.1 - - [24/Jun/2020 22:56:15] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 22:56:15,270 127.0.0.1 - - [24/Jun/2020 22:56:15] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 22:56:15,367 Starting new HTTPS connection (1): api.polygon.io:443
+2020-06-24 22:56:16,787 https://api.polygon.io:443 "GET /v2/aggs/ticker/XLK/range/1/day/1998-12-16/2020-06-24?apiKey=M_PKVL_rqHZI7VM9ZYO_hwPiConz5rIklx893F HTTP/1.1" 200 None
+2020-06-24 22:56:17,904 127.0.0.1 - - [24/Jun/2020 22:56:17] "[37mGET /ETfDescription/getOHLCDailyData/XLK/1998-12-16%2000:00:00 HTTP/1.1[0m" 200 -
+2020-06-24 22:59:44,090 Command find with request id 1058107670 started on server ('18.213.229.80', 27017)
+2020-06-24 22:59:44,093 Command find with request id 303528883 started on server ('18.213.229.80', 27017)
+2020-06-24 22:59:44,096 127.0.0.1 - - [24/Jun/2020 22:59:44] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 22:59:44,312 Command find with request id 303528883 on server ('18.213.229.80', 27017) succeeded in 218670 microseconds
+2020-06-24 22:59:44,327 Command find with request id 1058107670 on server ('18.213.229.80', 27017) succeeded in 236279 microseconds
+2020-06-24 22:59:44,338 127.0.0.1 - - [24/Jun/2020 22:59:44] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 22:59:45,084 127.0.0.1 - - [24/Jun/2020 22:59:45] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:05:48,101 Command find with request id 1645325369 started on server ('18.213.229.80', 27017)
+2020-06-24 23:05:48,108 Command find with request id 1984038011 started on server ('18.213.229.80', 27017)
+2020-06-24 23:05:48,113 127.0.0.1 - - [24/Jun/2020 23:05:48] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:05:48,325 Command find with request id 1984038011 on server ('18.213.229.80', 27017) succeeded in 217224 microseconds
+2020-06-24 23:05:48,343 Command find with request id 1645325369 on server ('18.213.229.80', 27017) succeeded in 242136 microseconds
+2020-06-24 23:05:48,345 127.0.0.1 - - [24/Jun/2020 23:05:48] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:05:49,227 127.0.0.1 - - [24/Jun/2020 23:05:49] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:10:52,815 Command find with request id 1193343818 started on server ('18.213.229.80', 27017)
+2020-06-24 23:10:52,820 Command find with request id 1179769793 started on server ('18.213.229.80', 27017)
+2020-06-24 23:10:52,825 127.0.0.1 - - [24/Jun/2020 23:10:52] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:10:53,039 Command find with request id 1179769793 on server ('18.213.229.80', 27017) succeeded in 218765 microseconds
+2020-06-24 23:10:53,056 Command find with request id 1193343818 on server ('18.213.229.80', 27017) succeeded in 240886 microseconds
+2020-06-24 23:10:53,058 127.0.0.1 - - [24/Jun/2020 23:10:53] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:10:53,755 127.0.0.1 - - [24/Jun/2020 23:10:53] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:10:54,054 127.0.0.1 - - [24/Jun/2020 23:10:54] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:11:14,772 Command find with request id 1622255830 started on server ('18.213.229.80', 27017)
+2020-06-24 23:11:14,774 Command find with request id 801352498 started on server ('18.213.229.80', 27017)
+2020-06-24 23:11:14,807 127.0.0.1 - - [24/Jun/2020 23:11:14] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:11:15,063 Command find with request id 801352498 on server ('18.213.229.80', 27017) succeeded in 288772 microseconds
+2020-06-24 23:11:15,080 Command find with request id 1622255830 on server ('18.213.229.80', 27017) succeeded in 307482 microseconds
+2020-06-24 23:11:15,106 127.0.0.1 - - [24/Jun/2020 23:11:15] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:11:15,907 127.0.0.1 - - [24/Jun/2020 23:11:15] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:11:16,224 127.0.0.1 - - [24/Jun/2020 23:11:16] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:16:45,004 Command find with request id 1126116211 started on server ('18.213.229.80', 27017)
+2020-06-24 23:16:45,007 Command find with request id 861777266 started on server ('18.213.229.80', 27017)
+2020-06-24 23:16:45,044 127.0.0.1 - - [24/Jun/2020 23:16:45] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:16:45,225 Command find with request id 861777266 on server ('18.213.229.80', 27017) succeeded in 217650 microseconds
+2020-06-24 23:16:45,238 Command find with request id 1126116211 on server ('18.213.229.80', 27017) succeeded in 233573 microseconds
+2020-06-24 23:16:45,249 127.0.0.1 - - [24/Jun/2020 23:16:45] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:16:45,940 127.0.0.1 - - [24/Jun/2020 23:16:45] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:16:46,241 127.0.0.1 - - [24/Jun/2020 23:16:46] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:19:29,016 Command find with request id 184778266 started on server ('18.213.229.80', 27017)
+2020-06-24 23:19:29,019 Command find with request id 306963100 started on server ('18.213.229.80', 27017)
+2020-06-24 23:19:29,024 127.0.0.1 - - [24/Jun/2020 23:19:29] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:19:29,239 Command find with request id 306963100 on server ('18.213.229.80', 27017) succeeded in 218615 microseconds
+2020-06-24 23:19:29,265 Command find with request id 184778266 on server ('18.213.229.80', 27017) succeeded in 248589 microseconds
+2020-06-24 23:19:29,266 127.0.0.1 - - [24/Jun/2020 23:19:29] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:19:30,087 127.0.0.1 - - [24/Jun/2020 23:19:30] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:19:30,490 127.0.0.1 - - [24/Jun/2020 23:19:30] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:20:04,762 Command find with request id 1598242968 started on server ('18.213.229.80', 27017)
+2020-06-24 23:20:04,783 Command find with request id 944106500 started on server ('18.213.229.80', 27017)
+2020-06-24 23:20:04,838 127.0.0.1 - - [24/Jun/2020 23:20:04] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:20:04,990 Command find with request id 1598242968 on server ('18.213.229.80', 27017) succeeded in 227408 microseconds
+2020-06-24 23:20:05,001 Command find with request id 944106500 on server ('18.213.229.80', 27017) succeeded in 217558 microseconds
+2020-06-24 23:20:05,030 127.0.0.1 - - [24/Jun/2020 23:20:05] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:20:05,924 127.0.0.1 - - [24/Jun/2020 23:20:05] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:20:06,335 127.0.0.1 - - [24/Jun/2020 23:20:06] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:22:12,655 Command find with request id 1282889892 started on server ('18.213.229.80', 27017)
+2020-06-24 23:22:12,659 Command find with request id 794598964 started on server ('18.213.229.80', 27017)
+2020-06-24 23:22:12,677 127.0.0.1 - - [24/Jun/2020 23:22:12] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:22:12,880 Command find with request id 1282889892 on server ('18.213.229.80', 27017) succeeded in 223863 microseconds
+2020-06-24 23:22:12,892 Command find with request id 794598964 on server ('18.213.229.80', 27017) succeeded in 231810 microseconds
+2020-06-24 23:22:12,910 127.0.0.1 - - [24/Jun/2020 23:22:12] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:22:13,579 127.0.0.1 - - [24/Jun/2020 23:22:13] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:22:13,882 127.0.0.1 - - [24/Jun/2020 23:22:13] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:24:33,338 Command find with request id 1985716395 started on server ('18.213.229.80', 27017)
+2020-06-24 23:24:33,342 Command find with request id 2039576385 started on server ('18.213.229.80', 27017)
+2020-06-24 23:24:33,376 127.0.0.1 - - [24/Jun/2020 23:24:33] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:24:33,561 Command find with request id 2039576385 on server ('18.213.229.80', 27017) succeeded in 217195 microseconds
+2020-06-24 23:24:33,575 Command find with request id 1985716395 on server ('18.213.229.80', 27017) succeeded in 236747 microseconds
+2020-06-24 23:24:33,621 127.0.0.1 - - [24/Jun/2020 23:24:33] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:24:34,630 127.0.0.1 - - [24/Jun/2020 23:24:34] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:24:35,037 127.0.0.1 - - [24/Jun/2020 23:24:35] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:26:29,513 Command find with request id 179414786 started on server ('18.213.229.80', 27017)
+2020-06-24 23:26:29,517 Command find with request id 357267914 started on server ('18.213.229.80', 27017)
+2020-06-24 23:26:29,573 127.0.0.1 - - [24/Jun/2020 23:26:29] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:26:29,736 Command find with request id 357267914 on server ('18.213.229.80', 27017) succeeded in 218362 microseconds
+2020-06-24 23:26:29,751 Command find with request id 179414786 on server ('18.213.229.80', 27017) succeeded in 236638 microseconds
+2020-06-24 23:26:29,766 127.0.0.1 - - [24/Jun/2020 23:26:29] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:26:30,485 127.0.0.1 - - [24/Jun/2020 23:26:30] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:26:30,793 127.0.0.1 - - [24/Jun/2020 23:26:30] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:27:51,362 Command find with request id 586027183 started on server ('18.213.229.80', 27017)
+2020-06-24 23:27:51,365 Command find with request id 998859539 started on server ('18.213.229.80', 27017)
+2020-06-24 23:27:51,374 127.0.0.1 - - [24/Jun/2020 23:27:51] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:27:51,583 Command find with request id 998859539 on server ('18.213.229.80', 27017) succeeded in 216571 microseconds
+2020-06-24 23:27:51,599 Command find with request id 586027183 on server ('18.213.229.80', 27017) succeeded in 236621 microseconds
+2020-06-24 23:27:51,612 127.0.0.1 - - [24/Jun/2020 23:27:51] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:27:52,306 127.0.0.1 - - [24/Jun/2020 23:27:52] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:27:52,883 127.0.0.1 - - [24/Jun/2020 23:27:52] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:28:51,383 Command find with request id 483596971 started on server ('18.213.229.80', 27017)
+2020-06-24 23:28:51,385 Command find with request id 1736171349 started on server ('18.213.229.80', 27017)
+2020-06-24 23:28:51,403 127.0.0.1 - - [24/Jun/2020 23:28:51] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:28:51,604 Command find with request id 1736171349 on server ('18.213.229.80', 27017) succeeded in 218183 microseconds
+2020-06-24 23:28:51,627 Command find with request id 483596971 on server ('18.213.229.80', 27017) succeeded in 241259 microseconds
+2020-06-24 23:28:51,635 127.0.0.1 - - [24/Jun/2020 23:28:51] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:28:52,490 127.0.0.1 - - [24/Jun/2020 23:28:52] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:28:52,873 127.0.0.1 - - [24/Jun/2020 23:28:52] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 23:28:52,879 127.0.0.1 - - [24/Jun/2020 23:28:52] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:29:13,206 Command find with request id 2001793133 started on server ('18.213.229.80', 27017)
+2020-06-24 23:29:13,210 Command find with request id 1658372429 started on server ('18.213.229.80', 27017)
+2020-06-24 23:29:13,220 127.0.0.1 - - [24/Jun/2020 23:29:13] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:29:13,567 Command find with request id 1658372429 on server ('18.213.229.80', 27017) succeeded in 356595 microseconds
+2020-06-24 23:29:13,567 Command find with request id 2001793133 on server ('18.213.229.80', 27017) succeeded in 361215 microseconds
+2020-06-24 23:29:13,608 127.0.0.1 - - [24/Jun/2020 23:29:13] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:29:14,609 127.0.0.1 - - [24/Jun/2020 23:29:14] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:29:14,924 127.0.0.1 - - [24/Jun/2020 23:29:14] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 23:29:14,929 127.0.0.1 - - [24/Jun/2020 23:29:14] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-06-24 23:29:19,041 Command find with request id 1466256269 started on server ('18.213.229.80', 27017)
+2020-06-24 23:29:19,043 Command find with request id 994263758 started on server ('18.213.229.80', 27017)
+2020-06-24 23:29:19,058 127.0.0.1 - - [24/Jun/2020 23:29:19] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-06-24 23:29:19,260 Command find with request id 994263758 on server ('18.213.229.80', 27017) succeeded in 217313 microseconds
+2020-06-24 23:29:19,274 Command find with request id 1466256269 on server ('18.213.229.80', 27017) succeeded in 233258 microseconds
+2020-06-24 23:29:19,308 127.0.0.1 - - [24/Jun/2020 23:29:19] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:29:19,976 127.0.0.1 - - [24/Jun/2020 23:29:19] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-06-24 23:29:20,279 127.0.0.1 - - [24/Jun/2020 23:29:20] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-06-24 23:29:20,284 127.0.0.1 - - [24/Jun/2020 23:29:20] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -

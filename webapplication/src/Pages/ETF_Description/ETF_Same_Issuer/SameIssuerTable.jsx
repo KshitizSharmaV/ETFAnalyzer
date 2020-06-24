@@ -1,28 +1,29 @@
 import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
-import HoldingsPieChart from "./HoldingsPieChart";
 import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
 import Axios from "axios";
 
-const HoldingsTable = (props) => {
-  const { ETF, startDate } = props;
+const SameIssuerTable = (props) => {
+  const { IssuerName } = props;
   const [tableData, setTableData] = useState({});
   const [order, setTableOrder] = useState([]);
   const [orderType, setOrderType] = useState("ASC");
 
   useEffect(() => {
-    Axios.get(
-      `http://localhost:5000/ETfDescription/getHoldingsData/${ETF}/${startDate}`
-    ).then(({data}) => {
-      setTableData(data);
-    }).catch((err) => console.log(err));;
-
-    // if (typeof data === "object") {
-    //   const order = Object.keys(data).sort();
-    //   setTableOrder(order);
-    // }
-  }, [ETF, startDate]);
+    if (IssuerName) {
+      Axios.get(
+        `http://localhost:5000/ETfDescription/getETFWithSameIssuer/${IssuerName}`
+      )
+        .then(({ data }) => {
+            console.log(data)
+          setTableData(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [IssuerName]);
 
   useEffect(() => {
     if (typeof tableData === "object") {
@@ -44,14 +45,13 @@ const HoldingsTable = (props) => {
     }
   };
 
-  console.log(props);
   return (
     <Card>
+        
       <Card.Header className="text-white BlackHeaderForModal">
-        ETF Holdings
+        ETF in Same Issuer
       </Card.Header>
       <Card.Body>
-        <HoldingsPieChart data={tableData} element={"TickerWeight"} />
         <div className="DescriptionTable2">
           <Table size="sm" striped bordered hover variant="dark">
             <thead>
@@ -59,8 +59,8 @@ const HoldingsTable = (props) => {
                 <th className="cursor-pointer" onClick={changeOrder}>
                   Symbol
                 </th>
-                <th>TickerName</th>
-                <th>TickerWeight</th>
+                <th>ETF Name</th>
+                <th>TotalAssetsUnderMgmt</th>
               </tr>
             </thead>
             <tbody>
@@ -68,8 +68,12 @@ const HoldingsTable = (props) => {
                 order.map((key) => (
                   <tr key={key}>
                     <td>{key}</td>
-                    <td>{tableData[key] && tableData[key].TickerName}</td>
-                    <td> {tableData[key] && tableData[key].TickerWeight} </td>
+                    <td>{tableData[key] && tableData[key].ETFName}</td>
+                    <td>
+                      {" "}
+                      {tableData[key] &&
+                        tableData[key].TotalAssetsUnderMgmt}
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -80,4 +84,4 @@ const HoldingsTable = (props) => {
   );
 };
 
-export default HoldingsTable;
+export default SameIssuerTable;
