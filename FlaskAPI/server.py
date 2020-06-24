@@ -111,7 +111,7 @@ etmoverslist = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMove
 
 @app.route('/PastArbitrageData/<ETFName>/<date>')
 def FetchPastArbitrageData(ETFName, date):
-    ColumnsForDisplay = ['$Spread', '$Arbitrage', 'Absolute Arbitrage',
+    ColumnsForDisplay = ['Time','$Spread', '$Arbitrage', 'Absolute Arbitrage',
                          'Over Bought/Sold',
                          'Etf Mover',
                          'Most Change%',
@@ -155,8 +155,7 @@ def FetchPastArbitrageData(ETFName, date):
 
     # Round of DataFrame 
     data = data.round(3)
-    print(data.head())
-
+    
     # Replace Values in Pandas DataFrame
     data.rename(columns={'ETF Trading Spread in $': '$Spread',
                          'Arbitrage in $': '$Arbitrage',
@@ -167,10 +166,12 @@ def FetchPastArbitrageData(ETFName, date):
     # Get the price dataframe
     allData = {}
     # Columns needed to display
+    data['Time'] = data.index
     data = data[ColumnsForDisplay]
-
     # PNL for all dates for the etf
-    allData['etfhistoricaldata'] = data.to_json(orient='index')
+    print("etfhistoricaldata")
+    print(data)
+    allData['etfhistoricaldata'] = data.to_json(orient='records')
     print("Price Df")
     print(pricedf)
     allData['etfPrices'] = pricedf.to_csv(sep='\t', index=False)

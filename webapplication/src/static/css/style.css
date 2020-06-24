@@ -15,3 +15,30 @@ h1, p {
 .CustomBackGroundColor{
 	background-color:#292b2c;
 }
+
+
+.BlackHeaderForModal{
+    background-color:#292b2c;
+}
+
+.CustomCardHeader{
+	padding-top: 0;
+	padding-bottom: 1;
+	font-size: 15px;
+	background-color:#292b2c;
+}
+
+.CustomCardBody{
+	padding-top: 0;
+	padding-bottom: 0;
+	background-color:#292b2c;
+}
+
+.CustomCard{
+	margin-top:1%;
+}
+
+.my-modal {
+    width: 35vw;
+    max-width: 35vw;
+} 
