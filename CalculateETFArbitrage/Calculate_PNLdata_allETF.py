@@ -45,13 +45,13 @@ class CalculateAndSavePnLData():
                     PNLOverDates['% R_Sell'] = round(PNLOverDates['# R_Sell'] / PNLOverDates['# T_Sell'], 2)
                     PNLOverDates['Date'] = date
                     PNLOverDates = PNLOverDates [['Date','Sell Return%','Buy Return%','# T_Buy','# R_Buy','% R_Buy','# T_Sell','# R_Sell','% R_Sell','Magnitue Of Arbitrage']]
-                    final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict('records'))
+                    final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict())
+                    self.Save_PnLData(final_res)
                 except Exception as e:
                     traceback.print_exc()
                     logger.exception(e)
                     # print("Exception in {}".format(etf_arb['ETFName']))
                     pass
-                self.Save_PnLData(final_res)
         except  Exception as e1:
             logger.exception(e1)
             traceback.print_exc()
