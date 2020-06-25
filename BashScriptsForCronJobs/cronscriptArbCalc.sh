@@ -1,5 +1,5 @@
 #!/bin/bash
-PID=$(pgrep -f ProcessCaller.py)
+PID=$(ps aux | grep -i "[p]ython ProcessCaller.py"  | awk '{print $2}')
 while [ -e /proc/$PID ]; do
   sleep .6
 done
