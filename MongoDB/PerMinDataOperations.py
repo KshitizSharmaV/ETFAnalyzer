@@ -9,6 +9,7 @@ class PerMinDataOperations():
 
     def __init__(self):
         self.DAYendTime = datetime.time(23,59)
+        self.DAYendTimeZeroZeo = datetime.time(0,0)
 
         # Day Light Savings
         # Summer UTC 13 to 20
@@ -28,6 +29,7 @@ class PerMinDataOperations():
     # Insert into QuotesLiveData Collection
     def insertQuotesLive(self, quotesData):
         quotesWS_collection.insert_many(quotesData, ordered=False)
+
 
     # Use PyMongo Cursor for fetching from TradePerMinWS Collection
     def FetchAllTradeDataPerMin(self, startts, endts):
@@ -51,19 +53,24 @@ class PerMinDataOperations():
         end_dt=None
         if currentTime >= self.UTCStartTime and (not ifaholiday): 
             start_dt = now
+            start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
+            start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         else:
             lastworkinDay=LastWorkingDay(todaysDate)
             start_dt = lastworkinDay
+            start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
             end_dt =  lastworkinDay.replace(hour=self.EndHour,minute=00,second=0, microsecond=0)
-            end_dt=end_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            #end_dt=end_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         
-        start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
+        #start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
         # Fix for breaking code
-        start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+        #start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         
         FetchDataForTimeObject = {}
-        print(start_dt)
-        print(end_dt)
+        print("*************")
+        print("start_dt"+str(start_dt))
+        print("end_dt"+str(end_dt))
+        
         FetchDataForTimeObject['start_dt']=int(start_dt.timestamp() * 1000)
         FetchDataForTimeObject['end_dt']=int(end_dt.timestamp() * 1000) if end_dt else end_dt
         
@@ -127,21 +134,20 @@ class PerMinDataOperations():
         todaysDate = now.date()
         ifaholiday = HolidayCheck(todaysDate)
         dt=None
-        print(now.time())
-        print(self.UTCEndTime)
-        print(self.DAYendTime)
         # Current Market 930 to 4
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
             dt = now.replace(second=0, microsecond=0)
+            dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         # After Market
         elif (currentTime >= self.UTCEndTime) and (currentTime < self.DAYendTime) and (not ifaholiday):
             dt = now.replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
+            dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         # Next day of market before 9:30 am or holiday
-        elif (currentTime >= self.DAYendTime) and (currentTime < datetime.time(self.StartHour,30)) or ifaholiday:
+        elif (currentTime > self.DAYendTimeZeroZeo) and (currentTime < datetime.time(self.StartHour,30)) or ifaholiday:
             dt=LastWorkingDay(todaysDate).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
         # Fix for adjustment datetime to unix timestamp
-        print(dt)
-        dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+        print("Live Single Arbitrage: "+str(dt))
+        #dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         return int(dt.timestamp() * 1000)
 
     #  Live arbitrage for 1 etf or all etf
