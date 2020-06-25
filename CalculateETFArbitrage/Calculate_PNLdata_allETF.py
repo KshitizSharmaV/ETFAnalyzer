@@ -1,4 +1,5 @@
 import sys, traceback
+
 sys.path.append('..')
 from CommonServices.ImportExtensions import *
 import pandas as pd
@@ -6,8 +7,10 @@ import getpass
 from pymongo import *
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import AnalyzeArbitrageDataForETF
-from  CommonServices.LogCreater import CreateLogger
+from CommonServices.LogCreater import CreateLogger
+
 logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-PNLLog.log', loggerName='PNLLogger')
+
 
 class CalculateAndSavePnLData():
     def __init__(self):
@@ -16,9 +19,12 @@ class CalculateAndSavePnLData():
             self.connforthis = MongoDBConnectors().get_pymongo_readWrite_production_production()
         else:
             self.connforthis = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
-        
+
         self.arbitragecollection = self.connforthis.ETF_db.ArbitrageCollection
-    
+
+    ########################################################################################
+    # Use to populate DB for the first time, for all dates which are not present
+    ########################################################################################
     def retrievePNLForAllDays(self, magnitudeOfArbitrageToFilterOn=0):
         try:
             date_list = self.returnres()
@@ -27,7 +33,13 @@ class CalculateAndSavePnLData():
             # final_res = []
             for date in date_list:
                 try:
-                    presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find({'Date':date}).limit(1)
+                    if self.sysUserName == 'ubuntu':
+                        presence = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.find(
+                            {'Date': date}).limit(1)
+                    else:
+                        presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find(
+                            {'Date': date}).limit(1)
+
                     if list(presence):
                         continue
                     all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
@@ -40,7 +52,8 @@ class CalculateAndSavePnLData():
                                 print(etf_arb['ETFName'])
                                 logger.debug(etf_arb['ETFName'])
                                 allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
-                                    arbitrageDataFromMongo=etf_arb, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
+                                    arbitrageDataFromMongo=etf_arb,
+                                    magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
                                 PNLOverDates[str(etf_arb['ETFName'])] = pnlstatementforday
                             except Exception as e0:
                                 print("Exception in {}".format(etf_arb['ETFName']))
@@ -51,11 +64,14 @@ class CalculateAndSavePnLData():
                                 pass
                     PNLOverDates = pd.DataFrame(PNLOverDates).T
                     # del PNLOverDates['Magnitue Of Arbitrage']
-                    PNLOverDates.columns = ['Sell Return%','Buy Return%','Magnitue Of Arbitrage','# T_Buy','# R_Buy','# T_Sell','# R_Sell']
+                    PNLOverDates.columns = ['Sell Return%', 'Buy Return%', 'Magnitue Of Arbitrage', '# T_Buy',
+                                            '# R_Buy', '# T_Sell', '# R_Sell']
                     PNLOverDates['% R_Buy'] = round(PNLOverDates['# R_Buy'] / PNLOverDates['# T_Buy'], 2)
                     PNLOverDates['% R_Sell'] = round(PNLOverDates['# R_Sell'] / PNLOverDates['# T_Sell'], 2)
                     PNLOverDates['Date'] = date
-                    PNLOverDates = PNLOverDates [['Date','Sell Return%','Buy Return%','# T_Buy','# R_Buy','% R_Buy','# T_Sell','# R_Sell','% R_Sell','Magnitue Of Arbitrage']]
+                    PNLOverDates = PNLOverDates[
+                        ['Date', 'Sell Return%', 'Buy Return%', '# T_Buy', '# R_Buy', '% R_Buy', '# T_Sell', '# R_Sell',
+                         '% R_Sell', 'Magnitue Of Arbitrage']]
                     final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict('records'))
                     print(final_res)
                     self.Save_PnLData(final_res)
@@ -69,46 +85,58 @@ class CalculateAndSavePnLData():
             traceback.print_exc()
             pass
         # return final_res
-    
+
+    ########################################################################################
+    # Will run daily once after Historical Arbitrage to store PNL of last calculated Historical Arb for all ETF
+    ########################################################################################
     def retrievePNLForAllETF_ForOneDay(self, magnitudeOfArbitrageToFilterOn=0):
-        last_date_cursor=self.arbitragecollection.find({},{'_id':0,'dateOfAnalysis':1}).sort([('dateOfAnalysis', -1)]).limit(1)
+        last_date_cursor = self.arbitragecollection.find({}, {'_id': 0, 'dateOfAnalysis': 1}).sort(
+            [('dateOfAnalysis', -1)]).limit(1)
         last_date = list(last_date_cursor)[0]['dateOfAnalysis']
-        all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis':last_date})
-        PNLOverDates={}
+        all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': last_date})
+        PNLOverDates = {}
         # Iter over the collection results
         for etf_arb in all_etf_arb_cursor:
-            allData, pricedf, pnlstatementforday, scatterPlotData=AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=etf_arb, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
-            PNLOverDates[str(etf_arb['ETFName'])]=pnlstatementforday
-        PNLOverDates=pd.DataFrame(PNLOverDates).T
+            allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
+                arbitrageDataFromMongo=etf_arb, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
+            PNLOverDates[str(etf_arb['ETFName'])] = pnlstatementforday
+        PNLOverDates = pd.DataFrame(PNLOverDates).T
         # del PNLOverDates['Magnitue Of Arbitrage']
-        PNLOverDates.columns = ['Sell Return%','Buy Return%','Magnitue Of Arbitrage','# T_Buy','# R_Buy','# T_Sell','# R_Sell']
-        PNLOverDates['% R_Buy']= round(PNLOverDates['# R_Buy']/PNLOverDates['# T_Buy'],2)
-        PNLOverDates['% R_Sell']= round(PNLOverDates['# R_Sell']/PNLOverDates['# T_Sell'],2)
-        PNLOverDates['Date']=last_date
-        PNLOverDates = PNLOverDates [['Date','Sell Return%','Buy Return%','# T_Buy','# R_Buy','% R_Buy','# T_Sell','# R_Sell','% R_Sell','Magnitue Of Arbitrage']]
+        PNLOverDates.columns = ['Sell Return%', 'Buy Return%', 'Magnitue Of Arbitrage', '# T_Buy', '# R_Buy',
+                                '# T_Sell', '# R_Sell']
+        PNLOverDates['% R_Buy'] = round(PNLOverDates['# R_Buy'] / PNLOverDates['# T_Buy'], 2)
+        PNLOverDates['% R_Sell'] = round(PNLOverDates['# R_Sell'] / PNLOverDates['# T_Sell'], 2)
+        PNLOverDates['Date'] = last_date
+        PNLOverDates = PNLOverDates[
+            ['Date', 'Sell Return%', 'Buy Return%', '# T_Buy', '# R_Buy', '% R_Buy', '# T_Sell', '# R_Sell', '% R_Sell',
+             'Magnitue Of Arbitrage']]
         return PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict('records')
-    
+
     def returnres(self):
         curs = self.arbitragecollection.aggregate([
-                {
-                    '$group': {
-                        '_id': '$dateOfAnalysis',
-                        'count': {
-                            '$sum': 1
-                        }
+            {
+                '$group': {
+                    '_id': '$dateOfAnalysis',
+                    'count': {
+                        '$sum': 1
                     }
                 }
-            ])
+            }
+        ])
         res = list(curs)
         dates = [item['_id'] for item in res]
-        return(dates)
-    
+        return (dates)
+
     def Save_PnLData(self, data):
-        result = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.insert_many(data)
+        if self.sysUserName == 'ubuntu':
+            result = self.connforthis.ETF_db.PNLDataCollection.insert_many(data)
+        else:
+            result = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.insert_many(data)
         print('inserted %d docs' % (len(result.inserted_ids),))
         logger.debug('inserted %d docs' % (len(result.inserted_ids),))
-        
-if __name__=='__main__':
+
+
+if __name__ == '__main__':
     obj = CalculateAndSavePnLData()
-    # obj.Save_PnLData(obj.retrievePNLForAllDays())
+    # obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
     obj.retrievePNLForAllDays()
