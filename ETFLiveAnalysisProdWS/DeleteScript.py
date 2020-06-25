@@ -1,7 +1,7 @@
 import sys, traceback
+sys.path.append('..')
 from datetime import datetime, timedelta
 import CommonServices.ImportExtensions
-sys.path.append('..')
 import getpass
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.LogCreater import  CreateLogger
