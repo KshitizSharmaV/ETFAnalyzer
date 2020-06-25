@@ -26,18 +26,29 @@ class CalculateAndSavePnLData():
             etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
             # final_res = []
             for date in date_list:
-                all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
-                PNLOverDates = {}
-                final_res = []
-                # Iter over the collection results
                 try:
+                    presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find({'Date':date}).limit(1)
+                    if list(presence):
+                        continue
+                    all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
+                    PNLOverDates = {}
+                    final_res = []
+                    # Iter over the collection results
                     for etf_arb in all_etf_arb_cursor:
                         if etf_arb['ETFName'] in etflist:
-                            print(etf_arb['ETFName'])
-                            logger.debug(etf_arb['ETFName'])
-                            allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
-                                arbitrageDataFromMongo=etf_arb, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
-                            PNLOverDates[str(etf_arb['ETFName'])] = pnlstatementforday
+                            try:
+                                print(etf_arb['ETFName'])
+                                logger.debug(etf_arb['ETFName'])
+                                allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
+                                    arbitrageDataFromMongo=etf_arb, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
+                                PNLOverDates[str(etf_arb['ETFName'])] = pnlstatementforday
+                            except Exception as e0:
+                                print("Exception in {}".format(etf_arb['ETFName']))
+                                logger.warning("Exception in {}".format(etf_arb['ETFName']))
+                                print(e0)
+                                traceback.print_exc()
+                                logger.exception(e0)
+                                pass
                     PNLOverDates = pd.DataFrame(PNLOverDates).T
                     # del PNLOverDates['Magnitue Of Arbitrage']
                     PNLOverDates.columns = ['Sell Return%','Buy Return%','Magnitue Of Arbitrage','# T_Buy','# R_Buy','# T_Sell','# R_Sell']
@@ -45,7 +56,8 @@ class CalculateAndSavePnLData():
                     PNLOverDates['% R_Sell'] = round(PNLOverDates['# R_Sell'] / PNLOverDates['# T_Sell'], 2)
                     PNLOverDates['Date'] = date
                     PNLOverDates = PNLOverDates [['Date','Sell Return%','Buy Return%','# T_Buy','# R_Buy','% R_Buy','# T_Sell','# R_Sell','% R_Sell','Magnitue Of Arbitrage']]
-                    final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict())
+                    final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict('records'))
+                    print(final_res)
                     self.Save_PnLData(final_res)
                 except Exception as e:
                     traceback.print_exc()
@@ -92,7 +104,7 @@ class CalculateAndSavePnLData():
         return(dates)
     
     def Save_PnLData(self, data):
-        result = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.insert_many(data)
+        result = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.insert_many(data)
         print('inserted %d docs' % (len(result.inserted_ids),))
         logger.debug('inserted %d docs' % (len(result.inserted_ids),))
         
