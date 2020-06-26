@@ -18,11 +18,11 @@ const PnlTable = (props) => {
 
   return (
     <Card>
-      <Card.Header className="text-white BlackHeaderForModal">
+      <Card.Header className="text-white bg-color-dark">
         ETF in same industry : Technology Equities
       </Card.Header>
-      <Card.Body>
-        <div className="DescriptionTable2">
+      <Card.Body className="padding-0 bg-color-dark overflow-auto height-50vh font-size-sm">
+        
           <Table size="sm" striped bordered hover variant="dark">
             <thead>
               <tr>
@@ -58,7 +58,7 @@ const PnlTable = (props) => {
                 })}
             </tbody>
           </Table>
-        </div>
+       
       </Card.Body>
     </Card>
   );

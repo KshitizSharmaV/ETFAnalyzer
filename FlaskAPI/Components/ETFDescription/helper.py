@@ -27,12 +27,13 @@ def fetchETFsWithSameIssuer(connection=None, Issuer=None):
             }}
         ])
 
-    ETFWithSameIssuer = {}
+    ETFWithSameIssuer = []
     for item in dataD:
         etfTicker = item['ETFTicker']
         if etfTicker not in tickerlist:
-            ETFWithSameIssuer[etfTicker] = {'ETFName': item['ETFName'],
+            t = {'etfTicker':etfTicker,'ETFName': item['ETFName'],
                                             'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
+            ETFWithSameIssuer.append(t)
         
     return ETFWithSameIssuer
 
@@ -58,12 +59,11 @@ def fetchETFsWithSameETFdbCategory(connection=None,ETFdbCategory=None):
             }}
         ])
 
-    ETFWithSameETFDBCategory = {}
+    ETFWithSameETFDBCategory = []
     for item in dataD:
         etfTicker = item['ETFTicker']
         if etfTicker not in tickerlist:
-            ETFWithSameETFDBCategory[etfTicker] = {'ETFName': item['ETFName'],
-                                                'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
+            ETFWithSameETFDBCategory.append({'etfTicker':etfTicker,'ETFName': item['ETFName'],'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)})
     return ETFWithSameETFDBCategory
 
 
@@ -79,10 +79,10 @@ def fetchETFsWithSimilarTotAsstUndMgmt(connection=None,totalassetUnderManagement
         {'FundHoldingsDate': 1, 'ETFTicker': 1, 'TotalAssetsUnderMgmt': 1, 'ETFName': 1,
          '_id': 0}).sort('-FundHoldingsDate')
     # List of Dicts
-    ETFWithSameAssetUnderManagement={}
+    ETFWithSameAssetUnderManagement=[]
     for item in similar_taum_etfs:
-        ETFWithSameAssetUnderManagement[item['ETFTicker']]={'ETFName': item['ETFName'], 
-                                                            'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)}
+        ETFWithSameAssetUnderManagement.append({'etfTicker':item['ETFTicker'],'ETFName': item['ETFName'], 
+                                                            'TotalAssetsUnderMgmt': "${:,.3f} M".format(item['TotalAssetsUnderMgmt']/1000)})
     return ETFWithSameAssetUnderManagement
 
 def fetchOHLCHistoricalData(etfname=None,StartDate=None):

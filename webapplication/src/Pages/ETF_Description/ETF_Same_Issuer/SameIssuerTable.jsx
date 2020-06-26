@@ -16,7 +16,7 @@ const SameIssuerTable = (props) => {
         `http://localhost:5000/ETfDescription/getETFWithSameIssuer/${IssuerName}`
       )
         .then(({ data }) => {
-            console.log(data)
+          console.log(data);
           setTableData(data);
         })
         .catch((err) => {
@@ -47,38 +47,34 @@ const SameIssuerTable = (props) => {
 
   return (
     <Card>
-        
-      <Card.Header className="text-white BlackHeaderForModal">
+      <Card.Header className="text-white bg-color-dark">
         ETF in Same Issuer
       </Card.Header>
-      <Card.Body>
-        <div className="DescriptionTable2">
-          <Table size="sm" striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th className="cursor-pointer" onClick={changeOrder}>
-                  Symbol
-                </th>
-                <th>ETF Name</th>
-                <th>TotalAssetsUnderMgmt</th>
-              </tr>
-            </thead>
-            <tbody>
-              {typeof tableData === "object" &&
-                order.map((key) => (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td>{tableData[key] && tableData[key].ETFName}</td>
-                    <td>
-                      {" "}
-                      {tableData[key] &&
-                        tableData[key].TotalAssetsUnderMgmt}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-        </div>
+      <Card.Body className="padding-0 bg-color-dark overflow-auto height-50vh font-size-sm">
+        <Table size="sm" striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th className="cursor-pointer" onClick={changeOrder}>
+                Symbol
+              </th>
+              <th>ETF Name</th>
+              <th>TotalAssetsUnderMgmt</th>
+            </tr>
+          </thead>
+          <tbody>
+            {typeof tableData === "object" &&
+              order.map((key) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{tableData[key] && tableData[key].ETFName}</td>
+                  <td>
+                    {" "}
+                    {tableData[key] && tableData[key].TotalAssetsUnderMgmt}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
       </Card.Body>
     </Card>
   );

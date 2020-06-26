@@ -1,0 +1,138 @@
+18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out
+18.213.229.80:27017: timed out
+Traceback (most recent call last):
+  File "../CalculateETFArbitrage/LoadEtfHoldings.py", line 98, in getAllETFData
+    etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/queryset/manager.py", line 37, in __get__
+    queryset = queryset_class(owner, owner._get_collection())
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 207, in _get_collection
+    db = cls._get_db()
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/document.py", line 185, in _get_db
+    return get_db(cls._meta.get("db_alias", DEFAULT_CONNECTION_NAME))
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/mongoengine/connection.py", line 367, in get_db
+    db.authenticate(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/database.py", line 1468, in authenticate
+    self.client._cache_credentials(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/mongo_client.py", line 749, in _cache_credentials
+    server = self._get_topology().select_server(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 233, in select_server
+    return random.choice(self.select_servers(selector,
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 192, in select_servers
+    server_descriptions = self._select_servers_loop(
+  File "/Users/adityanaik/.local/share/virtualenvs/env-LXPwMaJz/lib/python3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 18.213.229.80:27017: timed out

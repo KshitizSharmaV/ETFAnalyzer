@@ -1,44 +1,94 @@
-h1, p {	
-  font-family: Lato;	
-}	
+h1,
+p {
+  font-family: Lato;
+}
 
-.Container {	
-  width:100%;	
-}	
+.Container {
+  width: 100%;
+}
 
-.TableContainer {	
-  width: 100%;	
+.TableContainer {
+  width: 100%;
   overflow: hidden;
-  overflow-x: scroll;	
-} 
-
-.CustomBackGroundColor{
-	background-color:#292b2c;
+  overflow-x: scroll;
 }
 
-
-.BlackHeaderForModal{
-    background-color:#292b2c;
+.CustomBackGroundColor {
+  background-color: #292b2c;
 }
 
-.CustomCardHeader{
-	padding-top: 0;
-	padding-bottom: 1;
-	font-size: 15px;
-	background-color:#292b2c;
+.BlackHeaderForModal {
+  background-color: #292b2c;
 }
 
-.CustomCardBody{
-	padding-top: 0;
-	padding-bottom: 0;
-	background-color:#292b2c;
+.CustomCardHeader {
+  padding-top: 0;
+  padding-bottom: 1;
+  font-size: 15px;
+  background-color: #292b2c;
 }
 
-.CustomCard{
-	margin-top:1%;
+.CustomCardBody {
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #292b2c;
+}
+
+.CustomCard {
+  margin-top: 1%;
 }
 
 .my-modal {
-    width: 35vw;
-    max-width: 35vw;
-} 
+  width: 35vw;
+  max-width: 35vw;
+}
+
+.margin-left-auto {
+  margin-left: auto;
+}
+.margin-right-auto {
+  margin-right: auto;
+}
+
+.margin-auto {
+  margin: auto;
+}
+.margin-0 {
+  margin: 0;
+}
+.blockelem {
+  display: block;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.bg-color-dark {
+  background-color: #292b2c;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.height-50vh {
+  height: 50vh;
+}
+
+.font-size-sm {
+  font-size: 13px;
+}
+
+.padding-0 {
+  padding: 0;
+}
+.padding-1px{
+padding: 1px;
+}

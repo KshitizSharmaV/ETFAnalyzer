@@ -31,32 +31,29 @@ const DescriptionTable = (props) => {
 
   return (
     <Card>
-        {console.log(DescriptionData, order)}
-      <Card.Header className="text-white BlackHeaderForModal">
+      <Card.Header className="text-white bg-color-dark">
         ETF Description
       </Card.Header>
-      <Card.Body>
-        <div className="DescriptionTable2">
-          <Table size="sm" striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th className="cursor-pointer" onClick={changeOrder}>
-                  Name
-                </th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {typeof DescriptionData === "object" &&
-                order.map((key) => (
-                  <tr key={key}>
-                    <td>{key && key}</td>
-                    <td>{DescriptionData[key] && DescriptionData[key]} </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-        </div>
+      <Card.Body className="padding-0 bg-color-dark overflow-auto height-50vh font-size-sm">
+        <Table size="sm" striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th className="cursor-pointer" onClick={changeOrder}>
+                Name
+              </th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {typeof DescriptionData === "object" &&
+              order.map((key) => (
+                <tr key={key}>
+                  <td>{key && key}</td>
+                  <td>{DescriptionData[key] && DescriptionData[key]} </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
       </Card.Body>
     </Card>
   );
