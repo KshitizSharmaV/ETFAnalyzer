@@ -2,14 +2,18 @@ import datetime
 from MongoDB.Schemas import trade_per_min_WS_motor, trade_per_min_WS, quotesWS_collection, arbitrage_per_min
 import pandas as pd
 from time import time
+from dateutil import tz
 from CommonServices.Holidays import HolidayCheck,LastWorkingDay,isTimeBetween
 
 
 class PerMinDataOperations():
 
     def __init__(self):
-        self.DAYendTime = datetime.time(23,59)
-        self.DAYendTimeZeroZeo = datetime.time(0,0)
+        ''' Day End Times in UTC'''
+        self.DAYendTime = datetime.time(3,59) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(4,59)
+        # self.DAYendTime = datetime.time(23,59)
+        self.DAYendTimeZeroZeo = datetime.time(4,00) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(5,00)
+        # self.DAYendTimeZeroZeo = datetime.time(0,0)
 
         # Day Light Savings
         # Summer UTC 13 to 20
@@ -54,12 +58,20 @@ class PerMinDataOperations():
         if currentTime >= self.UTCStartTime and (not ifaholiday): 
             start_dt = now
             start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
-            start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            # start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            start_dt = start_dt.replace(tzinfo = tz.gettz('UTC'))
+            start_dt = start_dt.astimezone(tz.tzlocal())
         else:
             lastworkinDay=LastWorkingDay(todaysDate)
             start_dt = lastworkinDay
+
             start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
+            start_dt = start_dt.replace(tzinfo=tz.gettz('UTC'))
+            start_dt = start_dt.astimezone(tz.tzlocal())
+
             end_dt =  lastworkinDay.replace(hour=self.EndHour,minute=00,second=0, microsecond=0)
+            end_dt = end_dt.replace(tzinfo=tz.gettz('UTC'))
+            end_dt = end_dt.astimezone(tz.tzlocal())
             #end_dt=end_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         
         #start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
@@ -137,14 +149,21 @@ class PerMinDataOperations():
         # Current Market 930 to 4
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
             dt = now.replace(second=0, microsecond=0)
-            dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            dt = datetime.datetime.now().replace(second=0, microsecond=0)
+
         # After Market
         elif (currentTime >= self.UTCEndTime) and (currentTime < self.DAYendTime) and (not ifaholiday):
             dt = now.replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
-            dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            dt = dt.replace(tzinfo = tz.gettz('UTC'))
+            dt = dt.astimezone(tz.tzlocal())
+
         # Next day of market before 9:30 am or holiday
         elif (currentTime > self.DAYendTimeZeroZeo) and (currentTime < datetime.time(self.StartHour,30)) or ifaholiday:
             dt=LastWorkingDay(todaysDate).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
+            dt = dt.replace(tzinfo=tz.gettz('UTC'))
+            dt = dt.astimezone(tz.tzlocal())
         # Fix for adjustment datetime to unix timestamp
         print("Live Single Arbitrage: "+str(dt))
         #dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
