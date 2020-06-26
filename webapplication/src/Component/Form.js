@@ -53,9 +53,6 @@ class Former extends Component{
 		dropdownPosition: "bottom",
 	}
 
-	constructor(props){
-		super(props);
-	}
 	
 	// handling date change as well as checking if date lies between 16-17 as data provided has only that
   	changeDate = (selecteddate) => {
