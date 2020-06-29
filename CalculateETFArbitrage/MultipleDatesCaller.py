@@ -19,27 +19,11 @@ from CalculateETFArbitrage.Control import ArbitrageCalculation
 from MongoDB.SaveArbitrageCalcs import SaveCalculatedArbitrage
 from CalculateETFArbitrage.GetRelevantHoldings import RelevantHoldings
 from MongoDB.FetchArbitrage import FetchArbitrage
-import logging
-import os
+from CommonServices.LogCreater import CreateLogger
+logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
+logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLog.log', loggerName='HistArbErrorLogger')
 
-path = os.path.join(os.getcwd(), "Logs/")
-if not os.path.exists(path):
-    os.makedirs(path)
-
-filename = path + datetime.now().strftime("%Y%m%d") + "-ArbEventLog.log"
-filename2 = path + datetime.now().strftime("%Y%m%d") + "-ArbErrorLog.log"
-handler = logging.FileHandler(filename)
-handler2 = logging.FileHandler(filename2)
-logging.basicConfig(filename=filename, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w')
-# logger = logging.getLogger("EventLogger")
-logger = logging.getLogger(__name__)
-logger2 = logging.getLogger("ArbErrorLogger")
-logger.setLevel(logging.DEBUG)
-logger2.setLevel(logging.ERROR)
-logger.addHandler(handler)
-logger2.addHandler(handler2)
-
-dates = ['2020-06-15']
+dates = ['2020-06-24','2020-06-25','2020-06-26']
 for date in dates:
     etfwhichfailed = []
     # MAKE A LIST OF WORKING ETFs.
