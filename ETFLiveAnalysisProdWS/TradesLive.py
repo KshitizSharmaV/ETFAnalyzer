@@ -1,6 +1,5 @@
 import datetime
 import sys, traceback
-
 sys.path.append("..")  # Remove in production - KTZ
 import ujson
 import json
@@ -8,7 +7,7 @@ import pandas as pd
 import websocket
 import logging
 import os
-
+from CommonServices.EmailService import EmailSender
 from CommonServices.LogCreater import CreateLogger
 from CommonServices import ImportExtensions
 
@@ -47,6 +46,11 @@ def on_message(ws, message):
 def on_error(ws, error):
     print("error : {}".format(error))
     logger.exception(error)
+    emailobj = EmailSender()
+    msg = emailobj.message(subject=error,
+                           text="Exception Caught in ETFLiveAnalysisProdWS/TradesLive.py {}".format(
+                               traceback.format_exc()))
+    emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
     print("retrying...")
     logger.debug('retrying...')
     main()

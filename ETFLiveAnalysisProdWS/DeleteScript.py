@@ -2,6 +2,7 @@ import sys, traceback
 sys.path.append('..')
 from datetime import datetime, timedelta
 import CommonServices.ImportExtensions
+from CommonServices.EmailService import EmailSender
 import getpass
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.LogCreater import  CreateLogger
@@ -56,6 +57,11 @@ def delete_old_live_data_from_collection(collectionName):
         traceback.print_exc()
         logger.warning('Could not delete records from: {}'.format(collectionName))
         logger.exception(e)
+        emailobj = EmailSender()
+        msg = emailobj.message(subject=e,
+                               text="Exception Caught in ETFLiveAnalysisProdWS/DeleteScript.py {}".format(
+                                   traceback.format_exc()))
+        emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
         pass
 
 if __name__=='__main__':

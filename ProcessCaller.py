@@ -101,7 +101,7 @@ except Exception as e:
     traceback.print_exc()
     # receivers' address in a list (1 or more addresses), subject, body - exception message
     emailobj = EmailSender()
-    msg = emailobj.message(subject="Exception Occurred",
+    msg = emailobj.message(subject=e,
                            text="Exception Caught in ETFAnalysis/ProcessCaller.py {}".format(traceback.format_exc()))
     emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
     pass

@@ -89,11 +89,13 @@ for etfname in etflist:
         print("exception in {} etf, not crawled".format(etfname))
         print(e)
         traceback.print_exc()
+        logger.warning("exception in {} etf, not crawled".format(etfname))
         logger.exception(e)
+        logger2.warning("exception in {} etf, not crawled".format(etfname))
         logger2.exception(e)
         emailobj = EmailSender()
-        msg = emailobj.message(subject="Exception Occurred",
-                               text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/Caller.py {}".format(
+        msg = emailobj.message(subject=e,
+                               text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/Caller.py for etf: {} \n {}".format(etfname,
                                    traceback.format_exc()))
         emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
         continue

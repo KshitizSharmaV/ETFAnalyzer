@@ -57,7 +57,7 @@ class Download523TickersList(masterclass):
                 self.driver.quit()
                 # send email on every failure
                 emailobj = EmailSender()
-                msg = emailobj.message(subject="Exception Occurred",
+                msg = emailobj.message(subject=e,
                                        text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
                                            traceback.format_exc()))
                 emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])

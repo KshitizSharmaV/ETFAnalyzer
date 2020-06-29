@@ -133,7 +133,7 @@ class PullandCleanData:
             logger.exception("Exception occurred in DataCleanFeed.py")
             traceback.print_exc()
             emailobj = EmailSender()
-            msg = emailobj.message(subject="Exception Occurred",
+            msg = emailobj.message(subject=e,
                                    text="Exception Caught in ETFAnalysis/HoldingsDataScripts/DataCleanFeed.py {}".format(
                                        traceback.format_exc()))
             emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])

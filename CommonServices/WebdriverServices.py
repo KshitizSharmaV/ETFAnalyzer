@@ -65,7 +65,7 @@ class masterclass:
             print("Not stored in DB")
             print(e)
             emailobj = EmailSender()
-            msg = emailobj.message(subject="Exception Occurred",
+            msg = emailobj.message(subject=e,
                                    text="Exception Caught in ETFAnalysis/CommonServices/WebdriverServices.py {}".format(
                                        traceback.format_exc()))
             emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])

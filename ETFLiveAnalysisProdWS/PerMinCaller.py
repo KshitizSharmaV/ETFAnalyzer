@@ -1,6 +1,5 @@
 import sys
 import traceback
-
 sys.path.append('..')
 
 import datetime
@@ -10,6 +9,7 @@ import schedule
 import time
 
 # Custom Imports
+from CommonServices.EmailService import EmailSender
 from ETFLiveAnalysisProdWS.TickListsGenerator import ListsCreator
 from ETFLiveAnalysisProdWS.CalculatePerMinArb import ArbPerMin
 from CommonServices.LogCreater import CreateLogger
@@ -93,6 +93,11 @@ class PerMinAnalysis():
         except Exception as e:
             traceback.print_exc()
             logger.exception(e)
+            emailobj = EmailSender()
+            msg = emailobj.message(subject=e,
+                                   text="Exception Caught in ETFLiveAnalysisProdWS/PerMinCaller.py {}".format(
+                                       traceback.format_exc()))
+            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             pass
         
 

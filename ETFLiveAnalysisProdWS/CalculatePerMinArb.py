@@ -8,6 +8,7 @@ import time
 import pandas as pd
 
 # Custom Imports
+from CommonServices.EmailService import EmailSender
 from CommonServices.LogCreater import CreateLogger
 from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from CommonServices import ImportExtensions
@@ -105,6 +106,12 @@ class ArbPerMin():
         except Exception as e:
             traceback.print_exc()
             logger.exception(traceback.print_exc())
+            # send email on every failure
+            emailobj = EmailSender()
+            msg = emailobj.message(subject=e,
+                                   text="Exception Caught in ETFLiveAnalysisProdWS/CalculatePerMinArb.py {}".format(
+                                       traceback.format_exc()))
+            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
         
         return arbdict
         

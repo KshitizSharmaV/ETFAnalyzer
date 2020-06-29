@@ -4,29 +4,9 @@ from mongoengine import *
 from datetime import datetime
 import pandas as pd
 import getpass
-# import logging
-#
-# log = logging.getLogger()
-# log.setLevel(logging.DEBUG)
-# logging.basicConfig(filename="LoadEtfs.log", format='%(asctime)s %(message)s', filemode='w')
-import logging
-import os
-path = os.path.join(os.getcwd(), "Logs/")
-if not os.path.exists(path):
-    os.makedirs(path)
-
-filename = path + datetime.now().strftime("%Y%m%d") + "-ArbEventLog.log"
-filename2 = path + datetime.now().strftime("%Y%m%d") + "-ArbErrorLog.log"
-handler = logging.FileHandler(filename)
-handler2 = logging.FileHandler(filename2)
-logging.basicConfig(filename=filename, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w')
-# logger = logging.getLogger("EventLogger")
-logger = logging.getLogger(__name__)
-logger2 = logging.getLogger("ArbErrorLogger")
-logger.setLevel(logging.DEBUG)
-logger2.setLevel(logging.ERROR)
-logger.addHandler(handler)
-logger2.addHandler(handler2)
+from CommonServices.LogCreater import CreateLogger
+logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
+logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLog.log', loggerName='HistArbErrorLogger')
 
 from HoldingsDataScripts.ETFMongo import ETF
 from MongoDB.MongoDBConnections import MongoDBConnectors
@@ -63,9 +43,9 @@ class LoadHoldingsdata(object):
             logger.debug("Data Successfully Loaded")
             return self
         except Exception as e:
-            logger.error("Data Not Loaded")
+            logger.error("Holdings Data Not Loaded for etf : {}",format(etfname))
             # logger.critical(e, exc_info=True)
-            logger2.error("Data Not Loaded")
+            logger2.error("Holdings Data Not Loaded for etf : {}",format(etfname))
             logger.exception(e)
             logger2.exception(e)
 
@@ -86,7 +66,8 @@ class LoadHoldingsdata(object):
             return holdingsdatadf
 
         except Exception as e:
-            print("Can't Fetch Fund Holdings Data")
+            print("Can't Fetch Fund Holdings Data for etf {}".format(etfname))
+            logger.error("Can't Fetch Fund Holdings Data for etf {}".format(etfname))
             print(e)
             logger.exception(e)
             logger2.exception(e)
@@ -100,7 +81,9 @@ class LoadHoldingsdata(object):
             return etfdata
 
         except Exception as e:
-            print("Can't Fetch Fund Holdings Data")
+            print("Can't Fetch Fund Holdings Data for etf: {}".format(etfname))
+            logger.error("Can't Fetch Fund Holdings Data for etf: {}".format(etfname))
+            logger2.error("Can't Fetch Fund Holdings Data for etf: {}".format(etfname))
             print(e)
             traceback.print_exc()
             logger.exception(e)
@@ -123,6 +106,8 @@ class LoadHoldingsdata(object):
             return holdingsdatadf['TickerSymbol'].to_list()
         except Exception as e:
             print("Can't Fetch Fund Holdings Data for all ETFs")
+            logger.error("Can't Fetch Fund Holdings Data for all ETFs")
+            logger2.error("Can't Fetch Fund Holdings Data for all ETFs")
             print(e)
             logger.exception(e)
             logger2.exception(e)
