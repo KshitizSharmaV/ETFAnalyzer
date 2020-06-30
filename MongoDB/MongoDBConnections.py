@@ -51,7 +51,7 @@ class MongoDBConnectors():
         return connection
 
     def get_pymongo_readonly_production_production(self):
-        connection = MongoClient('localhost', 27017, replicaSet='rs0', username='usertesterReadOnly',
+        connection = MongoClient('localhost', 27017,username='usertesterReadOnly',
                                  password='onlyreadpass')
         return connection
 
@@ -65,7 +65,7 @@ class MongoDBConnectors():
             username = None
             password = None
             pass
-        connection = MongoClient('localhost', 27017, replicaSet='rs0', username=username, password=password)
+        connection = MongoClient('localhost', 27017, username=username, password=password)
         return connection
 
     ''' MongoEngine Connections '''
@@ -91,7 +91,7 @@ class MongoDBConnectors():
         return connect('ETF_db', alias='ETF_db')
 
     def get_mongoengine_readonly_production_production(self):
-        return connect('ETF_db', alias='ETF_db', replicaSet='rs0', username='usertesterReadOnly',
+        return connect('ETF_db', alias='ETF_db', username='usertesterReadOnly',
                        password='onlyreadpass', authentication_source='admin')
 
     def get_mongoengine_readWrite_production_production(self):
@@ -104,7 +104,7 @@ class MongoDBConnectors():
             username = None
             password = None
             pass
-        return connect('ETF_db', alias='ETF_db', replicaSet='rs0', username=username, password=password,
+        return connect('ETF_db', alias='ETF_db', username=username, password=password,
                        authentication_source='admin')
     ''' Motor AsyncIO Connections '''
     def get_motorasync_readonly_devlocal_production(self):
@@ -129,7 +129,7 @@ class MongoDBConnectors():
         return connection
 
     def get_motorasync_readonly_production_production(self):
-        connection = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017, replicaSet='rs0', username='usertesterReadOnly',
+        connection = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017, username='usertesterReadOnly',
                                  password='onlyreadpass')
         return connection
 
@@ -143,5 +143,5 @@ class MongoDBConnectors():
             username = None
             password = None
             pass
-        connection = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017, replicaSet='rs0', username=username, password=password)
+        connection = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017, username=username, password=password)
         return connection
