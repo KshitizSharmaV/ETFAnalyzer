@@ -4,10 +4,11 @@ import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
 import Axios from "axios";
 import PieChartModal from "./PieChartModal";
+import orderBy from "lodash/orderBy"
 
 const HoldingsTable = (props) => {
   const { ETF, startDate } = props;
-  const [tableData, setTableData] = useState({});
+  const [tableData, setTableData] = useState([]);
   const [order, setTableOrder] = useState([]);
   const [orderType, setOrderType] = useState("ASC");
 
@@ -26,27 +27,29 @@ const HoldingsTable = (props) => {
     // }
   }, [ETF, startDate]);
 
-  useEffect(() => {
-    if (typeof tableData === "object") {
-      const order = Object.keys(tableData).sort();
-      setTableOrder(order);
-    }
-  }, [tableData]);
+  // useEffect(() => {
+  //   if (typeof tableData === "object") {
+  //     const order = Object.keys(tableData).sort();
+  //     setTableOrder(order);
+  //   }
+  // }, [tableData]);
 
   const changeOrder = () => {
+
     if (orderType === "ASC") {
-      const order = Object.keys(tableData).sort().reverse();
+      const sortedData = orderBy(tableData, ["TickerSymbol"], ['asc'])
+      console.log(sortedData)
       setOrderType("DSC");
-      setTableOrder(order);
+      setTableData(sortedData)
     }
     if (orderType === "DSC") {
-      const order = Object.keys(tableData).sort();
+      const sortedData = orderBy(tableData, ["TickerSymbol"], ['desc'])
       setOrderType("ASC");
-      setTableOrder(order);
+      setTableData(sortedData)
     }
   };
 
-  console.log(props);
+
   return (
     <Card>
       <Card.Header className="text-white bg-color-dark flex-row">
@@ -66,13 +69,12 @@ const HoldingsTable = (props) => {
           </thead>
           <tbody>
             {typeof tableData === "object" &&
-              order.map((key) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{tableData[key] && tableData[key].TickerName}</td>
-                  <td> {tableData[key] && tableData[key].TickerWeight} </td>
-                </tr>
-              ))}
+              tableData.map((data) => <tr key={data.TickerSymbol}>
+                <td>{data.TickerSymbol}</td>
+                <td>{data.TickerName && data.TickerName}</td>
+                <td> {data.TickerWeight && data.TickerWeight} </td>
+              </tr>)
+            }
           </tbody>
         </Table>
       </Card.Body>

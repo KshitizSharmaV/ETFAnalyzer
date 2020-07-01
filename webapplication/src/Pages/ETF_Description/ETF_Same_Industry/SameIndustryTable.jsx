@@ -3,11 +3,12 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
 import Axios from "axios";
+import orderBy from "lodash/orderBy"
+
 
 const SameIndustryTable = (props) => {
   const { EtfDbCategory } = props;
-  const [tableData, setTableData] = useState({});
-  const [order, setTableOrder] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [orderType, setOrderType] = useState("ASC");
 
   useEffect(() => {
@@ -25,23 +26,24 @@ const SameIndustryTable = (props) => {
     }
   }, [EtfDbCategory]);
 
-  useEffect(() => {
-    if (typeof tableData === "object") {
-      const order = Object.keys(tableData).sort();
-      setTableOrder(order);
-    }
-  }, [tableData]);
+  // useEffect(() => {
+  //   if (typeof tableData === "object") {
+  //     const order = Object.keys(tableData).sort();
+  //     setTableOrder(order);
+  //   }
+  // }, [tableData]);
 
   const changeOrder = () => {
     if (orderType === "ASC") {
-      const order = Object.keys(tableData).sort().reverse();
+      const sortedData = orderBy(tableData, ["etfTicker"], ['asc'])
+
       setOrderType("DSC");
-      setTableOrder(order);
+      setTableData(sortedData)
     }
     if (orderType === "DSC") {
-      const order = Object.keys(tableData).sort();
+      const sortedData = orderBy(tableData, ["etfTicker"], ['desc'])
       setOrderType("ASC");
-      setTableOrder(order);
+      setTableData(sortedData)
     }
   };
 
@@ -62,13 +64,13 @@ const SameIndustryTable = (props) => {
             </tr>
           </thead>
           <tbody>
-            {typeof tableData === "object" &&
-              order.map((key) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{tableData[key] && tableData[key].ETFName}</td>
+            {Array.isArray(tableData) &&
+              tableData.map(({ ETFName, TotalAssetsUnderMgmt, etfTicker }) => (
+                <tr key={etfTicker}>
+                  <td>{etfTicker && etfTicker}</td>
+                  <td>{ETFName && ETFName}</td>
                   <td>
-                    {tableData[key] && tableData[key].TotalAssetsUnderMgmt}{" "}
+                    {TotalAssetsUnderMgmt && TotalAssetsUnderMgmt}
                   </td>
                 </tr>
               ))}

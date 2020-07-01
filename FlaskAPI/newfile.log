@@ -1,0 +1,461 @@
+2020-07-01 06:53:28,088 Using selector: KqueueSelector
+2020-07-01 06:53:28,100  * Debugger is active!
+2020-07-01 06:53:28,107  * Debugger PIN: 680-047-206
+2020-07-01 07:01:34,958 Command saslStart with request id 578354438 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,175 Command saslStart with request id 578354438 on server ('18.213.229.80', 27017) succeeded in 215973 microseconds
+2020-07-01 07:01:35,188 Command saslContinue with request id 330111137 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,393 Command saslStart with request id 1227619358 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,403 Command saslContinue with request id 330111137 on server ('18.213.229.80', 27017) succeeded in 215199 microseconds
+2020-07-01 07:01:35,403 Command saslContinue with request id 1723153177 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,414 Command saslStart with request id 70982397 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,611 Command saslStart with request id 1227619358 on server ('18.213.229.80', 27017) succeeded in 216923 microseconds
+2020-07-01 07:01:35,619 Command saslContinue with request id 1723153177 on server ('18.213.229.80', 27017) succeeded in 215182 microseconds
+2020-07-01 07:01:35,619 Command find with request id 1070477904 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,622 Command saslContinue with request id 2051621609 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,641 Command saslStart with request id 70982397 on server ('18.213.229.80', 27017) succeeded in 227246 microseconds
+2020-07-01 07:01:35,654 Command saslContinue with request id 1606946231 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,839 Command saslContinue with request id 2051621609 on server ('18.213.229.80', 27017) succeeded in 216627 microseconds
+2020-07-01 07:01:35,840 Command saslContinue with request id 1190959745 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:35,881 Command saslContinue with request id 1606946231 on server ('18.213.229.80', 27017) succeeded in 227239 microseconds
+2020-07-01 07:01:35,882 Command saslContinue with request id 1912844175 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:36,052 Command find with request id 1070477904 on server ('18.213.229.80', 27017) succeeded in 433050 microseconds
+2020-07-01 07:01:36,066 Command saslContinue with request id 1190959745 on server ('18.213.229.80', 27017) succeeded in 226576 microseconds
+2020-07-01 07:01:36,082 Command find with request id 1341853635 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:36,091 127.0.0.1 - - [01/Jul/2020 07:01:36] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:01:36,109 Command saslContinue with request id 1912844175 on server ('18.213.229.80', 27017) succeeded in 227307 microseconds
+2020-07-01 07:01:36,111 Command find with request id 1808266298 started on server ('18.213.229.80', 27017)
+2020-07-01 07:01:36,303 Command find with request id 1341853635 on server ('18.213.229.80', 27017) succeeded in 218199 microseconds
+2020-07-01 07:01:36,313 127.0.0.1 - - [01/Jul/2020 07:01:36] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:01:36,341 Command find with request id 1808266298 on server ('18.213.229.80', 27017) succeeded in 229109 microseconds
+2020-07-01 07:01:39,886 127.0.0.1 - - [01/Jul/2020 07:01:39] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:01:40,332 127.0.0.1 - - [01/Jul/2020 07:01:40] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:01:42,338 127.0.0.1 - - [01/Jul/2020 07:01:42] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:05:16,199 Command find with request id 1623161625 started on server ('18.213.229.80', 27017)
+2020-07-01 07:05:16,201 Command find with request id 992663534 started on server ('18.213.229.80', 27017)
+2020-07-01 07:05:16,202 Command find with request id 2043046042 started on server ('18.213.229.80', 27017)
+2020-07-01 07:05:16,540 Command find with request id 992663534 on server ('18.213.229.80', 27017) succeeded in 339219 microseconds
+2020-07-01 07:05:16,546 Command find with request id 1623161625 on server ('18.213.229.80', 27017) succeeded in 346879 microseconds
+2020-07-01 07:05:16,547 127.0.0.1 - - [01/Jul/2020 07:05:16] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:05:16,757 Command find with request id 2043046042 on server ('18.213.229.80', 27017) succeeded in 555205 microseconds
+2020-07-01 07:05:16,793 127.0.0.1 - - [01/Jul/2020 07:05:16] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:05:17,782 127.0.0.1 - - [01/Jul/2020 07:05:17] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:05:18,392 127.0.0.1 - - [01/Jul/2020 07:05:18] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:05:18,396 127.0.0.1 - - [01/Jul/2020 07:05:18] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:06:00,618 Command find with request id 1567121210 started on server ('18.213.229.80', 27017)
+2020-07-01 07:06:00,620 Command find with request id 1866729662 started on server ('18.213.229.80', 27017)
+2020-07-01 07:06:00,621 Command find with request id 1536830211 started on server ('18.213.229.80', 27017)
+2020-07-01 07:06:00,987 Command find with request id 1866729662 on server ('18.213.229.80', 27017) succeeded in 366604 microseconds
+2020-07-01 07:06:00,987 Command find with request id 1567121210 on server ('18.213.229.80', 27017) succeeded in 368810 microseconds
+2020-07-01 07:06:01,000 127.0.0.1 - - [01/Jul/2020 07:06:01] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:06:01,203 Command find with request id 1536830211 on server ('18.213.229.80', 27017) succeeded in 581147 microseconds
+2020-07-01 07:06:01,234 127.0.0.1 - - [01/Jul/2020 07:06:01] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:06:02,060 127.0.0.1 - - [01/Jul/2020 07:06:02] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:06:02,473 127.0.0.1 - - [01/Jul/2020 07:06:02] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:06:02,479 127.0.0.1 - - [01/Jul/2020 07:06:02] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:06:33,297 Command find with request id 1968456301 started on server ('18.213.229.80', 27017)
+2020-07-01 07:06:33,305 Command find with request id 1859468872 started on server ('18.213.229.80', 27017)
+2020-07-01 07:06:33,307 Command find with request id 1911300560 started on server ('18.213.229.80', 27017)
+2020-07-01 07:06:33,524 Command find with request id 1859468872 on server ('18.213.229.80', 27017) succeeded in 218844 microseconds
+2020-07-01 07:06:33,530 Command find with request id 1968456301 on server ('18.213.229.80', 27017) succeeded in 232715 microseconds
+2020-07-01 07:06:33,531 127.0.0.1 - - [01/Jul/2020 07:06:33] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:06:33,741 Command find with request id 1911300560 on server ('18.213.229.80', 27017) succeeded in 432994 microseconds
+2020-07-01 07:06:33,787 127.0.0.1 - - [01/Jul/2020 07:06:33] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:06:34,485 127.0.0.1 - - [01/Jul/2020 07:06:34] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:06:34,999 127.0.0.1 - - [01/Jul/2020 07:06:34] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:06:35,005 127.0.0.1 - - [01/Jul/2020 07:06:35] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:07:22,874 Command find with request id 1887638 started on server ('18.213.229.80', 27017)
+2020-07-01 07:07:22,881 Command find with request id 1660760808 started on server ('18.213.229.80', 27017)
+2020-07-01 07:07:22,885 Command find with request id 1561939997 started on server ('18.213.229.80', 27017)
+2020-07-01 07:07:23,116 Command find with request id 1660760808 on server ('18.213.229.80', 27017) succeeded in 234565 microseconds
+2020-07-01 07:07:23,121 Command find with request id 1887638 on server ('18.213.229.80', 27017) succeeded in 246872 microseconds
+2020-07-01 07:07:23,128 127.0.0.1 - - [01/Jul/2020 07:07:23] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:07:23,331 Command find with request id 1561939997 on server ('18.213.229.80', 27017) succeeded in 445404 microseconds
+2020-07-01 07:07:23,373 127.0.0.1 - - [01/Jul/2020 07:07:23] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:07:23,854 127.0.0.1 - - [01/Jul/2020 07:07:23] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:07:24,375 127.0.0.1 - - [01/Jul/2020 07:07:24] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:07:24,382 127.0.0.1 - - [01/Jul/2020 07:07:24] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:07:45,422 Command find with request id 1640687929 started on server ('18.213.229.80', 27017)
+2020-07-01 07:07:45,424 Command find with request id 1351995223 started on server ('18.213.229.80', 27017)
+2020-07-01 07:07:45,426 Command find with request id 459244054 started on server ('18.213.229.80', 27017)
+2020-07-01 07:07:45,849 Command find with request id 1351995223 on server ('18.213.229.80', 27017) succeeded in 424715 microseconds
+2020-07-01 07:07:45,855 Command find with request id 1640687929 on server ('18.213.229.80', 27017) succeeded in 431743 microseconds
+2020-07-01 07:07:45,861 127.0.0.1 - - [01/Jul/2020 07:07:45] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:07:46,067 Command find with request id 459244054 on server ('18.213.229.80', 27017) succeeded in 641512 microseconds
+2020-07-01 07:07:46,100 127.0.0.1 - - [01/Jul/2020 07:07:46] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:07:46,886 127.0.0.1 - - [01/Jul/2020 07:07:46] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:07:47,492 127.0.0.1 - - [01/Jul/2020 07:07:47] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:07:47,498 127.0.0.1 - - [01/Jul/2020 07:07:47] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:08:24,042 Command find with request id 2111482797 started on server ('18.213.229.80', 27017)
+2020-07-01 07:08:24,046 Command find with request id 524102504 started on server ('18.213.229.80', 27017)
+2020-07-01 07:08:24,046 Command find with request id 1760348381 started on server ('18.213.229.80', 27017)
+2020-07-01 07:08:24,355 Command find with request id 524102504 on server ('18.213.229.80', 27017) succeeded in 308574 microseconds
+2020-07-01 07:08:24,360 Command find with request id 2111482797 on server ('18.213.229.80', 27017) succeeded in 318133 microseconds
+2020-07-01 07:08:24,366 127.0.0.1 - - [01/Jul/2020 07:08:24] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:08:24,572 Command find with request id 1760348381 on server ('18.213.229.80', 27017) succeeded in 525231 microseconds
+2020-07-01 07:08:24,607 127.0.0.1 - - [01/Jul/2020 07:08:24] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:08:25,204 127.0.0.1 - - [01/Jul/2020 07:08:25] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:08:25,794 127.0.0.1 - - [01/Jul/2020 07:08:25] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:08:25,801 127.0.0.1 - - [01/Jul/2020 07:08:25] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:09:06,216 Command find with request id 1437784630 started on server ('18.213.229.80', 27017)
+2020-07-01 07:09:06,219 Command find with request id 1360280366 started on server ('18.213.229.80', 27017)
+2020-07-01 07:09:06,219 Command find with request id 121205400 started on server ('18.213.229.80', 27017)
+2020-07-01 07:09:06,567 Command find with request id 1360280366 on server ('18.213.229.80', 27017) succeeded in 348248 microseconds
+2020-07-01 07:09:06,568 Command find with request id 1437784630 on server ('18.213.229.80', 27017) succeeded in 351081 microseconds
+2020-07-01 07:09:06,580 127.0.0.1 - - [01/Jul/2020 07:09:06] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:09:06,784 Command find with request id 121205400 on server ('18.213.229.80', 27017) succeeded in 564337 microseconds
+2020-07-01 07:09:06,818 127.0.0.1 - - [01/Jul/2020 07:09:06] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:09:07,399 127.0.0.1 - - [01/Jul/2020 07:09:07] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:09:07,992 127.0.0.1 - - [01/Jul/2020 07:09:07] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:09:07,998 127.0.0.1 - - [01/Jul/2020 07:09:07] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:10:11,028 Command find with request id 1262976197 started on server ('18.213.229.80', 27017)
+2020-07-01 07:10:11,031 Command find with request id 1112576031 started on server ('18.213.229.80', 27017)
+2020-07-01 07:10:11,032 Command find with request id 925238588 started on server ('18.213.229.80', 27017)
+2020-07-01 07:10:11,254 Command find with request id 1112576031 on server ('18.213.229.80', 27017) succeeded in 222927 microseconds
+2020-07-01 07:10:11,261 Command find with request id 1262976197 on server ('18.213.229.80', 27017) succeeded in 232368 microseconds
+2020-07-01 07:10:11,267 127.0.0.1 - - [01/Jul/2020 07:10:11] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:10:11,467 Command find with request id 925238588 on server ('18.213.229.80', 27017) succeeded in 434310 microseconds
+2020-07-01 07:10:11,506 127.0.0.1 - - [01/Jul/2020 07:10:11] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:10:11,995 127.0.0.1 - - [01/Jul/2020 07:10:11] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:10:12,402 127.0.0.1 - - [01/Jul/2020 07:10:12] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:10:12,408 127.0.0.1 - - [01/Jul/2020 07:10:12] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:10:52,790 Command find with request id 989340000 started on server ('18.213.229.80', 27017)
+2020-07-01 07:10:52,794 Command find with request id 2018984926 started on server ('18.213.229.80', 27017)
+2020-07-01 07:10:52,795 Command find with request id 690545035 started on server ('18.213.229.80', 27017)
+2020-07-01 07:10:53,265 Command find with request id 2018984926 on server ('18.213.229.80', 27017) succeeded in 470936 microseconds
+2020-07-01 07:10:53,298 127.0.0.1 - - [01/Jul/2020 07:10:53] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:10:53,495 Command find with request id 690545035 on server ('18.213.229.80', 27017) succeeded in 699619 microseconds
+2020-07-01 07:10:53,495 Command find with request id 989340000 on server ('18.213.229.80', 27017) succeeded in 704742 microseconds
+2020-07-01 07:10:53,507 127.0.0.1 - - [01/Jul/2020 07:10:53] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:10:55,723 127.0.0.1 - - [01/Jul/2020 07:10:55] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:10:56,328 127.0.0.1 - - [01/Jul/2020 07:10:56] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:10:56,387 127.0.0.1 - - [01/Jul/2020 07:10:56] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:20:12,626 Command find with request id 38535563 started on server ('18.213.229.80', 27017)
+2020-07-01 07:20:12,629 Command find with request id 1274629594 started on server ('18.213.229.80', 27017)
+2020-07-01 07:20:12,630 Command find with request id 1550207533 started on server ('18.213.229.80', 27017)
+2020-07-01 07:20:12,980 Command find with request id 1550207533 on server ('18.213.229.80', 27017) succeeded in 350071 microseconds
+2020-07-01 07:20:12,991 Command find with request id 38535563 on server ('18.213.229.80', 27017) succeeded in 364842 microseconds
+2020-07-01 07:20:13,000 127.0.0.1 - - [01/Jul/2020 07:20:13] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:20:13,196 Command find with request id 1274629594 on server ('18.213.229.80', 27017) succeeded in 565964 microseconds
+2020-07-01 07:20:13,227 127.0.0.1 - - [01/Jul/2020 07:20:13] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:20:13,968 127.0.0.1 - - [01/Jul/2020 07:20:13] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:20:14,503 127.0.0.1 - - [01/Jul/2020 07:20:14] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:20:14,508 127.0.0.1 - - [01/Jul/2020 07:20:14] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:24:28,081 Command find with request id 707454747 started on server ('18.213.229.80', 27017)
+2020-07-01 07:24:28,083 Command find with request id 1722463037 started on server ('18.213.229.80', 27017)
+2020-07-01 07:24:28,085 Command find with request id 1356701299 started on server ('18.213.229.80', 27017)
+2020-07-01 07:24:28,301 Command find with request id 1722463037 on server ('18.213.229.80', 27017) succeeded in 218248 microseconds
+2020-07-01 07:24:28,308 127.0.0.1 - - [01/Jul/2020 07:24:28] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:24:28,311 Command find with request id 707454747 on server ('18.213.229.80', 27017) succeeded in 229412 microseconds
+2020-07-01 07:24:28,546 Command find with request id 1356701299 on server ('18.213.229.80', 27017) succeeded in 460637 microseconds
+2020-07-01 07:24:28,597 127.0.0.1 - - [01/Jul/2020 07:24:28] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:24:29,417 127.0.0.1 - - [01/Jul/2020 07:24:29] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:24:29,817 127.0.0.1 - - [01/Jul/2020 07:24:29] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:24:29,822 127.0.0.1 - - [01/Jul/2020 07:24:29] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:26:00,750 Command find with request id 498383912 started on server ('18.213.229.80', 27017)
+2020-07-01 07:26:00,753 Command find with request id 1152185684 started on server ('18.213.229.80', 27017)
+2020-07-01 07:26:00,755 Command find with request id 924745989 started on server ('18.213.229.80', 27017)
+2020-07-01 07:26:00,972 Command find with request id 1152185684 on server ('18.213.229.80', 27017) succeeded in 218690 microseconds
+2020-07-01 07:26:00,980 Command find with request id 498383912 on server ('18.213.229.80', 27017) succeeded in 229278 microseconds
+2020-07-01 07:26:00,987 127.0.0.1 - - [01/Jul/2020 07:26:00] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:26:01,365 Command find with request id 924745989 on server ('18.213.229.80', 27017) succeeded in 609938 microseconds
+2020-07-01 07:26:01,400 127.0.0.1 - - [01/Jul/2020 07:26:01] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:26:02,203 127.0.0.1 - - [01/Jul/2020 07:26:02] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:26:02,796 127.0.0.1 - - [01/Jul/2020 07:26:02] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:26:02,802 127.0.0.1 - - [01/Jul/2020 07:26:02] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:26:46,348 Command find with request id 1763800679 started on server ('18.213.229.80', 27017)
+2020-07-01 07:26:46,349 Command find with request id 333748765 started on server ('18.213.229.80', 27017)
+2020-07-01 07:26:46,350 Command find with request id 88207391 started on server ('18.213.229.80', 27017)
+2020-07-01 07:26:46,628 Command find with request id 333748765 on server ('18.213.229.80', 27017) succeeded in 278633 microseconds
+2020-07-01 07:26:46,634 Command find with request id 1763800679 on server ('18.213.229.80', 27017) succeeded in 285992 microseconds
+2020-07-01 07:26:46,641 127.0.0.1 - - [01/Jul/2020 07:26:46] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:26:46,844 Command find with request id 88207391 on server ('18.213.229.80', 27017) succeeded in 493832 microseconds
+2020-07-01 07:26:46,881 127.0.0.1 - - [01/Jul/2020 07:26:46] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:26:47,480 127.0.0.1 - - [01/Jul/2020 07:26:47] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:26:47,976 127.0.0.1 - - [01/Jul/2020 07:26:47] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:26:47,983 127.0.0.1 - - [01/Jul/2020 07:26:47] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:32:22,768 Command find with request id 1088387561 started on server ('18.213.229.80', 27017)
+2020-07-01 07:32:22,772 Command find with request id 264032581 started on server ('18.213.229.80', 27017)
+2020-07-01 07:32:22,773 Command find with request id 894374165 started on server ('18.213.229.80', 27017)
+2020-07-01 07:32:22,992 Command find with request id 264032581 on server ('18.213.229.80', 27017) succeeded in 219294 microseconds
+2020-07-01 07:32:23,000 Command find with request id 1088387561 on server ('18.213.229.80', 27017) succeeded in 231954 microseconds
+2020-07-01 07:32:23,007 127.0.0.1 - - [01/Jul/2020 07:32:23] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:32:23,218 Command find with request id 894374165 on server ('18.213.229.80', 27017) succeeded in 445194 microseconds
+2020-07-01 07:32:23,364 127.0.0.1 - - [01/Jul/2020 07:32:23] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:32:23,769 127.0.0.1 - - [01/Jul/2020 07:32:23] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:32:24,271 127.0.0.1 - - [01/Jul/2020 07:32:24] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:32:24,277 127.0.0.1 - - [01/Jul/2020 07:32:24] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:47:04,496 Command find with request id 1350237153 started on server ('18.213.229.80', 27017)
+2020-07-01 07:47:04,501 Command find with request id 976132622 started on server ('18.213.229.80', 27017)
+2020-07-01 07:47:04,502 Command find with request id 1233398521 started on server ('18.213.229.80', 27017)
+2020-07-01 07:47:04,721 Command find with request id 976132622 on server ('18.213.229.80', 27017) succeeded in 219247 microseconds
+2020-07-01 07:47:04,728 Command find with request id 1350237153 on server ('18.213.229.80', 27017) succeeded in 231134 microseconds
+2020-07-01 07:47:04,729 127.0.0.1 - - [01/Jul/2020 07:47:04] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:47:04,936 Command find with request id 1233398521 on server ('18.213.229.80', 27017) succeeded in 433654 microseconds
+2020-07-01 07:47:04,977 127.0.0.1 - - [01/Jul/2020 07:47:04] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:47:05,468 127.0.0.1 - - [01/Jul/2020 07:47:05] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:47:06,044 127.0.0.1 - - [01/Jul/2020 07:47:06] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:47:06,048 127.0.0.1 - - [01/Jul/2020 07:47:06] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:50:21,570 Command find with request id 403681562 started on server ('18.213.229.80', 27017)
+2020-07-01 07:50:21,574 Command find with request id 775171661 started on server ('18.213.229.80', 27017)
+2020-07-01 07:50:21,575 Command find with request id 1674303725 started on server ('18.213.229.80', 27017)
+2020-07-01 07:50:22,020 Command find with request id 775171661 on server ('18.213.229.80', 27017) succeeded in 444986 microseconds
+2020-07-01 07:50:22,026 Command find with request id 403681562 on server ('18.213.229.80', 27017) succeeded in 454265 microseconds
+2020-07-01 07:50:22,032 127.0.0.1 - - [01/Jul/2020 07:50:22] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:50:22,237 Command find with request id 1674303725 on server ('18.213.229.80', 27017) succeeded in 661874 microseconds
+2020-07-01 07:50:22,269 127.0.0.1 - - [01/Jul/2020 07:50:22] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:50:22,827 127.0.0.1 - - [01/Jul/2020 07:50:22] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:50:23,459 127.0.0.1 - - [01/Jul/2020 07:50:23] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:50:23,466 127.0.0.1 - - [01/Jul/2020 07:50:23] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:51:12,789 Command find with request id 568356771 started on server ('18.213.229.80', 27017)
+2020-07-01 07:51:12,812 Command find with request id 364988341 started on server ('18.213.229.80', 27017)
+2020-07-01 07:51:12,823 Command find with request id 1145751355 started on server ('18.213.229.80', 27017)
+2020-07-01 07:51:13,020 Command find with request id 568356771 on server ('18.213.229.80', 27017) succeeded in 230394 microseconds
+2020-07-01 07:51:13,031 Command find with request id 364988341 on server ('18.213.229.80', 27017) succeeded in 218650 microseconds
+2020-07-01 07:51:13,038 127.0.0.1 - - [01/Jul/2020 07:51:13] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:51:13,255 Command find with request id 1145751355 on server ('18.213.229.80', 27017) succeeded in 431817 microseconds
+2020-07-01 07:51:13,336 127.0.0.1 - - [01/Jul/2020 07:51:13] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:51:13,880 127.0.0.1 - - [01/Jul/2020 07:51:13] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:51:14,401 127.0.0.1 - - [01/Jul/2020 07:51:14] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:51:14,407 127.0.0.1 - - [01/Jul/2020 07:51:14] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:51:48,201 Command find with request id 1035191736 started on server ('18.213.229.80', 27017)
+2020-07-01 07:51:48,203 Command find with request id 1702482605 started on server ('18.213.229.80', 27017)
+2020-07-01 07:51:48,205 Command find with request id 553029607 started on server ('18.213.229.80', 27017)
+2020-07-01 07:51:48,656 Command find with request id 1035191736 on server ('18.213.229.80', 27017) succeeded in 454547 microseconds
+2020-07-01 07:51:48,662 Command find with request id 1702482605 on server ('18.213.229.80', 27017) succeeded in 457978 microseconds
+2020-07-01 07:51:48,671 127.0.0.1 - - [01/Jul/2020 07:51:48] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:51:48,872 Command find with request id 553029607 on server ('18.213.229.80', 27017) succeeded in 666635 microseconds
+2020-07-01 07:51:48,905 127.0.0.1 - - [01/Jul/2020 07:51:48] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:51:49,506 127.0.0.1 - - [01/Jul/2020 07:51:49] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:51:50,091 127.0.0.1 - - [01/Jul/2020 07:51:50] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 07:51:50,095 127.0.0.1 - - [01/Jul/2020 07:51:50] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:58:14,319 Command find with request id 446138204 started on server ('18.213.229.80', 27017)
+2020-07-01 07:58:14,322 Command find with request id 1379382951 started on server ('18.213.229.80', 27017)
+2020-07-01 07:58:14,323 Command find with request id 1203288092 started on server ('18.213.229.80', 27017)
+2020-07-01 07:58:14,541 Command find with request id 1379382951 on server ('18.213.229.80', 27017) succeeded in 218479 microseconds
+2020-07-01 07:58:14,549 Command find with request id 446138204 on server ('18.213.229.80', 27017) succeeded in 229692 microseconds
+2020-07-01 07:58:14,557 127.0.0.1 - - [01/Jul/2020 07:58:14] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:58:14,758 Command find with request id 1203288092 on server ('18.213.229.80', 27017) succeeded in 434244 microseconds
+2020-07-01 07:58:14,802 127.0.0.1 - - [01/Jul/2020 07:58:14] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 07:58:15,280 127.0.0.1 - - [01/Jul/2020 07:58:15] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 07:58:16,163 127.0.0.1 - - [01/Jul/2020 07:58:16] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 07:58:16,169 127.0.0.1 - - [01/Jul/2020 07:58:16] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:13:10,603 Command find with request id 1377343945 started on server ('18.213.229.80', 27017)
+2020-07-01 08:13:10,612 Command find with request id 1293452602 started on server ('18.213.229.80', 27017)
+2020-07-01 08:13:10,613 Command find with request id 80923233 started on server ('18.213.229.80', 27017)
+2020-07-01 08:13:10,838 Command find with request id 1293452602 on server ('18.213.229.80', 27017) succeeded in 225238 microseconds
+2020-07-01 08:13:10,845 Command find with request id 1377343945 on server ('18.213.229.80', 27017) succeeded in 241266 microseconds
+2020-07-01 08:13:10,874 127.0.0.1 - - [01/Jul/2020 08:13:10] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:13:11,049 Command find with request id 80923233 on server ('18.213.229.80', 27017) succeeded in 435714 microseconds
+2020-07-01 08:13:11,127 127.0.0.1 - - [01/Jul/2020 08:13:11] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:13:11,580 127.0.0.1 - - [01/Jul/2020 08:13:11] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:13:12,198 127.0.0.1 - - [01/Jul/2020 08:13:12] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:13:12,203 127.0.0.1 - - [01/Jul/2020 08:13:12] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:13:45,679 Command find with request id 2051953944 started on server ('18.213.229.80', 27017)
+2020-07-01 08:13:45,689 Command find with request id 750049635 started on server ('18.213.229.80', 27017)
+2020-07-01 08:13:45,692 Command find with request id 355207555 started on server ('18.213.229.80', 27017)
+2020-07-01 08:13:45,957 Command find with request id 750049635 on server ('18.213.229.80', 27017) succeeded in 267668 microseconds
+2020-07-01 08:13:45,963 Command find with request id 2051953944 on server ('18.213.229.80', 27017) succeeded in 283961 microseconds
+2020-07-01 08:13:45,976 127.0.0.1 - - [01/Jul/2020 08:13:45] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:13:46,175 Command find with request id 355207555 on server ('18.213.229.80', 27017) succeeded in 482716 microseconds
+2020-07-01 08:13:46,226 127.0.0.1 - - [01/Jul/2020 08:13:46] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:13:46,756 127.0.0.1 - - [01/Jul/2020 08:13:46] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:13:47,396 127.0.0.1 - - [01/Jul/2020 08:13:47] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:13:47,402 127.0.0.1 - - [01/Jul/2020 08:13:47] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:14:16,060 Command find with request id 1828903032 started on server ('18.213.229.80', 27017)
+2020-07-01 08:14:16,064 Command find with request id 1439819313 started on server ('18.213.229.80', 27017)
+2020-07-01 08:14:16,073 Command find with request id 1197459195 started on server ('18.213.229.80', 27017)
+2020-07-01 08:14:16,456 Command find with request id 1439819313 on server ('18.213.229.80', 27017) succeeded in 391958 microseconds
+2020-07-01 08:14:16,464 Command find with request id 1828903032 on server ('18.213.229.80', 27017) succeeded in 403253 microseconds
+2020-07-01 08:14:16,474 127.0.0.1 - - [01/Jul/2020 08:14:16] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:14:16,675 Command find with request id 1197459195 on server ('18.213.229.80', 27017) succeeded in 602157 microseconds
+2020-07-01 08:14:16,725 127.0.0.1 - - [01/Jul/2020 08:14:16] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:14:17,336 127.0.0.1 - - [01/Jul/2020 08:14:17] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:14:17,857 127.0.0.1 - - [01/Jul/2020 08:14:17] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:14:17,865 127.0.0.1 - - [01/Jul/2020 08:14:17] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:15:01,819 Command find with request id 1080952188 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:01,820 Command find with request id 1999253743 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:01,822 Command find with request id 1928517639 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:02,146 Command find with request id 1999253743 on server ('18.213.229.80', 27017) succeeded in 324626 microseconds
+2020-07-01 08:15:02,151 Command find with request id 1080952188 on server ('18.213.229.80', 27017) succeeded in 330688 microseconds
+2020-07-01 08:15:02,158 127.0.0.1 - - [01/Jul/2020 08:15:02] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:02,363 Command find with request id 1928517639 on server ('18.213.229.80', 27017) succeeded in 540553 microseconds
+2020-07-01 08:15:02,431 127.0.0.1 - - [01/Jul/2020 08:15:02] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:15:02,997 127.0.0.1 - - [01/Jul/2020 08:15:02] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:03,518 127.0.0.1 - - [01/Jul/2020 08:15:03] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:15:03,524 127.0.0.1 - - [01/Jul/2020 08:15:03] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:15:13,913 Command find with request id 2094427782 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:13,916 Command find with request id 1643274097 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:13,917 Command find with request id 1868047859 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:14,140 Command find with request id 1643274097 on server ('18.213.229.80', 27017) succeeded in 223751 microseconds
+2020-07-01 08:15:14,151 Command find with request id 2094427782 on server ('18.213.229.80', 27017) succeeded in 237589 microseconds
+2020-07-01 08:15:14,178 127.0.0.1 - - [01/Jul/2020 08:15:14] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:14,350 Command find with request id 1868047859 on server ('18.213.229.80', 27017) succeeded in 432958 microseconds
+2020-07-01 08:15:14,413 127.0.0.1 - - [01/Jul/2020 08:15:14] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:15:15,263 127.0.0.1 - - [01/Jul/2020 08:15:15] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:15,994 127.0.0.1 - - [01/Jul/2020 08:15:15] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:15:16,001 127.0.0.1 - - [01/Jul/2020 08:15:16] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:15:16,822 Command find with request id 490853015 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:16,830 Command find with request id 1281934978 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:16,834 Command find with request id 1925228542 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:17,097 Command find with request id 1281934978 on server ('18.213.229.80', 27017) succeeded in 266080 microseconds
+2020-07-01 08:15:17,105 Command find with request id 490853015 on server ('18.213.229.80', 27017) succeeded in 282705 microseconds
+2020-07-01 08:15:17,226 127.0.0.1 - - [01/Jul/2020 08:15:17] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:17,315 Command find with request id 1925228542 on server ('18.213.229.80', 27017) succeeded in 480829 microseconds
+2020-07-01 08:15:17,421 127.0.0.1 - - [01/Jul/2020 08:15:17] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:15:17,950 127.0.0.1 - - [01/Jul/2020 08:15:17] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:18,487 127.0.0.1 - - [01/Jul/2020 08:15:18] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:15:18,494 127.0.0.1 - - [01/Jul/2020 08:15:18] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:15:47,661 Command find with request id 2028614953 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:47,663 Command find with request id 1481135299 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:47,665 Command find with request id 1958017916 started on server ('18.213.229.80', 27017)
+2020-07-01 08:15:47,882 Command find with request id 1481135299 on server ('18.213.229.80', 27017) succeeded in 218370 microseconds
+2020-07-01 08:15:47,893 Command find with request id 2028614953 on server ('18.213.229.80', 27017) succeeded in 231712 microseconds
+2020-07-01 08:15:47,921 127.0.0.1 - - [01/Jul/2020 08:15:47] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:48,100 Command find with request id 1958017916 on server ('18.213.229.80', 27017) succeeded in 435155 microseconds
+2020-07-01 08:15:48,172 127.0.0.1 - - [01/Jul/2020 08:15:48] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:15:48,670 127.0.0.1 - - [01/Jul/2020 08:15:48] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:15:49,255 127.0.0.1 - - [01/Jul/2020 08:15:49] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:15:49,261 127.0.0.1 - - [01/Jul/2020 08:15:49] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:16:47,932 Command find with request id 1759229198 started on server ('18.213.229.80', 27017)
+2020-07-01 08:16:47,934 Command find with request id 810278890 started on server ('18.213.229.80', 27017)
+2020-07-01 08:16:47,935 Command find with request id 1163498603 started on server ('18.213.229.80', 27017)
+2020-07-01 08:16:48,237 Command find with request id 810278890 on server ('18.213.229.80', 27017) succeeded in 301791 microseconds
+2020-07-01 08:16:48,237 Command find with request id 1759229198 on server ('18.213.229.80', 27017) succeeded in 303316 microseconds
+2020-07-01 08:16:48,276 127.0.0.1 - - [01/Jul/2020 08:16:48] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:16:48,454 Command find with request id 1163498603 on server ('18.213.229.80', 27017) succeeded in 519132 microseconds
+2020-07-01 08:16:48,523 127.0.0.1 - - [01/Jul/2020 08:16:48] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:16:49,029 127.0.0.1 - - [01/Jul/2020 08:16:49] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:16:49,674 127.0.0.1 - - [01/Jul/2020 08:16:49] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:16:49,679 127.0.0.1 - - [01/Jul/2020 08:16:49] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:17:27,298 Command find with request id 2049325511 started on server ('18.213.229.80', 27017)
+2020-07-01 08:17:27,301 Command find with request id 1671132791 started on server ('18.213.229.80', 27017)
+2020-07-01 08:17:27,302 Command find with request id 1937682871 started on server ('18.213.229.80', 27017)
+2020-07-01 08:17:27,521 Command find with request id 1671132791 on server ('18.213.229.80', 27017) succeeded in 220017 microseconds
+2020-07-01 08:17:27,529 127.0.0.1 - - [01/Jul/2020 08:17:27] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:17:27,529 Command find with request id 2049325511 on server ('18.213.229.80', 27017) succeeded in 230604 microseconds
+2020-07-01 08:17:27,763 Command find with request id 1937682871 on server ('18.213.229.80', 27017) succeeded in 460863 microseconds
+2020-07-01 08:17:27,827 127.0.0.1 - - [01/Jul/2020 08:17:27] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:17:28,269 127.0.0.1 - - [01/Jul/2020 08:17:28] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:17:29,058 127.0.0.1 - - [01/Jul/2020 08:17:29] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:17:29,064 127.0.0.1 - - [01/Jul/2020 08:17:29] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:18:05,370 Command find with request id 839521936 started on server ('18.213.229.80', 27017)
+2020-07-01 08:18:05,377 Command find with request id 877617562 started on server ('18.213.229.80', 27017)
+2020-07-01 08:18:05,383 Command find with request id 1200676938 started on server ('18.213.229.80', 27017)
+2020-07-01 08:18:05,599 Command find with request id 877617562 on server ('18.213.229.80', 27017) succeeded in 222046 microseconds
+2020-07-01 08:18:05,605 Command find with request id 839521936 on server ('18.213.229.80', 27017) succeeded in 234880 microseconds
+2020-07-01 08:18:05,613 127.0.0.1 - - [01/Jul/2020 08:18:05] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:18:05,825 Command find with request id 1200676938 on server ('18.213.229.80', 27017) succeeded in 441289 microseconds
+2020-07-01 08:18:05,880 127.0.0.1 - - [01/Jul/2020 08:18:05] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:18:06,485 127.0.0.1 - - [01/Jul/2020 08:18:06] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:18:06,996 127.0.0.1 - - [01/Jul/2020 08:18:06] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:18:07,003 127.0.0.1 - - [01/Jul/2020 08:18:07] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:27:16,571 Command find with request id 1927948269 started on server ('18.213.229.80', 27017)
+2020-07-01 08:27:16,574 Command find with request id 1793291147 started on server ('18.213.229.80', 27017)
+2020-07-01 08:27:16,577 Command find with request id 2058805631 started on server ('18.213.229.80', 27017)
+2020-07-01 08:27:16,980 Command find with request id 1793291147 on server ('18.213.229.80', 27017) succeeded in 406470 microseconds
+2020-07-01 08:27:16,988 Command find with request id 1927948269 on server ('18.213.229.80', 27017) succeeded in 416726 microseconds
+2020-07-01 08:27:16,995 127.0.0.1 - - [01/Jul/2020 08:27:16] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:27:17,199 Command find with request id 2058805631 on server ('18.213.229.80', 27017) succeeded in 621545 microseconds
+2020-07-01 08:27:17,236 127.0.0.1 - - [01/Jul/2020 08:27:17] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:27:17,833 127.0.0.1 - - [01/Jul/2020 08:27:17] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:27:18,416 127.0.0.1 - - [01/Jul/2020 08:27:18] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:27:18,421 127.0.0.1 - - [01/Jul/2020 08:27:18] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:27:59,945 Command find with request id 387423580 started on server ('18.213.229.80', 27017)
+2020-07-01 08:27:59,948 Command find with request id 257691356 started on server ('18.213.229.80', 27017)
+2020-07-01 08:27:59,950 Command find with request id 1691587940 started on server ('18.213.229.80', 27017)
+2020-07-01 08:28:00,199 Command find with request id 1691587940 on server ('18.213.229.80', 27017) succeeded in 249274 microseconds
+2020-07-01 08:28:00,205 Command find with request id 387423580 on server ('18.213.229.80', 27017) succeeded in 259898 microseconds
+2020-07-01 08:28:00,212 127.0.0.1 - - [01/Jul/2020 08:28:00] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:28:00,417 Command find with request id 257691356 on server ('18.213.229.80', 27017) succeeded in 468425 microseconds
+2020-07-01 08:28:00,486 127.0.0.1 - - [01/Jul/2020 08:28:00] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:28:00,940 127.0.0.1 - - [01/Jul/2020 08:28:00] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:28:01,637 127.0.0.1 - - [01/Jul/2020 08:28:01] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:28:01,644 127.0.0.1 - - [01/Jul/2020 08:28:01] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:28:10,737 Command find with request id 2031439871 started on server ('18.213.229.80', 27017)
+2020-07-01 08:28:10,737 Command find with request id 1714891891 started on server ('18.213.229.80', 27017)
+2020-07-01 08:28:10,738 Command find with request id 809985650 started on server ('18.213.229.80', 27017)
+2020-07-01 08:28:10,958 Command find with request id 809985650 on server ('18.213.229.80', 27017) succeeded in 219675 microseconds
+2020-07-01 08:28:10,967 127.0.0.1 - - [01/Jul/2020 08:28:10] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:28:10,968 Command find with request id 2031439871 on server ('18.213.229.80', 27017) succeeded in 230352 microseconds
+2020-07-01 08:28:11,172 Command find with request id 1714891891 on server ('18.213.229.80', 27017) succeeded in 433592 microseconds
+2020-07-01 08:28:11,214 127.0.0.1 - - [01/Jul/2020 08:28:11] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:28:11,901 127.0.0.1 - - [01/Jul/2020 08:28:11] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:28:12,440 127.0.0.1 - - [01/Jul/2020 08:28:12] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:28:12,445 127.0.0.1 - - [01/Jul/2020 08:28:12] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:44:11,315 Command find with request id 1748669808 started on server ('18.213.229.80', 27017)
+2020-07-01 08:44:11,316 Command find with request id 1579753861 started on server ('18.213.229.80', 27017)
+2020-07-01 08:44:11,318 Command find with request id 1582813966 started on server ('18.213.229.80', 27017)
+2020-07-01 08:44:11,536 Command find with request id 1579753861 on server ('18.213.229.80', 27017) succeeded in 218882 microseconds
+2020-07-01 08:44:11,546 127.0.0.1 - - [01/Jul/2020 08:44:11] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:44:11,547 Command find with request id 1748669808 on server ('18.213.229.80', 27017) succeeded in 230993 microseconds
+2020-07-01 08:44:11,759 Command find with request id 1582813966 on server ('18.213.229.80', 27017) succeeded in 440750 microseconds
+2020-07-01 08:44:11,799 127.0.0.1 - - [01/Jul/2020 08:44:11] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:44:12,472 127.0.0.1 - - [01/Jul/2020 08:44:12] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:44:13,008 127.0.0.1 - - [01/Jul/2020 08:44:13] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:44:13,017 127.0.0.1 - - [01/Jul/2020 08:44:13] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:44:37,157 Command find with request id 809518879 started on server ('18.213.229.80', 27017)
+2020-07-01 08:44:37,161 Command find with request id 1274895608 started on server ('18.213.229.80', 27017)
+2020-07-01 08:44:37,163 Command find with request id 1726137537 started on server ('18.213.229.80', 27017)
+2020-07-01 08:44:37,597 Command find with request id 1274895608 on server ('18.213.229.80', 27017) succeeded in 434075 microseconds
+2020-07-01 08:44:37,604 Command find with request id 809518879 on server ('18.213.229.80', 27017) succeeded in 445446 microseconds
+2020-07-01 08:44:37,605 127.0.0.1 - - [01/Jul/2020 08:44:37] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:44:37,813 Command find with request id 1726137537 on server ('18.213.229.80', 27017) succeeded in 650048 microseconds
+2020-07-01 08:44:37,847 127.0.0.1 - - [01/Jul/2020 08:44:37] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:44:38,463 127.0.0.1 - - [01/Jul/2020 08:44:38] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:44:39,008 127.0.0.1 - - [01/Jul/2020 08:44:39] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:44:39,014 127.0.0.1 - - [01/Jul/2020 08:44:39] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:45:53,549 Command find with request id 680778347 started on server ('18.213.229.80', 27017)
+2020-07-01 08:45:53,551 Command find with request id 48806813 started on server ('18.213.229.80', 27017)
+2020-07-01 08:45:53,552 Command find with request id 2104836584 started on server ('18.213.229.80', 27017)
+2020-07-01 08:45:53,989 Command find with request id 48806813 on server ('18.213.229.80', 27017) succeeded in 437518 microseconds
+2020-07-01 08:45:53,994 Command find with request id 680778347 on server ('18.213.229.80', 27017) succeeded in 443787 microseconds
+2020-07-01 08:45:54,002 127.0.0.1 - - [01/Jul/2020 08:45:54] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:45:54,205 Command find with request id 2104836584 on server ('18.213.229.80', 27017) succeeded in 652035 microseconds
+2020-07-01 08:45:54,241 127.0.0.1 - - [01/Jul/2020 08:45:54] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:45:54,838 127.0.0.1 - - [01/Jul/2020 08:45:54] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:45:55,422 127.0.0.1 - - [01/Jul/2020 08:45:55] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:45:55,427 127.0.0.1 - - [01/Jul/2020 08:45:55] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:47:02,060 Command find with request id 484836576 started on server ('18.213.229.80', 27017)
+2020-07-01 08:47:02,063 Command find with request id 1095376114 started on server ('18.213.229.80', 27017)
+2020-07-01 08:47:02,064 Command find with request id 1756525914 started on server ('18.213.229.80', 27017)
+2020-07-01 08:47:02,390 Command find with request id 1095376114 on server ('18.213.229.80', 27017) succeeded in 326082 microseconds
+2020-07-01 08:47:02,396 Command find with request id 484836576 on server ('18.213.229.80', 27017) succeeded in 334246 microseconds
+2020-07-01 08:47:02,402 127.0.0.1 - - [01/Jul/2020 08:47:02] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:47:02,606 Command find with request id 1756525914 on server ('18.213.229.80', 27017) succeeded in 541863 microseconds
+2020-07-01 08:47:02,647 127.0.0.1 - - [01/Jul/2020 08:47:02] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:47:03,424 127.0.0.1 - - [01/Jul/2020 08:47:03] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:47:04,032 127.0.0.1 - - [01/Jul/2020 08:47:04] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:47:04,039 127.0.0.1 - - [01/Jul/2020 08:47:04] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:53:36,802 Command find with request id 585249139 started on server ('18.213.229.80', 27017)
+2020-07-01 08:53:36,804 Command find with request id 807175913 started on server ('18.213.229.80', 27017)
+2020-07-01 08:53:36,805 Command find with request id 551371692 started on server ('18.213.229.80', 27017)
+2020-07-01 08:53:37,028 Command find with request id 807175913 on server ('18.213.229.80', 27017) succeeded in 223366 microseconds
+2020-07-01 08:53:37,039 127.0.0.1 - - [01/Jul/2020 08:53:37] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:53:37,040 Command find with request id 585249139 on server ('18.213.229.80', 27017) succeeded in 236863 microseconds
+2020-07-01 08:53:37,242 Command find with request id 551371692 on server ('18.213.229.80', 27017) succeeded in 436951 microseconds
+2020-07-01 08:53:37,290 127.0.0.1 - - [01/Jul/2020 08:53:37] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:53:37,773 127.0.0.1 - - [01/Jul/2020 08:53:37] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:53:38,290 127.0.0.1 - - [01/Jul/2020 08:53:38] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:53:38,300 127.0.0.1 - - [01/Jul/2020 08:53:38] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:54:24,245 Command find with request id 1283497205 started on server ('18.213.229.80', 27017)
+2020-07-01 08:54:24,248 Command find with request id 264290320 started on server ('18.213.229.80', 27017)
+2020-07-01 08:54:24,254 Command find with request id 931226244 started on server ('18.213.229.80', 27017)
+2020-07-01 08:54:24,477 Command find with request id 1283497205 on server ('18.213.229.80', 27017) succeeded in 230492 microseconds
+2020-07-01 08:54:24,502 Command find with request id 264290320 on server ('18.213.229.80', 27017) succeeded in 254147 microseconds
+2020-07-01 08:54:24,527 127.0.0.1 - - [01/Jul/2020 08:54:24] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:54:24,718 Command find with request id 931226244 on server ('18.213.229.80', 27017) succeeded in 464368 microseconds
+2020-07-01 08:54:24,780 127.0.0.1 - - [01/Jul/2020 08:54:24] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:54:25,247 127.0.0.1 - - [01/Jul/2020 08:54:25] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:54:25,797 127.0.0.1 - - [01/Jul/2020 08:54:25] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:54:25,804 127.0.0.1 - - [01/Jul/2020 08:54:25] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -
+2020-07-01 08:55:36,909 Command find with request id 874198470 started on server ('18.213.229.80', 27017)
+2020-07-01 08:55:36,914 Command find with request id 1718056163 started on server ('18.213.229.80', 27017)
+2020-07-01 08:55:36,918 Command find with request id 304813979 started on server ('18.213.229.80', 27017)
+2020-07-01 08:55:37,273 Command find with request id 874198470 on server ('18.213.229.80', 27017) succeeded in 363602 microseconds
+2020-07-01 08:55:37,280 Command find with request id 1718056163 on server ('18.213.229.80', 27017) succeeded in 366408 microseconds
+2020-07-01 08:55:37,286 127.0.0.1 - - [01/Jul/2020 08:55:37] "[37mGET /ETfDescription/getHoldingsData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:55:37,490 Command find with request id 304813979 on server ('18.213.229.80', 27017) succeeded in 571016 microseconds
+2020-07-01 08:55:37,527 127.0.0.1 - - [01/Jul/2020 08:55:37] "[37mGET /PastArbitrageData/CommonDataAcrossEtf/XLK HTTP/1.1[0m" 200 -
+2020-07-01 08:55:38,128 127.0.0.1 - - [01/Jul/2020 08:55:38] "[37mGET /ETfDescription/EtfData/XLK/20200608 HTTP/1.1[0m" 200 -
+2020-07-01 08:55:38,625 127.0.0.1 - - [01/Jul/2020 08:55:38] "[37mGET /ETfDescription/getETFsWithSameETFdbCategory/Technology%20Equities HTTP/1.1[0m" 200 -
+2020-07-01 08:55:38,634 127.0.0.1 - - [01/Jul/2020 08:55:38] "[37mGET /ETfDescription/getETFWithSameIssuer/State%20Street%20SPDR HTTP/1.1[0m" 200 -

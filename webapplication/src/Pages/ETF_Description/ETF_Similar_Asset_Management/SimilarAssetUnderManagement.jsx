@@ -4,32 +4,36 @@ import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
 import { InputGroup, FormControl } from "react-bootstrap";
 import { escapeRegExp } from "lodash";
+import orderBy from "lodash/orderBy"
 
 
 const SimilarAssetUnderManagement = (props) => {
   const { SimilarTotalAsstUndMgmt } = props;
   const [searchValue, setSearchValue] = useState("");
-
-  const [order, setTableOrder] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [orderType, setOrderType] = useState("ASC");
 
+
   useEffect(() => {
-    if (typeof SimilarTotalAsstUndMgmt === "object") {
-      const order = Object.keys(SimilarTotalAsstUndMgmt).sort();
-      setTableOrder(order);
-    }
-  }, [SimilarTotalAsstUndMgmt]);
+    const sortedData = orderBy(SimilarTotalAsstUndMgmt, ["etfTicker"], ['asc'])
+
+    setOrderType("DSC");
+    setTableData(sortedData)
+  }, [SimilarAssetUnderManagement])
+
 
   const changeOrder = () => {
+
     if (orderType === "ASC") {
-      const order = Object.keys(SimilarTotalAsstUndMgmt).sort().reverse();
+      const sortedData = orderBy(SimilarTotalAsstUndMgmt, ["etfTicker"], ['asc'])
+      console.log(sortedData)
       setOrderType("DSC");
-      setTableOrder(order);
+      setTableData(sortedData)
     }
     if (orderType === "DSC") {
-      const order = Object.keys(SimilarTotalAsstUndMgmt).sort();
+      const sortedData = orderBy(SimilarTotalAsstUndMgmt, ["etfTicker"], ['desc'])
       setOrderType("ASC");
-      setTableOrder(order);
+      setTableData(sortedData)
     }
   };
 
@@ -70,17 +74,16 @@ const SimilarAssetUnderManagement = (props) => {
             </tr>
           </thead>
           <tbody>
-            {typeof SimilarTotalAsstUndMgmt === "object" &&
-              order.map((key) => (
-                <tr key={key}>
-                  <td>{key && key}</td>
+            {Array.isArray(tableData) &&
+              tableData.map(({ ETFName, TotalAssetsUnderMgmt, etfTicker }) => (
+                <tr key={etfTicker}>
+                  <td>{etfTicker && etfTicker}</td>
                   <td>
-                    {SimilarTotalAsstUndMgmt[key] &&
-                      SimilarTotalAsstUndMgmt[key].ETFName}{" "}
+                    {ETFName &&
+                      ETFName}
                   </td>
                   <td>
-                    {SimilarTotalAsstUndMgmt[key] &&
-                      SimilarTotalAsstUndMgmt[key].TotalAssetsUnderMgmt}{" "}
+                    {TotalAssetsUnderMgmt && TotalAssetsUnderMgmt}
                   </td>
                 </tr>
               ))}
