@@ -41,71 +41,70 @@ MaintainSignal = ['XLK','XLC','XLP']
 
 
 # Calcualte Arbitrage and other results for a df
-def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilterOn=0, BuildMomentumSignals=True, BuildPatternSignals=True, includeMovers=True, getScatterPlot=True):
-    arbitrageBuySellSignals = pd.DataFrame()
-    df['Magnitude of Arbitrage']=abs(df['ETF Trading Spread in $']-abs(df['Arbitrage in $']))
-    df['Over Bought/Sold'] = 0
-    a = (abs(df['Arbitrage in $']) > df['ETF Trading Spread in $'])
-    b = df['ETF Trading Spread in $'] != 0
-    c = df['Magnitude of Arbitrage'] > magnitudeOfArbitrageToFilterOn
-    df.loc[a & b & c, 'Over Bought/Sold'] = 111
-    df['Over Bought/Sold'] = df['Over Bought/Sold'] * np.sign(df['Arbitrage in $'])
+def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilterOn=0, BuildMomentumSignals=False, BuildPatternSignals=False, includeMovers=True, getScatterPlot=True):
+    df['Magnitude of Arbitrage']=abs(df['Arbitrage in $']) - df['ETF Trading Spread in $']
+    # Replace all negative values with 0 
+    df['Magnitude of Arbitrage']=df['Magnitude of Arbitrage'].mask(df['Magnitude of Arbitrage'].lt(0),0)
+    df['Over Bought/Sold'] = 'Balanced'
+    
+    df.loc[(df['Magnitude of Arbitrage']>magnitudeOfArbitrageToFilterOn) & 
+           (df['Arbitrage in $']>0), 'Over Bought/Sold'] = 'Over Bought'
+
+    df.loc[(df['Magnitude of Arbitrage']>magnitudeOfArbitrageToFilterOn) & 
+       (df['Arbitrage in $']<0), 'Over Bought/Sold'] = 'Over Sold'
+
     df=df.set_index('Time')
 
-    # Build Signals
-    if BuildMomentumSignals:
-        df=MomentumSignals(df,tp=10)
-    if BuildPatternSignals:
-        df=PatternSignals(df)
-
+    # Build Signals if True passed by user, default is False
+    df=MomentumSignals(df,tp=10) if BuildMomentumSignals else df
+    df=PatternSignals(df) if BuildPatternSignals else df
+        
     columnsneeded=['ETF Trading Spread in $','Arbitrage in $','Magnitude of Arbitrage','Over Bought/Sold']
     #columnsneeded=columnsneeded+MomentumsignalsColumns+CandlesignalsColumns+MajorUnderlyingMovers
-    if includeMovers:
-        # MajorUnderlyingMovers = [col for col in df.columns.to_list() if "Mover" in col or "Change" in col]
-        columnsneeded=columnsneeded+MajorUnderlyingMovers
+    columnsneeded=columnsneeded+MajorUnderlyingMovers if includeMovers else columnsneeded
 
-    etfOverBought = df.loc[df['Over Bought/Sold']== 111.0]
-    PNLSellPositionsT_1=0
-    if etfOverBought.shape[0]!=0:
-        sellPositions = analysePerformance(df=df, BuySellIndex=etfOverBought)
-        tempdf=df.loc[etfOverBought.index]
-        tempdf=tempdf[columnsneeded]
-        sellPositions=pd.merge(tempdf,sellPositions,how='outer',left_index=True,right_index=True)
-        # Drop the last row
-        sellPositions.drop(sellPositions.tail(1).index,inplace=True)
-        arbitrageBuySellSignals = arbitrageBuySellSignals.append(sellPositions)
-        PNLSellPositionsT_1 =round(-(sellPositions['T+1'].sum()),2)
-    etfOverSold = df.loc[df['Over Bought/Sold']== -111.0]
+    allSignalsProcessing = pd.DataFrame()
+    allSignalsProcessingTemp  = analysePerformance(df=df, BuySellIndex=df)
+    tempdf=df.loc[df.index]
+    tempdf=tempdf[columnsneeded]
+    allSignalsProcessingTemp=pd.merge(tempdf,allSignalsProcessingTemp,how='outer',left_index=True,right_index=True)
+    # Dropt the last row
+    allSignalsProcessingTemp.drop(allSignalsProcessingTemp.tail(1).index,inplace=True)
+    allSignalsProcessing = allSignalsProcessing.append(allSignalsProcessingTemp)
 
-    PNLBuyPositionsT_1=0
-    if etfOverSold.shape[0]!=0:
-        buyPositions  = analysePerformance(df=df, BuySellIndex=etfOverSold)
-        tempdf=df.loc[etfOverSold.index]
-        tempdf=tempdf[columnsneeded]
-        buyPositions=pd.merge(tempdf,buyPositions,how='outer',left_index=True,right_index=True)
-        # Dropt the last row
-        buyPositions.drop(buyPositions.tail(1).index,inplace=True)
-        arbitrageBuySellSignals = arbitrageBuySellSignals.append(buyPositions)
-        PNLBuyPositionsT_1 =round(buyPositions['T+1'].sum(),2)
+    print(allSignalsProcessing.columns)
+    print(allSignalsProcessing)
+    print(allSignalsProcessing['Over Bought/Sold'])
 
-    scatterPlotData=None
-    if getScatterPlot:
-        scatterPlotData=df[['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records')
+    
 
-    # Dvision By ETF Type
-    # Some etfs have inverse signal, IF TRUE, than we stick with momentum and keep buying with it
+    sellPositions = allSignalsProcessing.loc[allSignalsProcessing['Over Bought/Sold']== 'Over Bought']
+    PNLSellPositionsT_1 =round((sellPositions['T+1'].sum()),2) if sellPositions.shape[0]!=0 else 0
+    
+    buyPositions = allSignalsProcessing.loc[allSignalsProcessing['Over Bought/Sold']== 'Over Sold']
+    PNLBuyPositionsT_1 =round(buyPositions['T+1'].sum(),2) if buyPositions.shape[0]!=0 else 0
+    
+    scatterPlotData=df[['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records') if getScatterPlot else None
+
+    pnlstatementforday = {'PNL% Sell Pos. (T+1)':PNLSellPositionsT_1,'PNL% Buy Pos. (T+1)':PNLBuyPositionsT_1,'Magnitue Of Arbitrage':magnitudeOfArbitrageToFilterOn}
+    #allSignalsProcessing['Over Bought/Sold'] = allSignalsProcessing['Over Bought/Sold'].map({-111.0: 'Buy', 111.0: 'Sell',0:'No Action'})
+
+    '''
     if etfname in MaintainSignal:
         pnlstatementforday = {'PNL% Sell Pos. (T+1)':-PNLBuyPositionsT_1,'PNL% Buy Pos. (T+1)':-PNLSellPositionsT_1,'Magnitue Of Arbitrage':magnitudeOfArbitrageToFilterOn}
         arbitrageBuySellSignals['Over Bought/Sold'] = arbitrageBuySellSignals['Over Bought/Sold'].map({-111.0: 'Sell', 111.0: 'Buy'})
+        allSignalsProcessing['Over Bought/Sold'] = allSignalsProcessing['Over Bought/Sold'].map({-111.0: 'Sell', 111.0: 'Buy',0:'No Action'})
     else:
         pnlstatementforday = {'PNL% Sell Pos. (T+1)':PNLSellPositionsT_1,'PNL% Buy Pos. (T+1)':PNLBuyPositionsT_1,'Magnitue Of Arbitrage':magnitudeOfArbitrageToFilterOn}
         arbitrageBuySellSignals['Over Bought/Sold'] = arbitrageBuySellSignals['Over Bought/Sold'].map({111.0: 'Sell', -111.0: 'Buy'})
+        allSignalsProcessing['Over Bought/Sold'] = allSignalsProcessing['Over Bought/Sold'].map({-111.0: 'Buy', 111.0: 'Sell',0:'No Action'})
+    '''
 
     # Count the stats of Signal Right Buy, Right Sell, Total Buy & Total Sell
-    resultDict=countRightSignals(arbitrageBuySellSignals)
+    resultDict=countRightSignals(allSignalsProcessing)
     pnlstatementforday={**pnlstatementforday,**resultDict}
 
-    return arbitrageBuySellSignals, pnlstatementforday, scatterPlotData
+    return allSignalsProcessing, pnlstatementforday, scatterPlotData
 
 
 # Collecs the data for arbitrage calculations
