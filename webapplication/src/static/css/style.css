@@ -43,6 +43,14 @@ p {
   max-width: 35vw;
 }
 
+.d-inline-lock {
+  display: inline-block;
+}
+
+.d-block {
+  display: block;
+}
+
 .margin-left-auto {
   margin-left: auto;
 }
@@ -89,6 +97,6 @@ p {
 .padding-0 {
   padding: 0;
 }
-.padding-1px{
-padding: 1px;
+.padding-1px {
+  padding: 1px;
 }
