@@ -35,7 +35,7 @@ class Live_Arbitrage extends React.Component{
 
 
     updateData(){
-        axios.get(`http://localhost:5000/ETfLiveArbitrage/AllTickers`).then(res =>{
+        axios.get(`/ETfLiveArbitrage/AllTickers`).then(res =>{
             console.log(res);
             this.setState({
                 Arbitrage: res.data['Arbitrage in $'],

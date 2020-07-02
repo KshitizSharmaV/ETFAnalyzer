@@ -69,7 +69,7 @@ class Description extends React.Component{
 
   
   fetchETFDescriptionData(){
-    axios.get(`http://localhost:5000/ETfDescription/EtfData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
+    axios.get(`/ETfDescription/EtfData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
       console.log(res);
         this.setState({
           DescriptionData : res.data.ETFDataObject,
@@ -83,14 +83,14 @@ class Description extends React.Component{
 
   fetchSameIssuer(){
       if(this.state.IssuerName!== null){
-        axios.get(`http://localhost:5000/ETfDescription/getETFWithSameIssuer/${this.state.IssuerName}`).then(res =>{
+        axios.get(`/ETfDescription/getETFWithSameIssuer/${this.state.IssuerName}`).then(res =>{
           this.setState({SameIssuerETFs : res.data});
         });
       }
     }
 
     fetchHoldingsData(){
-        axios.get(`http://localhost:5000/ETfDescription/getHoldingsData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
+        axios.get(`/ETfDescription/getHoldingsData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
           console.log(res);
           this.setState({HoldingsData : res.data});
         });
@@ -99,7 +99,7 @@ class Description extends React.Component{
 
   fetchSameETFdbCategory(){
       if(this.state.EtfDbCategory!== null){
-        axios.get(`http://localhost:5000/ETfDescription/getETFsWithSameETFdbCategory/${this.state.EtfDbCategory}`).then(res =>{
+        axios.get(`/ETfDescription/getETFsWithSameETFdbCategory/${this.state.EtfDbCategory}`).then(res =>{
             this.setState({EtfsWithSameEtfDbCategory : res.data});
         });
       }
@@ -108,7 +108,7 @@ class Description extends React.Component{
   fetchOHLCDailyData(){
     if(this.state.DescriptionData!== null){
       console.log("Coming in to fetch")
-        axios.get(`http://localhost:5000/ETfDescription/getOHLCDailyData/${this.props.ETF}/${this.state.DescriptionData['InceptionDate']}`).then(res =>{
+        axios.get(`/ETfDescription/getOHLCDailyData/${this.props.ETF}/${this.state.DescriptionData['InceptionDate']}`).then(res =>{
             this.setState({
               OHLCDailyData : {'data':tsvParse(res.data, this.parseData(this.state.parseDate))},
             });
@@ -118,7 +118,7 @@ class Description extends React.Component{
   
   // Fetch Data which is common to an ETF across all dates
   fetchDataCommonToAllDates(url){
-    axios.get(`http://localhost:5000/PastArbitrageData/CommonDataAcrossEtf/${this.props.ETF}`).then(res =>{
+    axios.get(`/PastArbitrageData/CommonDataAcrossEtf/${this.props.ETF}`).then(res =>{
     this.setState({
       PNLOverDates: <AppTable data={JSON.parse(res.data.PNLOverDates)}/>,
       magnitudeOfArbitrage : 0
@@ -178,10 +178,10 @@ class Description extends React.Component{
                   <Card>
                     <Card.Header className="text-white BlackHeaderForModal">
                       <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-8">
                           PNL Data
                         </div>
-                        <div class="col-md-3 float-right">
+                        <div class="col-md-4 float-right">
                           Arbitrage Magnitude : {this.MagnitudeOfArbitrageScorllable()}
                         </div>
                       </div>
@@ -201,7 +201,7 @@ class Description extends React.Component{
                     <Card.Header className="text-white BlackHeaderForModal">ETFs from same issuer : {this.state.IssuerName}</Card.Header>
                     <Card.Body className="CustomBackGroundColor">
                         <div className="DescriptionTable">
-                           <AppTable data={this.state.SameIssuerETFs} clickableTable='True' submitFn={this.props.submitFn}/>
+                           <AppTable data={this.state.SameIssuerETFs} clickableTable='False' submitFn={this.props.submitFn}/>
                         </div>
                     </Card.Body>
                   </Card>
@@ -212,7 +212,7 @@ class Description extends React.Component{
                     <Card.Header className="text-white BlackHeaderForModal">ETF with similar asset under mgmt</Card.Header>
                     <Card.Body className="CustomBackGroundColor">
                         <div className="DescriptionTable">
-                           <AppTable data={this.state.SimilarTotalAsstUndMgmt} clickableTable='True' submitFn={this.props.submitFn}/>
+                           <AppTable data={this.state.SimilarTotalAsstUndMgmt} clickableTable='False' submitFn={this.props.submitFn}/>
                         </div>
                     </Card.Body>
                   </Card>
@@ -223,7 +223,7 @@ class Description extends React.Component{
                     <Card.Header className="text-white BlackHeaderForModal">ETF in same Industry : {this.state.EtfDbCategory}</Card.Header>
                     <Card.Body className="CustomBackGroundColor">
                         <div className="DescriptionTable">
-                           <AppTable data={this.state.EtfsWithSameEtfDbCategory} clickableTable='True' submitFn={this.props.submitFn}/>
+                           <AppTable data={this.state.EtfsWithSameEtfDbCategory} clickableTable='False' submitFn={this.props.submitFn}/>
                         </div>
                     </Card.Body>
                   </Card>

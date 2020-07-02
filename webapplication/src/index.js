@@ -4,7 +4,6 @@ import { Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 
 import Former from './Component/Form.js';
-import ETFComparison from './Component/ETF-Comparison';
 import Description from './Component/ETF-Description';
 import HistoricalArbitrage from './Component/Historical-Arbitrage';
 import Live_Arbitrage from './Component/Live-Arbitrage';

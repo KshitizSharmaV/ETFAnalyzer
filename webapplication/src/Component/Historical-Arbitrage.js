@@ -147,7 +147,7 @@ class HistoricalArbitrage extends React.Component{
 
   	// Fetch Data For an ETF & a Date
 	fetchDataForADateAndETF(url){
-		axios.get(`http://localhost:5000/PastArbitrageData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
+		axios.get(`/PastArbitrageData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
 			console.log(res);
 			this.setState({
 			 	etfArbitrageTableData : JSON.parse(res.data.etfhistoricaldata),

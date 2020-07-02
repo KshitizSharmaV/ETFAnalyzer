@@ -75,7 +75,7 @@ class Live_Arbitrage extends React.Component{
     }
 
     UpdateArbitragDataTables(appendToPreviousTable){
-        axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/UpdateTable/${this.props.ETF}`).then(res =>{
+        axios.get(`/ETfLiveArbitrage/Single/UpdateTable/${this.props.ETF}`).then(res =>{
             console.log(res);
             if(appendToPreviousTable){
                 console.log("Append To Previous table");
