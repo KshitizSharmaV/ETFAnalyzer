@@ -100,3 +100,9 @@ p {
 .padding-1px {
   padding: 1px;
 }
+
+.recharts-cartesian-axis-tick {    
+    font-size: 0.8rem;
+    font-family: Roboto, sans-serif;
+    color:white;
+}
