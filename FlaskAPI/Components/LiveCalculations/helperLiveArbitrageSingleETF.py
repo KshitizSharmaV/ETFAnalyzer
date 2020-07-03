@@ -91,22 +91,25 @@ def AnalyzeDaysPerformance(ArbitrageDf=None,etfname=None):
 
 
 
-def CategorizeSignals(ArbitrageDf=None):
+def CategorizeSignals(ArbitrageDf=None, ArbitrageColumnName=None, PriceColumn=None,Pct_change=None):
     ArbitrageDf=ArbitrageDf[::-1]
     ArbitrageDf=ArbitrageDf.reset_index()
-    ArbitrageDf['AbsArbitrage']=abs(ArbitrageDf['Arbitrage'])
-    ArbitrageDf['ETF Change Price %']=ArbitrageDf['VWPrice'].pct_change()*100
+    ArbitrageDf['AbsArbitrage']=abs(ArbitrageDf[ArbitrageColumnName])
+    if Pct_change:
+        ArbitrageDf['ETF Change Price %']=ArbitrageDf[PriceColumn].pct_change()*100
+    else:
+        ArbitrageDf['ETF Change Price %']=ArbitrageDf[PriceColumn]
 
     bins = [-0.1, 0.05, 0.10, 0.15, 0.20, np.inf]
-    names = ['Weak', 'Good', 'Strong', '+ Strong', '++ Strong']
+    names = ['< 0.05', '< 0.10', '< 0.15', '< 0.20', '> 0.20']
     ArbitrageDf['Group'] = pd.cut(ArbitrageDf['AbsArbitrage'], bins, labels=names)
     
     SignalCategorization = {
-    'Weak':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    'Good':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    'Strong':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    '+ Strong':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    '++ Strong':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0}
+    '< 0.05':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
+    '< 0.10':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
+    '< 0.15':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
+    '< 0.20':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
+    '> 0.20':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0}
     }
     
     lastindex=ArbitrageDf.index[-1]
@@ -115,18 +118,16 @@ def CategorizeSignals(ArbitrageDf=None):
         if lastindex!=idx:
             groupType=ArbitrageDf.loc[idx,'Group']
             
-            if ArbitrageDf.loc[idx,'Arbitrage']<0:
+            if ArbitrageDf.loc[idx,ArbitrageColumnName]<0:
                 SignalCategorization[groupType]['# Buy Signals'] = SignalCategorization[groupType]['# Buy Signals'] + 1
                 SignalCategorization[groupType]['Buy Return'] = SignalCategorization[groupType]['Buy Return'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
-            elif ArbitrageDf.loc[idx,'Arbitrage']>0:
+            elif ArbitrageDf.loc[idx,ArbitrageColumnName]>0:
                 SignalCategorization[groupType]['# Sell Signals'] = SignalCategorization[groupType]['# Sell Signals'] + 1
                 SignalCategorization[groupType]['Sell Return'] = SignalCategorization[groupType]['Sell Return'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
 
     
     SignalCategorization=pd.DataFrame(SignalCategorization).fillna(0).round(3).to_dict()
     SignalCategorization = {k: SignalCategorization[k] for k in names}
-    print("CategorizeSignals")
-    print(SignalCategorization)
     return SignalCategorization
 
         
