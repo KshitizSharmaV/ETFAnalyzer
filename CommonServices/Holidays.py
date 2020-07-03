@@ -11,7 +11,8 @@ def HolidayCheck(dateToCheck):
 	
 	# holidays=cal.holidays(start='2020-01-01', end='2021-01-01').to_pydatetime()
 	Federalholidays=cal.holidays(start=startDate, end=endDate).to_pydatetime()
-
+	Federalholidays  = [x.date() for x in Federalholidays]
+	
 	if dateToCheck in Federalholidays:
 		return True
 	else:
