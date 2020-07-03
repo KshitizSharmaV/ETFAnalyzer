@@ -10,7 +10,7 @@ const PnlTable = (props) => {
 
   useEffect(() => {
     Axios.get(
-      `http://localhost:5000/PastArbitrageData/CommonDataAcrossEtf/${ETF}`
+      `/PastArbitrageData/CommonDataAcrossEtf/${ETF}`
     )
       .then((res) => setTableData(res.data))
       .catch((err) => console.log(err));

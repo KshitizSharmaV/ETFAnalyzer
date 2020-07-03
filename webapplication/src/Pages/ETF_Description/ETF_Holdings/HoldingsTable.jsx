@@ -18,7 +18,7 @@ const HoldingsTable = (props) => {
 
   useEffect(() => {
     Axios.get(
-      `http://localhost:5000/ETfDescription/getHoldingsData/${ETF}/${startDate}`
+      `/ETfDescription/getHoldingsData/${ETF}/${startDate}`
     )
       .then(({ data }) => {
         setTableData(data);

@@ -18,7 +18,7 @@ const SameIndustryTable = (props) => {
   useEffect(() => {
     if (EtfDbCategory) {
       Axios.get(
-        `http://localhost:5000/ETfDescription/getETFsWithSameETFdbCategory/${EtfDbCategory}`
+        `/ETfDescription/getETFsWithSameETFdbCategory/${EtfDbCategory}`
       )
         .then(({ data }) => {
           console.log(data);
