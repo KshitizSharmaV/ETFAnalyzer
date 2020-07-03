@@ -27,23 +27,11 @@ const HoldingsTable = (props) => {
       .catch((err) => console.log(err));
   }, [ETF, startDate]);
 
-  const changeOrder = () => {
-    if (orderType === "ASC") {
-      const sortedData = orderBy(tableData, ["TickerSymbol"], ["asc"]);
 
-      setOrderType("DSC");
-      setTableData(sortedData);
-    }
-    if (orderType === "DSC") {
-      const sortedData = orderBy(tableData, ["TickerSymbol"], ["desc"]);
-      setOrderType("ASC");
-      setTableData(sortedData);
-    }
-  };
 
   useEffect(() => {
     setTimeout(() => {
-      if (searchString < 1) {
+      if (searchString.length < 1) {
         return setFilterData(tableData);
       }
 
@@ -53,13 +41,27 @@ const HoldingsTable = (props) => {
     }, 300);
   }, [searchString]);
 
+
+  const changeOrder = () => {
+    if (orderType === "ASC") {
+      const sortedData = orderBy(filterData, ["TickerSymbol"], ["asc"]);
+
+      setOrderType("DSC");
+      setFilterData(sortedData);
+    }
+    if (orderType === "DSC") {
+      const sortedData = orderBy(filterData, ["TickerSymbol"], ["desc"]);
+      setOrderType("ASC");
+      setFilterData(sortedData);
+    }
+  };
+
   const handleSearchChange = (e) => {
     setSearchString(e.target.value);
   };
 
   return (
     <Card>
-      {console.log(filterData)}
       <Card.Header className="text-white bg-color-dark flex-row">
         ETF Holdings
         <input

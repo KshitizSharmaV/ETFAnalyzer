@@ -100,3 +100,11 @@ p {
 .padding-1px {
   padding: 1px;
 }
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}

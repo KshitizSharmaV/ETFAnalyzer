@@ -18,11 +18,8 @@ const PnlTable = (props) => {
 
   return (
     <Card>
-      <Card.Header className="text-white bg-color-dark">
-        ETF in same industry : Technology Equities
-      </Card.Header>
+      <Card.Header className="text-white bg-color-dark">PNL Table</Card.Header>
       <Card.Body className="padding-0 bg-color-dark overflow-auto height-50vh font-size-sm">
-
         <Table size="sm" striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -49,8 +46,10 @@ const PnlTable = (props) => {
                     <td>{data["# T.Sell"]}</td>
                     <td>{data["% R.Buy"]}</td>
                     <td>{data["% R.Sell"]}</td>
-                    <td>{data["Buy Return%"]}</td>
-                    <td>
+                    <td className={data["Buy Return%"] < 0 ? "red" : "green"}>
+                      {data["Buy Return%"]}
+                    </td>
+                    <td className={data["Sell Return%"] < 0 ? "red" : "green"}>
                       {data["Sell Return%"]}
                     </td>
                   </tr>
@@ -58,7 +57,6 @@ const PnlTable = (props) => {
               })}
           </tbody>
         </Table>
-
       </Card.Body>
     </Card>
   );

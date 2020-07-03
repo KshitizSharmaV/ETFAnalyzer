@@ -33,7 +33,7 @@ const SameIndustryTable = (props) => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (searchString < 1) {
+      if (searchString.length < 1) {
         return setFilterData(tableData);
       }
 
