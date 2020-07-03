@@ -10,6 +10,7 @@ import StockDesriptionHeader from './StockDesriptionHeader';
 import ChartComponent from './StockPriceChart';
 import ScatterPlot from './scatterplot';
 import PieChartGraph from './PieChart';
+import LineChartForHistArbJs from './LineChartForHistArb';
 import Modal from 'react-bootstrap/Modal'
 import Table from "react-bootstrap/Table";
 
@@ -29,7 +30,8 @@ class HistoricalArbitrage extends React.Component{
 			scatterPlotData:'',
 			LoadingStatement: "Loading.. PNL for " + this.props.ETF,
 			parseDate : timeParse("%Y-%m-%d %H:%M:%S"),
-			etfPriceData:''
+			etfPriceData:'',
+			ArbitrageCumSum:''
 		}
 		this.fetchDataForADateAndETF = this.fetchDataForADateAndETF.bind(this);
 	}
@@ -96,8 +98,19 @@ class HistoricalArbitrage extends React.Component{
 								  	</Card.Body>
 								</Card>
 							</Col>
-						</Row>
 
+							<Col xs={12} md={12}>
+
+								<Card className="CustomCard">
+									<Card.Header className="CustomCardHeader text-white">
+										Arb Time Series
+									</Card.Header>
+								  	<Card.Body className="CustomCardBody text-white">
+										<LineChartForHistArbJs data={this.state.ArbitrageCumSum}/>
+								  	</Card.Body>
+								</Card>
+							</Col>
+						</Row>
 	          		</Col>
 
 	          		<Col xs={12} md={8}>
@@ -134,7 +147,7 @@ class HistoricalArbitrage extends React.Component{
 
   	// Fetch Data For an ETF & a Date
 	fetchDataForADateAndETF(url){
-		axios.get(`http://localhost:5000/PastArbitrageData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
+		axios.get(`/PastArbitrageData/${this.props.ETF}/${this.props.startDate}`).then(res =>{
 			console.log(res);
 			this.setState({
 			 	etfArbitrageTableData : JSON.parse(res.data.etfhistoricaldata),
@@ -142,7 +155,8 @@ class HistoricalArbitrage extends React.Component{
 			 	etfPriceData : {'data':tsvParse(res.data.etfPrices, this.parseData(this.state.parseDate))},
 			 	scatterPlotData: <ScatterPlot data={JSON.parse(res.data.scatterPlotData)}/>,
 			 	etfmoversDictCount: JSON.parse(res.data.etfmoversDictCount),
-			 	highestChangeDictCount: JSON.parse(res.data.highestChangeDictCount)
+			 	highestChangeDictCount: JSON.parse(res.data.highestChangeDictCount),
+			 	ArbitrageCumSum : res.data.ArbitrageCumSum
 			});
 			console.log(this.state.etfPriceData);
 		});
@@ -240,11 +254,11 @@ const EtfArbitrageTable_Func = (props) =>{
         return Time.map((key, index) => {
             //console.log(key);
             let cls = "";
-            if (props.data['$Arbitrage'][key] < 0){
-                cls = "Red";
-            }
-            else if(props.data['$Arbitrage'][key] > 0){
+            if (props.data['Over Bought/Sold'][key] == 'Over Bought'){
                 cls = "Green";
+            }
+            else if(props.data['Over Bought/Sold'][key] == 'Over Sold'){
+                cls = "Red";
             }
             else {
                 cls = "";

@@ -146,6 +146,15 @@ class PerMinDataOperations():
         todaysDate = now.date()
         ifaholiday = HolidayCheck(todaysDate)
         dt=None
+        
+        # Testing - KTZ
+        #print(currentTime)
+        #print(self.UTCEndTime)
+        #print(self.DAYendTime)
+        #print((not ifaholiday))
+        #print(self.DAYendTimeZeroZeo)
+        #print(datetime.time(self.StartHour,30))
+
         # Current Market 930 to 4
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
             dt = now.replace(second=0, microsecond=0)
@@ -153,7 +162,11 @@ class PerMinDataOperations():
             dt = datetime.datetime.now().replace(second=0, microsecond=0)
 
         # After Market
-        elif (currentTime >= self.UTCEndTime) and (currentTime < self.DAYendTime) and (not ifaholiday):
+        #elif (currentTime >= self.UTCEndTime) and (currentTime < self.DAYendTime) and (not ifaholiday): - KTZ removed this
+        elif (currentTime >= self.UTCEndTime) and (not ifaholiday):
+            print("***********************************************************")
+            print("Inside After Market")
+            print("***********************************************************")
             dt = now.replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
             # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
             dt = dt.replace(tzinfo = tz.gettz('UTC'))

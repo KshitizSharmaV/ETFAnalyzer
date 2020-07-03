@@ -169,11 +169,12 @@ def FetchPastArbitrageData(ETFName, date):
     data = data[ColumnsForDisplay]
     # PNL for all dates for the etf
     print("Price Df")
-    print(pricedf)
+    print(data)
 
     data=data.reset_index(drop=True)
-    allData['etfhistoricaldata'] = data.to_json()
     
+    allData['etfhistoricaldata'] = data.to_json()
+    allData['ArbitrageCumSum']=data[['$Arbitrage','Time']].to_dict('records')
     allData['etfPrices'] = pricedf.to_csv(sep='\t', index=False)
     allData['PNLStatementForTheDay'] = json.dumps(PNLStatementForTheDay)
     allData['scatterPlotData'] = json.dumps(scatterPlotData)
