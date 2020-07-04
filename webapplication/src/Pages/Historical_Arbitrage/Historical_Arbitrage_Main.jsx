@@ -17,7 +17,7 @@ import EtfArbitrageTable from "./EtfArbitrageTable";
 import HisArbLineChart from "./HisArbLineChart";
 import ChartComponent from "../../Component/StockPriceChart";
 import AppTable from "../../Component/Table";
-import ScatterPlot from "./ScatterPlot";
+import ScatterPlot from "../../Component/scatterplot";
 
 class HistoricalArbitrage extends React.Component {
   state = {

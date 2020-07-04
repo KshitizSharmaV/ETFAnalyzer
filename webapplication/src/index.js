@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container'
 
 import Former from './Component/Form.js';
 import Live_Arbitrage from './Component/Live-Arbitrage';
-import Live_Arbitrage_Single from './Component/Live-Arbitrage-Single';
+//import Live_Arbitrage_Single from './Component/Live-Arbitrage-Single';
 import ML from './Component/Machine-Learning';
 import SignInFormPage from './Component/User/login';
 import SignUpFormPage from './Component/User/signup';
@@ -24,6 +24,7 @@ import {
 import './static/css/style.css';
 import { ETF_Description } from './Pages/ETF_Description';
 import { HistoricalArbitragee } from './Pages/Historical_Arbitrage/index.js';
+import { Live_Arbitrage_Single } from './Pages/Live_Arbitrage/index.js';
 
 const history = createBrowserHistory();
 

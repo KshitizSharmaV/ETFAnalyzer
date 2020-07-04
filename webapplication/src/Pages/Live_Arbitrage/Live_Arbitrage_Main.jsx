@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AppTable from './Table.js';
 import Table from 'react-bootstrap/Table';
-import '../static/css/Live_Arbitrage.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,11 +7,16 @@ import axios from 'axios';
 import { tsvParse, csvParse } from  "d3-dsv";
 import { timeParse } from "d3-time-format";
 import Card from 'react-bootstrap/Card'
-import ScatterPlot from './scatterplot';
-import ChartComponent from './StockPriceChart';
 
+import ChartComponent from "../../Component/StockPriceChart";
+import ScatterPlot from "../../Component/scatterplot";
+import AppTable from '../../Component/Table.js';
 
-class Live_Arbitrage extends React.Component{
+import LiveStatusWindow from './LiveStatusWindow';
+
+import '../../static/css/Live_Arbitrage.css';
+
+class Live_Arbitrage_Single extends React.Component{
     constructor(props){
         super(props);
     }
@@ -52,7 +55,7 @@ class Live_Arbitrage extends React.Component{
 
     fetchETFLiveData(){
         // Load the Historical Arbitrgae Data for Today 
-        axios.get(`http://localhost:5000/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
+        axios.get(`/ETfLiveArbitrage/Single/${this.props.ETF}`).then(res =>{
             console.log("fetchETFLiveData");
             console.log(res);
             this.setState({
@@ -120,26 +123,18 @@ class Live_Arbitrage extends React.Component{
                     <Row>
                         
                         <Col xs={12} md={12}>
-                            <Card className="CustomCard">
-                                <Card.Header className="CustomCardHeader text-white">
-                                    <span className="h4 pull-left pr-2">{this.props.ETF}</span>
-                                    H: <span className="text-muted">{this.state.HighPrice} </span>
-                                    O: <span className="text-muted">{this.state.OpenPrice} </span>
-                                    C: <span className="text-muted">{this.state.ClosePrice} </span>
-                                    L: <span className="text-muted">{this.state.LowPrice} </span>
-
-                                    <div>Time: <span className="text-muted">{this.state.CurrentTime}</span></div>
-                                </Card.Header>
-                            
-                                  <Card.Body className="CustomCardBody text-white">
-                                    <div><h5><span className={this.state.LiveColor}>ETF Status: {this.state.ETFStatus}</span></h5></div>
-                                    <div><h5><span className={this.state.LiveColor}>Signal: {this.state.Signal}</span></h5></div>
-                                    <div><span className={this.state.LiveColor}>Strength: {this.state.SignalStrength}</span></div>
-
-                                    <div><span className="">$ Arbitrage: {this.state.LiveArbitrage}</span></div>
-                                    <div><span className="">$ Spread: {this.state.LiveSpread}</span></div>    
-                                  </Card.Body>
-                            </Card>
+                        	<LiveStatusWindow HighPrice={this.state.HighPrice} 
+                        	OpenPrice={this.state.OpenPrice} 
+                        	ClosePrice={this.state.ClosePrice} 
+                        	LowPrice={this.state.LowPrice} 
+                        	SignalStrength={this.state.SignalStrength} 
+                        	CurrentTime={this.state.CurrentTime} 
+                        	ETFStatus={this.state.ETFStatus} 
+                        	Signal={this.state.Signal}
+							LiveArbitrage={this.state.LiveArbitrage}
+							LiveSpread={this.state.LiveSpread}
+							LiveColor={this.state.LiveColor}
+                        	 />
                         </Col>
 
                         <Col xs={12} md={12}>
@@ -267,4 +262,4 @@ const LiveTable = (props) => {
     );
 }
 
-export default Live_Arbitrage;
+export default Live_Arbitrage_Single;
