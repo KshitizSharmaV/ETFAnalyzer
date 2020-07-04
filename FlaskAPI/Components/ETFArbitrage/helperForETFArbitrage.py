@@ -68,11 +68,11 @@ def analysePerformance(df=None, BuySellIndex=None):
 
 def countRightSignals(data=None):
     resultDict={}
-    buysignal=data[data['Over Bought/Sold']=='Buy']
+    buysignal=data[data['Over Bought/Sold']=='Over Sold']
     resultDict['# of Buy Signal']=buysignal.shape[0]
     resultDict['# of Right Buy Signal']=buysignal[buysignal['T+1']>0].shape[0]
 
-    sellsignal=data[data['Over Bought/Sold']=='Sell']
+    sellsignal=data[data['Over Bought/Sold']=='Over Bought']
     resultDict['# of Sell Signal']=sellsignal.shape[0]
     resultDict['# of Right Sell Signal']=sellsignal[sellsignal['T+1']<0].shape[0]
 

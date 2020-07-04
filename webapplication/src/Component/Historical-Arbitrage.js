@@ -100,13 +100,23 @@ class HistoricalArbitrage extends React.Component{
 							</Col>
 
 							<Col xs={12} md={12}>
-
 								<Card className="CustomCard">
 									<Card.Header className="CustomCardHeader text-white">
 										Arb Time Series
 									</Card.Header>
 								  	<Card.Body className="CustomCardBody text-white">
 										<LineChartForHistArbJs data={this.state.ArbitrageCumSum}/>
+								  	</Card.Body>
+								</Card>
+							</Col>
+
+							<Col xs={12} md={12}>
+								<Card className="CustomCard">
+									<Card.Header className="CustomCardHeader text-white">
+										Signal Status
+									</Card.Header>
+								  	<Card.Body className="CustomCardBody text-white">
+										{this.state.SignalCategorization}
 								  	</Card.Body>
 								</Card>
 							</Col>
@@ -156,6 +166,7 @@ class HistoricalArbitrage extends React.Component{
 			 	scatterPlotData: <ScatterPlot data={JSON.parse(res.data.scatterPlotData)}/>,
 			 	etfmoversDictCount: JSON.parse(res.data.etfmoversDictCount),
 			 	highestChangeDictCount: JSON.parse(res.data.highestChangeDictCount),
+			 	SignalCategorization: <AppTable data={JSON.parse(res.data.SignalCategorization)}/>,
 			 	ArbitrageCumSum : res.data.ArbitrageCumSum
 			});
 			console.log(this.state.etfPriceData);
