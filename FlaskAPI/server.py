@@ -230,11 +230,10 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
 @app.route('/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
     PerMinObj = PerMinDataOperations()
-    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage)
+    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, SingleUpdate=False)
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
     res['pnlstatementforday'] = json.dumps(AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname))
-    print(res['Arbitrage'])
-    res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage',PriceColumn='VWPrice',Pct_change=True))
+    res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $',PriceColumn='VWPrice',Pct_change=True))
     res['scatterPlotData'] = json.dumps(res['Arbitrage'][['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records'))
     res['Arbitrage'] = res['Arbitrage'].to_json()
     return json.dumps(res)
@@ -243,12 +242,10 @@ def SendLiveArbitrageDataSingleTicker(etfname):
 @app.route('/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     PerMinObj = PerMinDataOperations()
-    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage)
-    
-    print(res['Arbitrage'])
+    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage, SingleUpdate=True)
     res['Prices']=res['Prices'].to_dict()
     res['Arbitrage']=res['Arbitrage'].to_dict()
-    res['SignalInfo']=analyzeSignalPerformane(res['Arbitrage']['Arbitrage'][0])
+    res['SignalInfo']=analyzeSignalPerformane(res['Arbitrage']['Arbitrage in $'][0])
     return res
 
 

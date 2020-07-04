@@ -16,6 +16,7 @@ import CombinedPieCharts from "./CombinedPieCharts";
 import EtfArbitrageTable from "./EtfArbitrageTable";
 import HisArbLineChart from "./HisArbLineChart";
 import ChartComponent from "../../Component/StockPriceChart";
+import AppTable from "../../Component/Table";
 import ScatterPlot from "./ScatterPlot";
 
 class HistoricalArbitrage extends React.Component {
@@ -56,6 +57,7 @@ class HistoricalArbitrage extends React.Component {
           scatterPlotData: JSON.parse(data.scatterPlotData),
           etfmoversDictCount: JSON.parse(data.etfmoversDictCount),
           highestChangeDictCount: JSON.parse(data.highestChangeDictCount),
+          SignalCategorization: <AppTable data={JSON.parse(data.SignalCategorization)}/>,
           ArbitrageCumSum: data.ArbitrageCumSum,
         })
       )
@@ -133,6 +135,18 @@ class HistoricalArbitrage extends React.Component {
                       </Card.Body>
                     </Card>
                   </Col>
+
+                  <Col xs={12} md={12}>
+                    <Card className="CustomCard">
+                      <Card.Header className="CustomCardHeader text-white">
+                        Signal Status
+                      </Card.Header>
+                        <Card.Body className="CustomCardBody text-white">
+                        {this.state.SignalCategorization}
+                        </Card.Body>
+                    </Card>
+                  </Col>
+
                 </Row>
               </Col>
 

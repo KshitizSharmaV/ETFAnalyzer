@@ -10,25 +10,46 @@ from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import calculateArbitrage
 daylightSavingAdjutment = 4 if date(2020,3,8)< datetime.now().date()< date(2020,11,1) else 5
 
 # Fetch Arbitrage & Price Data
-def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None):
+def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None, SingleUpdate=None):
     try:
         # Full day historical Prie for ETF
         PriceDF = FuncETFPrices(etfname)
 
         # Full day historical Arbitrage for ETF
-        ArbitrageDF = FuncArbitrageData(etfname=etfname)
-        mergedDF = ArbitrageDF.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        mergedDF =mergedDF[['Symbol','Timestamp','Arbitrage','Spread','VWPrice','TickVolume','Net Asset Value Change%','ETF Change Price %']]
-        mergedDF=mergedDF.round(5)
+        ArbitrageDFSemi = FuncArbitrageData(etfname=etfname)
+        
+        print("*******((((((((((((((((((((((((((((((((((((((*")
+        print("Line 22 and Line 23")
+        print(PriceDF)
+        print(ArbitrageDFSemi)
+
+        ArbitrageDf = ArbitrageDFSemi.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
+        ArbitrageDf =ArbitrageDf[['Symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','VWPrice','TickVolume','Net Asset Value Change%','ETF Change Price %']]
+        ArbitrageDf=ArbitrageDf.round(5)
         
         helperObj=Helper()
         PriceDF['date'] = PriceDF['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment))
-        mergedDF['Timestamp'] = mergedDF['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment)).time()))
+        ArbitrageDf['Timestamp'] = ArbitrageDf['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment)).time()))
         
-        #res=jsonify(Full_Day_Prices=PriceDF[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=mergedDF.to_dict())
+        ArbitrageDf.rename(columns={'Timestamp':'Time'}, inplace=True)
+
+        if not SingleUpdate:
+            arbitrageBuySellSignals, pnlstatementforday, scatterPlotData=calculateArbitrageResults(df=ArbitrageDf, 
+            etfname=etfname, 
+            magnitudeOfArbitrageToFilterOn=0,
+            BuildMomentumSignals=False, 
+            BuildPatternSignals=False,
+            includeMovers=False,
+            getScatterPlot=False)
+            print("*******((((((((((((((((((((((((((((((((((((((*")
+            print(arbitrageBuySellSignals)
+
+        print(ArbitrageDf)
+            
+        #res=jsonify(Full_Day_Prices=PriceDF[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=ArbitrageDf.to_dict())
         res={}
         res['Prices']=PriceDF[::-1]
-        res['Arbitrage']=mergedDF
+        res['Arbitrage']=ArbitrageDf
         return res
 
     except Exception as e:
@@ -73,9 +94,7 @@ def analyzeSignalPerformane(Arbitrage=None):
 
 def AnalyzeDaysPerformance(ArbitrageDf=None,etfname=None):
     ArbitrageDf=ArbitrageDf[::-1]
-    ArbitrageDf.rename(columns={'Timestamp':'Time',
-        'Spread':'ETF Trading Spread in $',
-        'Arbitrage':'Arbitrage in $'}, inplace=True)
+    ArbitrageDf.rename(columns={'Timestamp':'Time'}, inplace=True)
     ArbitrageDf['ETF Change Price %']=ArbitrageDf['VWPrice'].pct_change()*100
     
     ArbitrageDf=ArbitrageDf.dropna()

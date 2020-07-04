@@ -81,18 +81,18 @@ class Live_Arbitrage extends React.Component{
                 console.log("Append To Previous table");
             }else{
                 this.setState({
-                    LiveArbitrage: res.data.Arbitrage.Arbitrage[0],
-                    LiveSpread: res.data.Arbitrage.Spread[0],
-                    CurrentTime: res.data.Arbitrage.Timestamp[0],
-                    LiveVWPrice: res.data.Prices.VWPrice[0],
-                    OpenPrice: res.data.Prices.open[0],
-                    ClosePrice: res.data.Prices.close[0],
-                    HighPrice: res.data.Prices.high[0],
-                    LowPrice: res.data.Prices.low[0],
+                    LiveArbitrage: res.data.Arbitrage['Arbitrage in $'][0],
+                    LiveSpread: res.data.Arbitrage['ETF Trading Spread in $'][0],
+                    CurrentTime: res.data.Arbitrage['Time'][0],
+                    LiveVWPrice: res.data.Prices['VWPrice'][0],
+                    OpenPrice: res.data.Prices['open'][0],
+                    ClosePrice: res.data.Prices['close'][0],
+                    HighPrice: res.data.Prices['high'][0],
+                    LowPrice: res.data.Prices['low'][0],
                     ETFStatus: res.data.SignalInfo.ETFStatus,
                     Signal: res.data.SignalInfo.Signal,
                     SignalStrength: res.data.SignalInfo.Strength,
-                    LiveColor: res.data.Arbitrage.Arbitrage[0]<0 ? 'text-success':res.data.Arbitrage.Arbitrage[0]==0? 'text-muted':'text-danger'
+                    LiveColor: res.data.Arbitrage['Arbitrage in $'][0]<0 ? 'text-success':res.data.Arbitrage['Arbitrage in $'][0]==0? 'text-muted':'text-danger'
                 });
             }
         });    
@@ -117,37 +117,53 @@ class Live_Arbitrage extends React.Component{
                 </Col>
 
                 <Col xs={12} md={3}>
-                    <div className="">
-                        <Card>
-                            <Card.Header className="text-white" style={{'backgroundColor':'#292b2c'}}>
-                                <span className="h4 pull-left pr-2">{this.props.ETF}</span>
-                                H: <span className="text-muted">{this.state.HighPrice} </span>
-                                O: <span className="text-muted">{this.state.OpenPrice} </span>
-                                C: <span className="text-muted">{this.state.ClosePrice} </span>
-                                L: <span className="text-muted">{this.state.LowPrice} </span>
-
-                                <div>Time: <span className="text-muted">{this.state.CurrentTime}</span></div>
-                            </Card.Header>
+                    <Row>
                         
-                              <Card.Body className="text-white"style={{'backgroundColor':'#292b2c'}}>
-                                <div><h5><span className={this.state.LiveColor}>ETF Status: {this.state.ETFStatus}</span></h5></div>
-                                <div><h5><span className={this.state.LiveColor}>Signal: {this.state.Signal}</span></h5></div>
-                                <div><span className={this.state.LiveColor}>Strength: {this.state.SignalStrength}</span></div>
+                        <Col xs={12} md={12}>
+                            <Card className="CustomCard">
+                                <Card.Header className="CustomCardHeader text-white">
+                                    <span className="h4 pull-left pr-2">{this.props.ETF}</span>
+                                    H: <span className="text-muted">{this.state.HighPrice} </span>
+                                    O: <span className="text-muted">{this.state.OpenPrice} </span>
+                                    C: <span className="text-muted">{this.state.ClosePrice} </span>
+                                    L: <span className="text-muted">{this.state.LowPrice} </span>
 
-                                <div><span className="">$ Arbitrage: {this.state.LiveArbitrage}</span></div>
-                                <div><span className="">$ Spread: {this.state.LiveSpread}</span></div>    
-                              </Card.Body>
-                        </Card>
-                    </div>
+                                    <div>Time: <span className="text-muted">{this.state.CurrentTime}</span></div>
+                                </Card.Header>
+                            
+                                  <Card.Body className="CustomCardBody text-white">
+                                    <div><h5><span className={this.state.LiveColor}>ETF Status: {this.state.ETFStatus}</span></h5></div>
+                                    <div><h5><span className={this.state.LiveColor}>Signal: {this.state.Signal}</span></h5></div>
+                                    <div><span className={this.state.LiveColor}>Strength: {this.state.SignalStrength}</span></div>
 
-                    <div className="pt-3">
-                        {this.state.pnlstatementforday}
-                    </div>
+                                    <div><span className="">$ Arbitrage: {this.state.LiveArbitrage}</span></div>
+                                    <div><span className="">$ Spread: {this.state.LiveSpread}</span></div>    
+                                  </Card.Body>
+                            </Card>
+                        </Col>
 
-                    <div className="pt-3">
-                        {this.state.SignalCategorization}
-                    </div>
+                        <Col xs={12} md={12}>
+                            <Card className="CustomCard">
+                                <Card.Header className="CustomCardHeader text-white">
+                                    Signal Performace
+                                </Card.Header>
+                                    <Card.Body className="CustomCardBody text-white">
+                                    {this.state.SignalCategorization}
+                                  </Card.Body>
+                            </Card>
+                        </Col>
 
+                        <Col xs={12} md={12}>
+                            <Card className="CustomCard">
+                                <Card.Header className="CustomCardHeader text-white">
+                                    Signal Stats
+                                </Card.Header>
+                                    <Card.Body className="CustomCardBody text-white">
+                                    {this.state.pnlstatementforday}
+                                  </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
                 </Col>
 
                 <Col xs={12} md={5}>
@@ -156,8 +172,15 @@ class Live_Arbitrage extends React.Component{
                     </div>
                     
                     <Row>
-                        <Col xs={12} md={6}>
-                            {this.state.scatterPlotData}                            
+                        <Col xs={12} md={7}>
+                            <Card className="CustomCard">
+                                <Card.Header className="CustomCardHeader text-white">
+                                    ETF Change % Vs NAV change %
+                                </Card.Header>
+                                <Card.Body className="CustomCardBody text-white">
+                                    {this.state.scatterPlotData}                            
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
 
@@ -189,7 +212,7 @@ const TableStyling = {
   };
 
 const LiveTable = (props) => {
-    if(props.data.Arbitrage==undefined){
+    if(props.data['Arbitrage in $']==undefined){
         console.log(props.data);
         return "Loading";
     }
@@ -203,10 +226,10 @@ const LiveTable = (props) => {
         return Symbols.map((key, index) => {
             // console.log(key);
             let cls = "";
-            if (props.data.Arbitrage[key] < 0){
+            if (props.data['Arbitrage in $'][key] < 0){
                 cls = "Red";
             }
-            else if(props.data.Arbitrage[key] > 0){
+            else if(props.data['Arbitrage in $'][key] > 0){
                 cls = "Green";
             }
             else {
@@ -214,11 +237,11 @@ const LiveTable = (props) => {
             }
             return (
                 <tr key={index}>
-                    <td className={cls}>{props.data.Timestamp[key]}</td>
-                    <td className={cls}>{props.data.Arbitrage[key]}</td>
-                    <td>{props.data.Spread[key]}</td>
-                    <td>{props.data.VWPrice[key]}</td>
-                    <td>{props.data.TickVolume[key]}</td>
+                    <td className={cls}>{props.data['Time'][key]}</td>
+                    <td className={cls}>{props.data['Arbitrage in $'][key]}</td>
+                    <td>{props.data['ETF Trading Spread in $'][key]}</td>
+                    <td>{props.data['VWPrice'][key]}</td>
+                    <td>{props.data['TickVolume'][key]}</td>
                 </tr>
             )
         })
@@ -230,8 +253,8 @@ const LiveTable = (props) => {
           <thead className="TableHead">
             <tr>
                 <td>Time</td>
-                <td>Arbitrage</td>
-                <td>Spread</td>
+                <td>$Arbitrage</td>
+                <td>$Spread</td>
                 <td>Price</td>
                 <td>TickVolume</td>
             </tr>

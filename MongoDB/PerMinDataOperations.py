@@ -106,8 +106,8 @@ class PerMinDataOperations():
         data = []
         [data.append({'Timestamp': item['Timestamp'], 
                     'Symbol': item['ArbitrageData'][0]['symbol'],
-                    'Arbitrage': item['ArbitrageData'][0]['Arbitrage in $'], 
-                    'Spread': item['ArbitrageData'][0]['ETF Trading Spread in $'],
+                    'Arbitrage in $': item['ArbitrageData'][0]['Arbitrage in $'], 
+                    'ETF Trading Spread in $': item['ArbitrageData'][0]['ETF Trading Spread in $'],
                     'ETF Change Price %': item['ArbitrageData'][0]['ETF Change Price %'],
                     'Net Asset Value Change%': item['ArbitrageData'][0]['Net Asset Value Change%']})
                     for item in full_day_data_cursor]
@@ -189,8 +189,8 @@ class PerMinDataOperations():
             
             [data.append({'Timestamp': item['Timestamp'], 
                 'Symbol': item['ArbitrageData'][0]['symbol'],
-                'Arbitrage': item['ArbitrageData'][0]['Arbitrage in $'], 
-                'Spread': item['ArbitrageData'][0]['ETF Trading Spread in $'],
+                'Arbitrage in $': item['ArbitrageData'][0]['Arbitrage in $'], 
+                'ETF Trading Spread in $': item['ArbitrageData'][0]['ETF Trading Spread in $'],
                 'ETF Change Price %': item['ArbitrageData'][0]['ETF Change Price %'],
                 'Net Asset Value Change%': item['ArbitrageData'][0]['Net Asset Value Change%']
                 })
