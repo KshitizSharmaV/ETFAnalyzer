@@ -16,12 +16,13 @@ def HolidayCheck(dateToCheck):
 	if dateToCheck in Federalholidays:
 		return True
 	else:
-		weekno = datetime.datetime.today().weekday()
-		print(weekno)
+		weekno = dateToCheck.weekday()
 		return True if weekno>=5 else False
 	
 def LastWorkingDay(dateToCheck):
-	return dateToCheck - BDay(1)
+    while HolidayCheck(dateToCheck):
+        dateToCheck = dateToCheck - datetime.timedelta(days=1)
+    return datetime.datetime.combine(dateToCheck, datetime.datetime.min.time())
 
 def isTimeBetween(begin_time=None, end_time=None, check_time=None):
 	# If check time is not given, default to current UTC time

@@ -12,8 +12,8 @@ class PerMinDataOperations():
         ''' Day End Times in UTC'''
         self.DAYendTime = datetime.time(3,59) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(4,59)
         # self.DAYendTime = datetime.time(23,59)
-        self.DAYendTimeZeroZeo = datetime.time(4,00) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(5,00)
-        # self.DAYendTimeZeroZeo = datetime.time(0,0)
+        #self.DAYendTimeZeroZeo = datetime.time(4,00) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(5,00)
+        self.DAYendTimeZeroZeo = datetime.time(0,0)
 
         # Day Light Savings
         # Summer UTC 13 to 20
@@ -112,7 +112,6 @@ class PerMinDataOperations():
                     'Net Asset Value Change%': item['ArbitrageData'][0]['Net Asset Value Change%']})
                     for item in full_day_data_cursor]
         full_day_data_df = pd.DataFrame.from_records(data)
-        print(full_day_data_df)
         return full_day_data_df
 
 
@@ -133,7 +132,6 @@ class PerMinDataOperations():
         livePrices = pd.DataFrame.from_records(temp)
         livePrices.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
         livePrices.drop(columns=['Symbol'], inplace=True)
-        print(livePrices)
         return livePrices
 
     #################################
@@ -164,9 +162,6 @@ class PerMinDataOperations():
         # After Market
         #elif (currentTime >= self.UTCEndTime) and (currentTime < self.DAYendTime) and (not ifaholiday): - KTZ removed this
         elif (currentTime >= self.UTCEndTime) and (not ifaholiday):
-            print("***********************************************************")
-            print("Inside After Market")
-            print("***********************************************************")
             dt = now.replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
             # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
             dt = dt.replace(tzinfo = tz.gettz('UTC'))
