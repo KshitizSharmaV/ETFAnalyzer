@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import HoldingsPieChart from "./HoldingsPieChart";
+import { CommonPieChart } from "../../../Common_Components/PieChart";
 
 const PieChartModal = ({ data, element }) => {
   const [show, setShow] = useState(false);
@@ -23,7 +23,7 @@ const PieChartModal = ({ data, element }) => {
             <Modal.Title>ETF Holdings</Modal.Title>
           </Modal.Header>
           <Modal.Body className="margin-auto">
-            <HoldingsPieChart data={data} />
+            <CommonPieChart data={data} element="TickerWeight" />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>

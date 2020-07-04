@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container'
 
 import Former from './Component/Form.js';
 import Description from './Component/ETF-Description';
-import HistoricalArbitrage from './Component/Historical-Arbitrage';
+import Historical_Arbitrage from './Component/Historical-Arbitrage';
 import Live_Arbitrage from './Component/Live-Arbitrage';
 import Live_Arbitrage_Single from './Component/Live-Arbitrage-Single';
 import ML from './Component/Machine-Learning';
@@ -25,6 +25,7 @@ import {
 // StylesSheets
 import './static/css/style.css';
 import { ETF_Description } from './Pages/ETF_Description';
+import { HistoricalArbitrage } from './Pages/Historical_Arbitrage/index.js';
 
 const history = createBrowserHistory();
 
@@ -101,9 +102,10 @@ class App extends Component {
         {/* <Route path="/Live-Arbitrage" render={() => <Live_Arbitrage ETF={this.state.ETF} />} /> */}
         
         <PrivateRoute path="/ETF-Description" startDate={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitNewETF} component={ETF_Description}/>
-        <PrivateRoute path="/HistoricalArbitrage" component={HistoricalArbitrage} startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />
+        <PrivateRoute path="/HistoricalArbitrage" component={Historical_Arbitrage} startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />
         <PrivateRoute path="/Live-Arbitrage-Single" component={Live_Arbitrage_Single} ETF={this.state.ETF} />
         <PrivateRoute path="/Live-Arbitrage" component={Live_Arbitrage} ETF={this.state.ETF} />
+        <PrivateRoute path="/newhistoricalarbitrage" startDate ={this.state.startDate} ETF={this.state.ETF} component={HistoricalArbitrage} ETF={this.state.ETF} />
 
         <Route path="/SignUp" render={() => <SignUpFormPage />} />
         <Route path="/Login" component={SignInFormPage} />

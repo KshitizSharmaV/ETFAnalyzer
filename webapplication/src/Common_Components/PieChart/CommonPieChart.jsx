@@ -64,15 +64,15 @@ const renderActiveShape = (props) => {
   );
 };
 
-const convertData = (data = {}) => {
+const convertData = (data = {}, element = "") => {
   const convertedData = [];
   Object.entries(data).forEach(([key, value]) =>
-    convertedData.push({ name: key, value: value.TickerWeight })
+    convertedData.push({ name: key, value: value[element] })
   );
   return convertedData;
 };
 
-class HoldingsPieChart extends PureComponent {
+class CommonPieChart extends PureComponent {
   state = {
     data: [],
     chartname: "",
@@ -81,17 +81,17 @@ class HoldingsPieChart extends PureComponent {
   };
 
   componentDidUpdate(prevProps) {
-    const { data } = this.props;
+    const { data, element } = this.props;
 
     if (data !== prevProps.data && typeof data === "object") {
-      const tempData = convertData(data);
+      const tempData = convertData(data, element);
       this.setState({ ...this.state, data: tempData });
     }
   }
 
   componentDidMount() {
     if (typeof this.props.data === "object") {
-      const tempData = convertData(this.props.data);
+      const tempData = convertData(this.props.data, this.props.element);
       this.setState({ ...this.state, data: tempData });
     }
   }
@@ -103,7 +103,6 @@ class HoldingsPieChart extends PureComponent {
   };
 
   render() {
-  
     return (
       <PieChart width={350} height={300}>
         <Pie
@@ -130,4 +129,4 @@ class HoldingsPieChart extends PureComponent {
   }
 }
 
-export default HoldingsPieChart;
+export default CommonPieChart;

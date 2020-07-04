@@ -237,7 +237,7 @@ const TableStyling = {
   };
 
 const EtfArbitrageTable_Func = (props) =>{
-	console.log(props);
+	
 	if(props.data == {} || props.data == undefined){
         return "Loading";
     }

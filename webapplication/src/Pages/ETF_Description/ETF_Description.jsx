@@ -26,6 +26,7 @@ class ETF_Description extends React.Component {
 
   componentDidMount() {
     const { startDate, ETF } = this.props;
+    console.log(this.props)
     Axios.get(
       `/ETfDescription/EtfData/${ETF}/${startDate}`
     )

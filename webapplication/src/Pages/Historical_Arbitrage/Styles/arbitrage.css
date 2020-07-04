@@ -1,0 +1,8 @@
+.arbitrage-container {
+  margin: 0;
+  padding: 1em;
+  
+  height: calc(100vh - 56px);
+  display: grid;
+  
+}
