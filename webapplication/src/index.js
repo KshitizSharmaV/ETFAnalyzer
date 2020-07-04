@@ -25,7 +25,7 @@ import {
 // StylesSheets
 import './static/css/style.css';
 import { ETF_Description } from './Pages/ETF_Description';
-import { HistoricalArbitrage } from './Pages/Historical_Arbitrage/index.js';
+import { HistoricalArbitragee } from './Pages/Historical_Arbitrage/index.js';
 
 const history = createBrowserHistory();
 
@@ -105,7 +105,7 @@ class App extends Component {
         <PrivateRoute path="/HistoricalArbitrage" component={Historical_Arbitrage} startDate ={this.state.startDate} ETF={this.state.ETF} submitFn={this.SubmitFn} />
         <PrivateRoute path="/Live-Arbitrage-Single" component={Live_Arbitrage_Single} ETF={this.state.ETF} />
         <PrivateRoute path="/Live-Arbitrage" component={Live_Arbitrage} ETF={this.state.ETF} />
-        <PrivateRoute path="/newhistoricalarbitrage" startDate ={this.state.startDate} ETF={this.state.ETF} component={HistoricalArbitrage} ETF={this.state.ETF} />
+        <PrivateRoute path="/newhistoricalarbitrage" startDate ={this.state.startDate} ETF={this.state.ETF} component={HistoricalArbitragee} ETF={this.state.ETF} />
 
         <Route path="/SignUp" render={() => <SignUpFormPage />} />
         <Route path="/Login" component={SignInFormPage} />

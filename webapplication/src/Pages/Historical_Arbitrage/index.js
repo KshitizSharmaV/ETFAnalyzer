@@ -1,1 +1,1 @@
-export { default as HistoricalArbitrage } from "./HistoricalArbitrageMain";
+export { default as HistoricalArbitragee } from "./HistoricalArbitrageMain";
