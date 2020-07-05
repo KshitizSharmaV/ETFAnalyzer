@@ -72,12 +72,6 @@ def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilte
     allSignalsProcessingTemp.drop(allSignalsProcessingTemp.tail(1).index,inplace=True)
     allSignalsProcessing = allSignalsProcessing.append(allSignalsProcessingTemp)
 
-    print(allSignalsProcessing.columns)
-    print(allSignalsProcessing)
-    print(allSignalsProcessing['Over Bought/Sold'])
-
-    
-
     sellPositions = allSignalsProcessing.loc[allSignalsProcessing['Over Bought/Sold']== 'Over Bought']
     PNLSellPositionsT_1 =round((sellPositions['T+1'].sum()),2) if sellPositions.shape[0]!=0 else 0
     

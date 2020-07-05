@@ -207,9 +207,8 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 def SendLiveArbitrageDataAllTickers():
     try:
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
-        live_data.rename(columns={'symbol': 'Symbol'},inplace=True)
         live_prices = PerMinDataOperations().LiveFetchETFPrice()
-        ndf = live_data.merge(live_prices, how='left', on='Symbol')
+        ndf = live_data.merge(live_prices, how='left', on='symbol')
         ndf.dropna(inplace=True)
         ndf=ndf.round(4)
         return ndf.to_dict()

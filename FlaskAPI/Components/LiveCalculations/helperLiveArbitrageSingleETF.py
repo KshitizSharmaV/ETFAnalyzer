@@ -20,7 +20,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         ArbitrageDFSemi = FuncArbitrageData(etfname=etfname)
         
         ArbitrageDf = ArbitrageDFSemi.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        ArbitrageDf =ArbitrageDf[['Symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %']]
+        ArbitrageDf =ArbitrageDf[['symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %']]
         ArbitrageDf=ArbitrageDf.round(5)
         
         helperObj=Helper()
@@ -41,10 +41,6 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
             BuildPatternSignals=False,
             includeMovers=False,
             getScatterPlot=False)
-            
-            print("****************Check Lengths")
-            print(ArbitrageDf)
-            print(arbitrageBuySellSignals)
             
             cols_to_use = ArbitrageDf.columns.difference(arbitrageBuySellSignals.columns)
             arbitrageBuySellSignals['Time']=arbitrageBuySellSignals.index

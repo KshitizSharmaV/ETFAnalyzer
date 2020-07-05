@@ -104,14 +104,12 @@ class PerMinDataOperations():
             {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
     
         data = []
-        [data.append({'Timestamp': item['Timestamp'], 
-                    'Symbol': item['ArbitrageData'][0]['symbol'],
-                    'Arbitrage in $': item['ArbitrageData'][0]['Arbitrage in $'], 
-                    'ETF Trading Spread in $': item['ArbitrageData'][0]['ETF Trading Spread in $'],
-                    'ETF Change Price %': item['ArbitrageData'][0]['ETF Change Price %'],
-                    'Net Asset Value Change%': item['ArbitrageData'][0]['Net Asset Value Change%']})
-                    for item in full_day_data_cursor]
+        getTimeStamps=[]
+        for item in full_day_data_cursor:
+            getTimeStamps.append(item['Timestamp'])
+            data.extend(item['ArbitrageData']) 
         full_day_data_df = pd.DataFrame.from_records(data)
+        full_day_data_df['Timestamp'] = getTimeStamps
         return full_day_data_df
 
 
@@ -130,8 +128,8 @@ class PerMinDataOperations():
         temp = []
         [temp.append(item) for item in full_day_prices_etf_cursor]
         livePrices = pd.DataFrame.from_records(temp)
-        livePrices.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
-        livePrices.drop(columns=['Symbol'], inplace=True)
+        livePrices.rename(columns={'sym': 'symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
+        livePrices.drop(columns=['symbol'], inplace=True)
         return livePrices
 
     #################################
@@ -187,24 +185,22 @@ class PerMinDataOperations():
                 {"Timestamp": dt_ts, "ArbitrageData.symbol": etfname},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
             
-            [data.append({'Timestamp': item['Timestamp'], 
-                'Symbol': item['ArbitrageData'][0]['symbol'],
-                'Arbitrage in $': item['ArbitrageData'][0]['Arbitrage in $'], 
-                'ETF Trading Spread in $': item['ArbitrageData'][0]['ETF Trading Spread in $'],
-                'ETF Change Price %': item['ArbitrageData'][0]['ETF Change Price %'],
-                'Net Asset Value Change%': item['ArbitrageData'][0]['Net Asset Value Change%']
-                })
-                for item in live_per_min_cursor]
+            data = []
+            getTimeStamps=[]
+            for item in live_per_min_cursor:
+                getTimeStamps.append(item['Timestamp'])
+                data.extend(item['ArbitrageData']) 
+            liveArbitrageData_onemin = pd.DataFrame.from_records(data)
+            liveArbitrageData_onemin['Timestamp'] = getTimeStamps
+        
         else:
             # Data For Multiple Ticker for live minute
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData": 1})
             [data.extend(item['ArbitrageData']) for item in live_per_min_cursor]
-             
-        liveArbitrageData_onemin = pd.DataFrame.from_records(data)
-        print("liveArbitrageData_onemin")
-        print(liveArbitrageData_onemin)
+            liveArbitrageData_onemin = pd.DataFrame.from_records(data)
+        
         return liveArbitrageData_onemin
 
     # LIVE 1 Min prices for 1 or all etf
@@ -219,11 +215,9 @@ class PerMinDataOperations():
         temp = []
         [temp.append(item) for item in etf_live_prices_cursor]
         livePrices = pd.DataFrame.from_records(temp)
-        livePrices.rename(columns={'sym': 'Symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
+        livePrices.rename(columns={'sym': 'symbol', 'vw': 'VWPrice','o':'open','c':'close','h':'high','l':'low','v':'TickVolume', 'e': 'date'}, inplace=True)
         if etfname:
-            livePrices.drop(columns=['Symbol'], inplace=True)
-        print("LiveFetchETFPrice")
-        print(livePrices)
+            livePrices.drop(columns=['symbol'], inplace=True)
         return livePrices
 
     
