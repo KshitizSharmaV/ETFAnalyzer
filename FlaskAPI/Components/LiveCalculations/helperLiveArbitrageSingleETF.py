@@ -29,10 +29,6 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         
         ArbitrageDf.rename(columns={'Timestamp':'Time'}, inplace=True)
 
-        print("ArbitrageDf*******")
-        print(ArbitrageDf)
-        print(PriceDF)
-
         res={}
         res['Prices']=PriceDF[::-1]
         
@@ -46,12 +42,26 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
             includeMovers=False,
             getScatterPlot=False)
             
-            arbitrageBuySellSignals['Price'] = np.round(PriceDF[::-1]['Price'].values,2)
-            arbitrageBuySellSignals['Net Asset Value Change%'] = ArbitrageDf[::-1]['Net Asset Value Change%'].values
-            arbitrageBuySellSignals.rename(columns={'T':'ETF Change Price %'}, inplace=True)
-            arbitrageBuySellSignals['ETF Change Price %']=np.round(arbitrageBuySellSignals['ETF Change Price %'],2)
+            print("****************Check Lengths")
+            print(ArbitrageDf)
+            print(arbitrageBuySellSignals)
+            
+            cols_to_use = ArbitrageDf.columns.difference(arbitrageBuySellSignals.columns)
             arbitrageBuySellSignals['Time']=arbitrageBuySellSignals.index
-            arbitrageBuySellSignals['TickVolume']= PriceDF[::-1]['TickVolume'].values
+            arbitrageBuySellSignals = arbitrageBuySellSignals.merge(ArbitrageDf[cols_to_use], left_on='Time',right_on='Time', how='left')
+            
+            del arbitrageBuySellSignals['ETF Change Price %']
+            arbitrageBuySellSignals.rename(columns={'T':'ETF Change Price %'}, inplace=True)
+            
+            
+            ##arbitrageBuySellSignals['ETF Change Price %']=np.round(arbitrageBuySellSignals['ETF Change Price %'],2)
+            #arbitrageBuySellSignals['Price'] = np.round(arbitrageBuySellSignals['Price'],2)
+            
+            arbitrageBuySellSignals.Price=arbitrageBuySellSignals.Price.round(2)
+            arbitrageBuySellSignals['ETF Change Price %']=arbitrageBuySellSignals['ETF Change Price %'].round(2)
+
+            arbitrageBuySellSignals=arbitrageBuySellSignals
+            
             res['Arbitrage'] = arbitrageBuySellSignals
             res['pnlstatementforday'] = pnlstatementforday
         else:

@@ -110,7 +110,7 @@ etmoverslist = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMove
 
 @app.route('/PastArbitrageData/<ETFName>/<date>')
 def FetchPastArbitrageData(ETFName, date):
-    ColumnsForDisplay = ['Time','$Spread', '$Arbitrage', 'Absolute Arbitrage',
+    ColumnsForDisplay = ['Time','$Spread', 'Arbitrage in $', 'Absolute Arbitrage',
                          'Over Bought/Sold',
                          'Etf Mover',
                          'Most Change%',
@@ -154,7 +154,6 @@ def FetchPastArbitrageData(ETFName, date):
     
     # Replace Values in Pandas DataFrame
     data.rename(columns={'ETF Trading Spread in $': '$Spread',
-                         'Arbitrage in $': '$Arbitrage',
                          'Magnitude of Arbitrage': 'Absolute Arbitrage',
                          'ETFMover%1_ticker': 'Etf Mover',
                          'Change%1_ticker': 'Most Change%'}, inplace=True)
@@ -168,12 +167,12 @@ def FetchPastArbitrageData(ETFName, date):
     print("Price Df")
     print(data)
 
-    allData['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='$Arbitrage',PriceColumn='T',Pct_change=False))
+    allData['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $',PriceColumn='T',Pct_change=False))
 
     data=data.reset_index(drop=True)
     
     allData['etfhistoricaldata'] = data.to_json()
-    allData['ArbitrageCumSum']=data[['$Arbitrage','Time']].to_dict('records')
+    allData['ArbitrageCumSum']=data[['Arbitrage in $','Time']].to_dict('records')
     allData['etfPrices'] = pricedf.to_csv(sep='\t', index=False)
     print("PNLStatementForTheDay")
     print(PNLStatementForTheDay)
@@ -236,6 +235,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $',PriceColumn='Price',Pct_change=True))
     print(res['Arbitrage'])
     res['scatterPlotData'] = json.dumps(res['Arbitrage'][['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records'))
+    res['ArbitrageLineChart']=res['Arbitrage'][['Arbitrage in $','Time']].to_dict('records')
     res['Arbitrage'] = res['Arbitrage'].to_json()
     return json.dumps(res)
 
