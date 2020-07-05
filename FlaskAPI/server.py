@@ -230,10 +230,11 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
 @app.route('/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
     PerMinObj = PerMinDataOperations()
-    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, SingleUpdate=False)
+    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF, FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, callAllDayArbitrage=True)
     res['Prices']=res['Prices'].to_csv(sep='\t', index=False)
-    res['pnlstatementforday'] = json.dumps(AnalyzeDaysPerformance(ArbitrageDf=res['Arbitrage'],etfname=etfname))
-    res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $',PriceColumn='VWPrice',Pct_change=True))
+    res['pnlstatementforday'] = json.dumps(res['pnlstatementforday'])
+    res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $',PriceColumn='Price',Pct_change=True))
+    print(res['Arbitrage'])
     res['scatterPlotData'] = json.dumps(res['Arbitrage'][['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records'))
     res['Arbitrage'] = res['Arbitrage'].to_json()
     return json.dumps(res)
@@ -242,7 +243,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
 @app.route('/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     PerMinObj = PerMinDataOperations()
-    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage, SingleUpdate=True)
+    res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice, FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage, callAllDayArbitrage=False)
     res['Prices']=res['Prices'].to_dict()
     res['Arbitrage']=res['Arbitrage'].to_dict()
     res['SignalInfo']=analyzeSignalPerformane(res['Arbitrage']['Arbitrage in $'][0])

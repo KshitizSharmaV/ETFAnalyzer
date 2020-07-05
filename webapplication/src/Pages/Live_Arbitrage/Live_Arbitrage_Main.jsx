@@ -216,9 +216,9 @@ const LiveTable = (props) => {
     }
 
     const getRowsData = () => {
-        var Symbols = getKeys(props.data.Symbol)
+        var Time = getKeys(props.data.Time)
 
-        return Symbols.map((key, index) => {
+        return Time.map((key, index) => {
             // console.log(key);
             let cls = "";
             if (props.data['Arbitrage in $'][key] < 0){
@@ -235,7 +235,10 @@ const LiveTable = (props) => {
                     <td className={cls}>{props.data['Time'][key]}</td>
                     <td className={cls}>{props.data['Arbitrage in $'][key]}</td>
                     <td>{props.data['ETF Trading Spread in $'][key]}</td>
-                    <td>{props.data['VWPrice'][key]}</td>
+                    <td>{props.data['Magnitude of Arbitrage'][key]}</td>
+                    <td>{props.data['Over Bought/Sold'][key]}</td>
+                    <td>{props.data['Price'][key]}</td>
+                    <td>{props.data['ETF Change Price %'][key]}</td>
                     <td>{props.data['TickVolume'][key]}</td>
                 </tr>
             )
@@ -250,7 +253,10 @@ const LiveTable = (props) => {
                 <td>Time</td>
                 <td>$Arbitrage</td>
                 <td>$Spread</td>
+                <td>Absolute Arbitrage</td>
+                <td>Over Bought/Sold</td>
                 <td>Price</td>
+                <td>T</td>
                 <td>TickVolume</td>
             </tr>
           </thead>

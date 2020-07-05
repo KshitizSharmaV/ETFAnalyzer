@@ -4,27 +4,23 @@ from PolygonTickData.Helper import Helper
 from datetime import datetime, timedelta, date
 import numpy as np
 import sys
+import numpy as np
 
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import calculateArbitrageResults
 
 daylightSavingAdjutment = 4 if date(2020,3,8)< datetime.now().date()< date(2020,11,1) else 5
 
 # Fetch Arbitrage & Price Data
-def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None, SingleUpdate=None):
+def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None, callAllDayArbitrage=None):
     try:
         # Full day historical Prie for ETF
         PriceDF = FuncETFPrices(etfname)
-
+        PriceDF['Price'] = (PriceDF['high']+PriceDF['low'])/2
         # Full day historical Arbitrage for ETF
         ArbitrageDFSemi = FuncArbitrageData(etfname=etfname)
         
-        print("*******((((((((((((((((((((((((((((((((((((((*")
-        print("Line 22 and Line 23")
-        print(PriceDF)
-        print(ArbitrageDFSemi)
-
         ArbitrageDf = ArbitrageDFSemi.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        ArbitrageDf =ArbitrageDf[['Symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','VWPrice','TickVolume','Net Asset Value Change%','ETF Change Price %']]
+        ArbitrageDf =ArbitrageDf[['Symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %']]
         ArbitrageDf=ArbitrageDf.round(5)
         
         helperObj=Helper()
@@ -33,7 +29,15 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         
         ArbitrageDf.rename(columns={'Timestamp':'Time'}, inplace=True)
 
-        if not SingleUpdate:
+        print("ArbitrageDf*******")
+        print(ArbitrageDf)
+        print(PriceDF)
+
+        res={}
+        res['Prices']=PriceDF[::-1]
+        
+        # All day analysis
+        if callAllDayArbitrage:
             arbitrageBuySellSignals, pnlstatementforday, scatterPlotData=calculateArbitrageResults(df=ArbitrageDf, 
             etfname=etfname, 
             magnitudeOfArbitrageToFilterOn=0,
@@ -41,15 +45,18 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
             BuildPatternSignals=False,
             includeMovers=False,
             getScatterPlot=False)
-            print("*******((((((((((((((((((((((((((((((((((((((*")
-            print(arbitrageBuySellSignals)
-
-        print(ArbitrageDf)
             
-        #res=jsonify(Full_Day_Prices=PriceDF[::-1].to_csv(sep='\t', index=False), Full_Day_Arbitrage_Data=ArbitrageDf.to_dict())
-        res={}
-        res['Prices']=PriceDF[::-1]
-        res['Arbitrage']=ArbitrageDf
+            arbitrageBuySellSignals['Price'] = np.round(PriceDF[::-1]['Price'].values,2)
+            arbitrageBuySellSignals['Net Asset Value Change%'] = ArbitrageDf[::-1]['Net Asset Value Change%'].values
+            arbitrageBuySellSignals.rename(columns={'T':'ETF Change Price %'}, inplace=True)
+            arbitrageBuySellSignals['ETF Change Price %']=np.round(arbitrageBuySellSignals['ETF Change Price %'],2)
+            arbitrageBuySellSignals['Time']=arbitrageBuySellSignals.index
+            arbitrageBuySellSignals['TickVolume']= PriceDF[::-1]['TickVolume'].values
+            res['Arbitrage'] = arbitrageBuySellSignals
+            res['pnlstatementforday'] = pnlstatementforday
+        else:
+            res['Arbitrage']=ArbitrageDf
+        
         return res
 
     except Exception as e:
@@ -109,7 +116,6 @@ def AnalyzeDaysPerformance(ArbitrageDf=None,etfname=None):
     return pnlstatementforday
 
 
-
 def CategorizeSignals(ArbitrageDf=None, ArbitrageColumnName=None, PriceColumn=None,Pct_change=None):
     ArbitrageDf=ArbitrageDf[::-1]
     ArbitrageDf=ArbitrageDf.reset_index()
@@ -120,15 +126,15 @@ def CategorizeSignals(ArbitrageDf=None, ArbitrageColumnName=None, PriceColumn=No
         ArbitrageDf['ETF Change Price %']=ArbitrageDf[PriceColumn]
 
     bins = [-0.1, 0.05, 0.10, 0.15, 0.20, np.inf]
-    names = ['< 0.05', '< 0.10', '< 0.15', '< 0.20', '> 0.20']
+    names = ['<0.05', '<0.10', '<0.15', '<0.20', '>0.20']
     ArbitrageDf['Group'] = pd.cut(ArbitrageDf['AbsArbitrage'], bins, labels=names)
     
     SignalCategorization = {
-    '< 0.05':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    '< 0.10':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    '< 0.15':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    '< 0.20':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0},
-    '> 0.20':{'# Buy Signals':0,'Buy Return':0,'# Sell Signals':0,'Sell Return':0}
+    '<0.05':{'# Buy Sign':0,'Buy Ret':0,'# Sell Sign':0,'Sell Ret':0},
+    '<0.10':{'# Buy Sign':0,'Buy Ret':0,'# Sell Sign':0,'Sell Ret':0},
+    '<0.15':{'# Buy Sign':0,'Buy Ret':0,'# Sell Sign':0,'Sell Ret':0},
+    '<0.20':{'# Buy Sign':0,'Buy Ret':0,'# Sell Sign':0,'Sell Ret':0},
+    '>0.20':{'# Buy Sign':0,'Buy Ret':0,'# Sell Sign':0,'Sell Ret':0}
     }
     
     lastindex=ArbitrageDf.index[-1]
@@ -138,13 +144,12 @@ def CategorizeSignals(ArbitrageDf=None, ArbitrageColumnName=None, PriceColumn=No
             groupType=ArbitrageDf.loc[idx,'Group']
             
             if ArbitrageDf.loc[idx,ArbitrageColumnName]<0:
-                SignalCategorization[groupType]['# Buy Signals'] = SignalCategorization[groupType]['# Buy Signals'] + 1
-                SignalCategorization[groupType]['Buy Return'] = SignalCategorization[groupType]['Buy Return'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
+                SignalCategorization[groupType]['# Buy Sign'] = SignalCategorization[groupType]['# Buy Sign'] + 1
+                SignalCategorization[groupType]['Buy Ret'] = SignalCategorization[groupType]['Buy Ret'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
             elif ArbitrageDf.loc[idx,ArbitrageColumnName]>0:
-                SignalCategorization[groupType]['# Sell Signals'] = SignalCategorization[groupType]['# Sell Signals'] + 1
-                SignalCategorization[groupType]['Sell Return'] = SignalCategorization[groupType]['Sell Return'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
+                SignalCategorization[groupType]['# Sell Sign'] = SignalCategorization[groupType]['# Sell Sign'] + 1
+                SignalCategorization[groupType]['Sell Ret'] = SignalCategorization[groupType]['Sell Ret'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
 
-    
     SignalCategorization=pd.DataFrame(SignalCategorization).fillna(0).round(3).to_dict()
     SignalCategorization = {k: SignalCategorization[k] for k in names}
     return SignalCategorization
