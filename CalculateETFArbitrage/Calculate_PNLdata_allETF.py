@@ -2,7 +2,7 @@ import sys, traceback
 sys.path.append('..')
 from CommonServices.ImportExtensions import *
 import pandas as pd
-import getpass
+import getpass, datetime
 from pymongo import *
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import AnalyzeArbitrageDataForETF
@@ -39,7 +39,10 @@ class CalculateAndSavePnLData():
                         presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find(
                             {'Date': date})
 
-                    if len(list(presence))==len(etflist):
+                    presence_list = list(presence)
+                    print(presence_list)
+                    print(len(presence_list))
+                    if len(presence_list)==len(etflist):
                         continue
                     all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
                     PNLOverDates = {}
