@@ -12,8 +12,8 @@ class PerMinDataOperations():
         ''' Day End Times in UTC'''
         self.DAYendTime = datetime.time(3,59) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(4,59)
         # self.DAYendTime = datetime.time(23,59)
-        #self.DAYendTimeZeroZeo = datetime.time(4,00) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(5,00)
-        self.DAYendTimeZeroZeo = datetime.time(0,0)
+        self.DAYendTimeZeroZeo = datetime.time(3,59) if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else datetime.time(4,59)
+        # self.DAYendTimeZeroZeo = datetime.time(0,0)
 
         # Day Light Savings
         # Summer UTC 13 to 20
@@ -62,7 +62,7 @@ class PerMinDataOperations():
             start_dt = start_dt.replace(tzinfo = tz.gettz('UTC'))
             start_dt = start_dt.astimezone(tz.tzlocal())
         else:
-            lastworkinDay=LastWorkingDay(todaysDate)
+            lastworkinDay=LastWorkingDay(todaysDate-datetime.timedelta(days=1))
             start_dt = lastworkinDay
 
             start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
@@ -144,12 +144,13 @@ class PerMinDataOperations():
         dt=None
         
         # Testing - KTZ
-        #print(currentTime)
-        #print(self.UTCEndTime)
-        #print(self.DAYendTime)
-        #print((not ifaholiday))
-        #print(self.DAYendTimeZeroZeo)
-        #print(datetime.time(self.StartHour,30))
+        print(now)
+        print(currentTime)
+        print(self.UTCEndTime)
+        print(self.DAYendTime)
+        print((not ifaholiday))
+        print(self.DAYendTimeZeroZeo)
+        print(datetime.time(self.StartHour,30))
 
         # Current Market 930 to 4
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
@@ -166,8 +167,8 @@ class PerMinDataOperations():
             dt = dt.astimezone(tz.tzlocal())
 
         # Next day of market before 9:30 am or holiday
-        elif (currentTime > self.DAYendTimeZeroZeo) and (currentTime < datetime.time(self.StartHour,30)) or ifaholiday:
-            dt=LastWorkingDay(todaysDate).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
+        elif (currentTime > self.DAYendTimeZeroZeo) and (currentTime < self.UTCStartTime) or ifaholiday:
+            dt=LastWorkingDay(todaysDate-datetime.timedelta(days=1)).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
             dt = dt.astimezone(tz.tzlocal())
         # Fix for adjustment datetime to unix timestamp
