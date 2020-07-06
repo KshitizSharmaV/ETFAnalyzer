@@ -41,6 +41,7 @@ class CalculateAndSavePnLData():
 
                     presence_list = list(presence)
                     print(presence_list)
+                    etf_already_present = [item['Symbol'] for item in presence_list]
                     print(len(presence_list))
                     if len(presence_list)==len(etflist):
                         continue
@@ -49,7 +50,7 @@ class CalculateAndSavePnLData():
                     final_res = []
                     # Iter over the collection results
                     for etf_arb in all_etf_arb_cursor:
-                        if etf_arb['ETFName'] in etflist:
+                        if etf_arb['ETFName'] in etflist and etf_arb['ETFName'] not in etf_already_present:
                             try:
                                 print(etf_arb['ETFName'])
                                 logger.debug(etf_arb['ETFName'])
