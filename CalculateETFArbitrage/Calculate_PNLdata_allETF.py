@@ -34,12 +34,12 @@ class CalculateAndSavePnLData():
                 try:
                     if self.sysUserName == 'ubuntu':
                         presence = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.find(
-                            {'Date': date}).limit(1)
+                            {'Date': date})
                     else:
                         presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find(
-                            {'Date': date}).limit(1)
+                            {'Date': date})
 
-                    if list(presence):
+                    if len(list(presence))==len(etflist):
                         continue
                     all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
                     PNLOverDates = {}
@@ -137,5 +137,5 @@ class CalculateAndSavePnLData():
 
 if __name__ == '__main__':
     obj = CalculateAndSavePnLData()
-    obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
-    # obj.retrievePNLForAllDays()
+    # obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
+    obj.retrievePNLForAllDays()
