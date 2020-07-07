@@ -6,6 +6,8 @@ import pandas as pd
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from CommonServices.ThreadingRequests import IOBoundThreading
 from MongoDB.SaveFetchQuotesData import MongoDailyOpenCloseData
+from MongoDB.MongoDBConnections import MongoDBConnectors
+import getpass
 import traceback
 import datetime
 import requests
@@ -46,6 +48,7 @@ class DailyOpenCloseData(object):
     # Used for ubthreading
     def getSaveOpenCloseDataNoThreading(self, openCloseURLs=None):
         priceforNAVfilling = {}
+        failed_tickers = []
         for URL in openCloseURLs:
             try:
                 response = json.loads(requests.get(url=URL).text)
@@ -58,10 +61,11 @@ class DailyOpenCloseData(object):
                 print(e)
                 print("Holding can't be fetched for URL =" + URL)
                 traceback.print_exc()
+                failed_tickers.append(URL.split('/')[6])
                 # Failure if any holding gave an issue
-                return False
+                # return False
         # Success if holdings were scrapped success
-        return True
+        return failed_tickers
 
     def fetchData(self):
         return self.dailyopencloseObj.fetchDailyOpenCloseData(symbolList=self.symbols, date=self.date,
@@ -78,14 +82,50 @@ class DailyOpenCloseData(object):
     def run(self):
         symbolsToBeDownloaded = self.checkIfDataExsistInMongoDB(symbols=self.symbols, date=self.date,
                                                                 CollectionName=self.collectionName)
-
+        combined_data = []
         if len(symbolsToBeDownloaded) > 0:
             # Create New URLS
             createNewUrls = self.createUrls(symbolsToBeDownloaded=symbolsToBeDownloaded)
             # Save data for those URls
-            dailyDataStatus = self.getSaveOpenCloseDataNoThreading(openCloseURLs=createNewUrls)
-            if not dailyDataStatus:
-                return None
-
+            failed_tickers = self.getSaveOpenCloseDataNoThreading(openCloseURLs=createNewUrls)
+            if failed_tickers:
+                conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+                # if getpass.getuser() == 'ubuntu':
+                #     conn = MongoDBConnectors().get_pymongo_readonly_production_production()
+                # else:
+                #     conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+                data_cursor = conn.ETF_db.DailyOpenCloseCollection.aggregate([
+                    {
+                        '$match': {
+                            'dateForData': {
+                                '$lte': datetime.datetime.strptime(self.date,'%Y-%m-%d')
+                            },
+                            'Symbol': {
+                                '$in': failed_tickers
+                            }
+                        }
+                    }, {
+                        '$group': {
+                            '_id': '$Symbol',
+                            'Symbol': {
+                                '$first': '$Symbol'
+                            },
+                            'dateForData': {
+                                '$first': '$dateForData'
+                            },
+                            'Open Price': {
+                                '$first': '$Open Price'
+                            }
+                        }
+                    }, {
+                        '$project': {
+                            'Symbol': 1,
+                            'Open Price': 1,
+                            '_id': 0
+                        }
+                    }
+                ])
+                combined_data = [data for data in data_cursor]
         data = self.fetchData()
+        data.extend(combined_data)
         return pd.DataFrame(data)

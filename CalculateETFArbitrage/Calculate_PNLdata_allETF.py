@@ -36,13 +36,12 @@ class CalculateAndSavePnLData():
                         presence = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.find(
                             {'Date': date})
                     else:
-                        presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find(
+                        presence = MongoDBConnectors().get_pymongo_readonly_devlocal_production().ETF_db.PNLDataCollection.find(
                             {'Date': date})
 
                     presence_list = list(presence)
-                    print(presence_list)
                     etf_already_present = [item['Symbol'] for item in presence_list]
-                    print(len(presence_list))
+                    etf_to_be_done = list(set(etflist)-set(etf_already_present))
                     if len(presence_list)==len(etflist):
                         continue
                     all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
@@ -50,7 +49,7 @@ class CalculateAndSavePnLData():
                     final_res = []
                     # Iter over the collection results
                     for etf_arb in all_etf_arb_cursor:
-                        if etf_arb['ETFName'] in etflist and etf_arb['ETFName'] not in etf_already_present:
+                        if etf_arb['ETFName'] in etf_to_be_done:
                             try:
                                 print(etf_arb['ETFName'])
                                 logger.debug(etf_arb['ETFName'])
@@ -141,5 +140,5 @@ class CalculateAndSavePnLData():
 
 if __name__ == '__main__':
     obj = CalculateAndSavePnLData()
-    # obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
-    obj.retrievePNLForAllDays()
+    obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
+    # obj.retrievePNLForAllDays()

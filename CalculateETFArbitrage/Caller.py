@@ -73,7 +73,7 @@ for etfname in etflist:
 
         if data is None:
             print("Holding Belong to some other Exchange, No data was found")
-            logger.debug("Holding Belong to some other Exchange, No data was found for {}".format(etfname))
+            logger.error("Holding Belong to some other Exchange, No data was found for {}".format(etfname))
             etfwhichfailed.append(etfname)
             continue
         else:
