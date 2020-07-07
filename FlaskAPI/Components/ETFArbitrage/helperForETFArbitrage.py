@@ -79,6 +79,31 @@ def countRightSignals(data=None):
     return resultDict
 
 
+etmoverslist = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMover%5',
+                'ETFMover%6', 'ETFMover%7', 'ETFMover%8', 'ETFMover%9', 'ETFMover%10',
+                'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5', 'Change%6',
+                'Change%7', 'Change%8', 'Change%9', 'Change%10']
+def etfMoversChangers(data):
+    ########### Code to modify the ETF Movers and Underlying with highest change %
+    # Seperate ETF Movers and the percentage of movement
+    for movers in etmoverslist:
+        def getTickerReturnFromMovers(x):
+            # x = ast.literal_eval(x)
+            return x[0], float(x[1])
+
+        newcolnames = [movers + '_ticker', movers + '_value']
+        data[movers] = data[movers].apply(getTickerReturnFromMovers)
+        data[newcolnames] = pd.DataFrame(data[movers].tolist(), index=data.index)
+        del data[movers]
+
+    etfmoversList = dict(data[['ETFMover%1_ticker', 'ETFMover%2_ticker', 'ETFMover%3_ticker']].stack().value_counts())
+    etfmoversDictCount = pd.DataFrame.from_dict(etfmoversList, orient='index', columns=['Count']).to_dict('index')
+
+    highestChangeList = dict(data[['Change%1_ticker', 'Change%2_ticker', 'Change%3_ticker']].stack().value_counts())
+    highestChangeDictCount = pd.DataFrame.from_dict(highestChangeList, orient='index', columns=['Count']).to_dict(
+        'index')
+    return etfmoversDictCount, highestChangeDictCount
+    ########## Code to modify the ETF Movers and Underlying with highest change % ######
 
 
 

@@ -100,20 +100,15 @@ def SendETFHoldingsData(ETFName, date):
 # Historical Arbitrage
 ############################################
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays
+from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChangers
 
 # Divide Columnt into movers and the price by which they are moving
-etmoverslist = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMover%5',
-                'ETFMover%6', 'ETFMover%7', 'ETFMover%8', 'ETFMover%9', 'ETFMover%10',
-                'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5', 'Change%6',
-                'Change%7', 'Change%8', 'Change%9', 'Change%10']
-
-
 @app.route('/PastArbitrageData/<ETFName>/<date>')
 def FetchPastArbitrageData(ETFName, date):
     ColumnsForDisplay = ['Time','$Spread', 'Arbitrage in $', 'Absolute Arbitrage',
                          'Over Bought/Sold',
-                         'Etf Mover',
-                         'Most Change%',
+                         'ETFMover%1_ticker',
+                         'Change%1_ticker',
                          'T', 'T+1']
     # Retreive data for Components
     data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
@@ -125,22 +120,7 @@ def FetchPastArbitrageData(ETFName, date):
 
     ########### Code to modify the ETF Movers and Underlying with highest change %
     # Seperate ETF Movers and the percentage of movement
-    for movers in etmoverslist:
-        def getTickerReturnFromMovers(x):
-            # x = ast.literal_eval(x)
-            return x[0], float(x[1])
-
-        newcolnames = [movers + '_ticker', movers + '_value']
-        data[movers] = data[movers].apply(getTickerReturnFromMovers)
-        data[newcolnames] = pd.DataFrame(data[movers].tolist(), index=data.index)
-        del data[movers]
-
-    etfmoversList = dict(data[['ETFMover%1_ticker', 'ETFMover%2_ticker', 'ETFMover%3_ticker']].stack().value_counts())
-    etfmoversDictCount = pd.DataFrame.from_dict(etfmoversList, orient='index', columns=['Count']).to_dict('index')
-
-    highestChangeList = dict(data[['Change%1_ticker', 'Change%2_ticker', 'Change%3_ticker']].stack().value_counts())
-    highestChangeDictCount = pd.DataFrame.from_dict(highestChangeList, orient='index', columns=['Count']).to_dict(
-        'index')
+    etfmoversDictCount, highestChangeDictCount = etfMoversChangers(data)
     ########## Code to modify the ETF Movers and Underlying with highest change %
 
     # Sort the data frame on time since Sell and Buy are concatenated one after other
@@ -154,9 +134,7 @@ def FetchPastArbitrageData(ETFName, date):
     
     # Replace Values in Pandas DataFrame
     data.rename(columns={'ETF Trading Spread in $': '$Spread',
-                         'Magnitude of Arbitrage': 'Absolute Arbitrage',
-                         'ETFMover%1_ticker': 'Etf Mover',
-                         'Change%1_ticker': 'Most Change%'}, inplace=True)
+                         'Magnitude of Arbitrage': 'Absolute Arbitrage'}, inplace=True)
 
     # Get the price dataframe
     allData = {}
@@ -174,8 +152,6 @@ def FetchPastArbitrageData(ETFName, date):
     allData['etfhistoricaldata'] = data.to_json()
     allData['ArbitrageCumSum']=data[['Arbitrage in $','Time']].to_dict('records')
     allData['etfPrices'] = pricedf.to_csv(sep='\t', index=False)
-    print("PNLStatementForTheDay")
-    print(PNLStatementForTheDay)
     allData['PNLStatementForTheDay'] = json.dumps(PNLStatementForTheDay)
     allData['scatterPlotData'] = json.dumps(scatterPlotData)
     allData['etfmoversDictCount'] = json.dumps(etfmoversDictCount)
@@ -196,6 +172,29 @@ def fetchPNLForETFForALlDays(ETFName):
     return jsonify(PNLOverDates)
 
 
+from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
+from CommonServices.ThreadingRequests import IOBoundThreading
+import requests
+@app.route('/PastArbitrageData/DailyChange/<ETFName>/<date>')
+def getDailyChangeUnderlyingStocks(ETFName,date):
+    MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+    etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
+    ETFDataObject = etfdata.to_mongo().to_dict()
+    TickerSymbol=pd.DataFrame(ETFDataObject['holdings'])['TickerSymbol']
+    PolygonObj=PolgonDataCreateURLS()
+    date = date[:4]+'-'+date[4:6]+'-'+date[6:]
+    openCloseUrls = [PolygonObj.PolygonDailyOpenClose(date=date, symbol=etfname) for etfname in TickerSymbol if etfname!='CASH']
+    responses=[]
+    for url in openCloseUrls:
+        response = requests.get(url)
+        responses.append(json.loads(response.text))
+    responses=pd.DataFrame(responses)
+    responses['DailyChangepct'] = ((responses['close'] - responses['open'])/responses['open'])*100
+    responses['DailyChangepct'] = responses['DailyChangepct'].round(3)
+    print(responses[['symbol','DailyChangepct','volume']].to_dict(orient='records'))
+    return jsonify(responses[['symbol','DailyChangepct','volume']].to_dict(orient='records'))
+    
+    
 ############################################
 # Live Arbitrage All ETFs
 ############################################
@@ -208,6 +207,7 @@ def SendLiveArbitrageDataAllTickers():
     try:
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_prices = PerMinDataOperations().LiveFetchETFPrice()
+        print(live_prices)
         ndf = live_data.merge(live_prices, how='left', on='symbol')
         ndf.dropna(inplace=True)
         ndf=ndf.round(4)
@@ -233,6 +233,11 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     res['pnlstatementforday'] = json.dumps(res['pnlstatementforday'])
     res['SignalCategorization'] = json.dumps(CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $',PriceColumn='Price',Pct_change=True))
     print(res['Arbitrage'])
+
+    etfmoversDictCount, highestChangeDictCount = etfMoversChangers(res['Arbitrage'])
+    res['etfmoversDictCount'] = json.dumps(etfmoversDictCount)
+    res['highestChangeDictCount'] = json.dumps(highestChangeDictCount)
+
     res['scatterPlotData'] = json.dumps(res['Arbitrage'][['ETF Change Price %','Net Asset Value Change%']].to_dict(orient='records'))
     res['ArbitrageLineChart']=res['Arbitrage'][['Arbitrage in $','Time']].to_dict('records')
     res['Arbitrage'] = res['Arbitrage'].to_json()

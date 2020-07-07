@@ -9,6 +9,10 @@ import numpy as np
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import calculateArbitrageResults
 
 daylightSavingAdjutment = 4 if date(2020,3,8)< datetime.now().date()< date(2020,11,1) else 5
+etmoverslist = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMover%5',
+                'ETFMover%6', 'ETFMover%7', 'ETFMover%8', 'ETFMover%9', 'ETFMover%10',
+                'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5', 'Change%6',
+                'Change%7', 'Change%8', 'Change%9', 'Change%10']
 
 # Fetch Arbitrage & Price Data
 def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageData=None, callAllDayArbitrage=None):
@@ -20,7 +24,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         ArbitrageDFSemi = FuncArbitrageData(etfname=etfname)
         
         ArbitrageDf = ArbitrageDFSemi.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        ArbitrageDf =ArbitrageDf[['symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %']]
+        ArbitrageDf =ArbitrageDf[['symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %']+etmoverslist]
         ArbitrageDf=ArbitrageDf.round(5)
         
         helperObj=Helper()
