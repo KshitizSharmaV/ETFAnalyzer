@@ -6,12 +6,16 @@ import pandas as pd
 from CommonServices.ImportExtensions import *
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.EmailService import EmailSender
-
+from CommonServices.Holidays import HolidayCheck
+import getpass
 
 class AllCollectionsStatusCheck():
     def __init__(self):
         self.etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
-        self.connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+        if getpass.getuser()=='ubuntu':
+            self.connection = MongoDBConnectors().get_pymongo_readonly_production_production()
+        else:
+            self.connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
         self.db = self.connection.ETF_db
         pass
 
@@ -96,8 +100,13 @@ class AllCollectionsStatusCheck():
 
 
 if __name__ == '__main__':
-    date_to_check = input("Enter date to check (Historical Arb report will be shown for the previous day): ")
-    if date_to_check:
-        AllCollectionsStatusCheck().All_Status_Report(date_to_check_in_string=date_to_check)
-    else:
-        AllCollectionsStatusCheck().All_Status_Report()
+    # date_to_check = input("Enter date to check (Historical Arb report will be shown for the previous day): ")
+    # # base = datetime.today()
+    # # date_list = [base - timedelta(days=x) for x in range(10)]
+    # # for date_to_check in date_list:
+    # if date_to_check and HolidayCheck(date_to_check)==False:
+    #     AllCollectionsStatusCheck().All_Status_Report(date_to_check_in_string=date_to_check.strftime('%Y%m%d'))
+    #     print("#################################################################################")
+    # else:
+    #     AllCollectionsStatusCheck().All_Status_Report()
+    AllCollectionsStatusCheck().All_Status_Report()
