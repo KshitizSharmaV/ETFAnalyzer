@@ -89,11 +89,10 @@ class DailyOpenCloseData(object):
             # Save data for those URls
             failed_tickers = self.getSaveOpenCloseDataNoThreading(openCloseURLs=createNewUrls)
             if failed_tickers:
-                conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
-                # if getpass.getuser() == 'ubuntu':
-                #     conn = MongoDBConnectors().get_pymongo_readonly_production_production()
-                # else:
-                #     conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+                if getpass.getuser() == 'ubuntu':
+                    conn = MongoDBConnectors().get_pymongo_readonly_production_production()
+                else:
+                    conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
                 data_cursor = conn.ETF_db.DailyOpenCloseCollection.aggregate([
                     {
                         '$match': {
