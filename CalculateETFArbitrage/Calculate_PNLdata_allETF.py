@@ -28,9 +28,11 @@ class CalculateAndSavePnLData():
         try:
             date_list = self.returnres()
             date_list.sort()
+            date_list = [date for date in date_list if date>datetime.datetime(2020,6,4)]
             etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
             # final_res = []
             for date in date_list:
+                print(date)
                 try:
                     if self.sysUserName == 'ubuntu':
                         presence = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.find(
@@ -76,7 +78,7 @@ class CalculateAndSavePnLData():
                          '% R_Sell', 'Magnitue Of Arbitrage']]
                     final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict('records'))
                     print(final_res)
-                    self.Save_PnLData(final_res)
+                    # self.Save_PnLData(final_res)
                 except Exception as e:
                     traceback.print_exc()
                     logger.exception(e)
