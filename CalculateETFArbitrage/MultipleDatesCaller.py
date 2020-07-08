@@ -15,16 +15,38 @@ from CommonServices.EmailService import EmailSender
 import pandas as pd
 from datetime import datetime
 from datetime import timedelta
+import getpass
 from CalculateETFArbitrage.Control import ArbitrageCalculation
 from MongoDB.SaveArbitrageCalcs import SaveCalculatedArbitrage
 from CalculateETFArbitrage.GetRelevantHoldings import RelevantHoldings
 from MongoDB.FetchArbitrage import FetchArbitrage
+from MongoDB.MongoDBConnections import MongoDBConnectors
+from CommonServices.Holidays import HolidayCheck
 from CommonServices.LogCreater import CreateLogger
 logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
 logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLog.log', loggerName='HistArbErrorLogger')
 
-dates = ['2020-06-24','2020-06-25','2020-06-26']
-for date in dates:
+# if getpass.getuser()=='ubuntu':
+#     client = MongoDBConnectors().get_pymongo_readonly_production_production()
+# else:
+#     client = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+# result = client['ETF_db']['ArbitrageCollection'].aggregate([
+#     {
+#         '$group': {
+#             '_id': '$dateOfAnalysis',
+#             'count': {
+#                 '$sum': 1
+#             }
+#         }
+#     }
+# ])
+# datelist = [item['_id'].strftime('%Y-%m-%d') for item in result]
+# print(datelist)
+base = datetime.today()
+datelist = [(base - timedelta(days=x)).strftime('%Y-%m-%d') for x in range(38) if HolidayCheck(base - timedelta(days=x))==False]
+# dates = ['2020-06-24','2020-06-25','2020-06-26']
+for date in datelist:
+    print(date)
     etfwhichfailed = []
     # MAKE A LIST OF WORKING ETFs.
     workingdf = pd.read_csv("../CSVFiles/250M_WorkingETFs.csv")
