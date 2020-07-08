@@ -2,7 +2,8 @@ import sys  # Remove in production - KTZ
 import traceback
 
 # For Piyush System
-sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer', '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
+sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer',
+                 '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/HoldingsDataScripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/CommonServices',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/CalculateETFArbitrage'])
@@ -23,6 +24,7 @@ from MongoDB.FetchArbitrage import FetchArbitrage
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.Holidays import HolidayCheck
 from CommonServices.LogCreater import CreateLogger
+
 logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
 logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLog.log', loggerName='HistArbErrorLogger')
 
@@ -42,10 +44,13 @@ logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLo
 # ])
 # datelist = [item['_id'].strftime('%Y-%m-%d') for item in result]
 # print(datelist)
-base = datetime.today()
-datelist = [(base - timedelta(days=x)).strftime('%Y-%m-%d') for x in range(38) if HolidayCheck(base - timedelta(days=x))==False]
-# dates = ['2020-06-24','2020-06-25','2020-06-26']
-for date in datelist:
+# base = datetime.today()
+# datelist = [(base - timedelta(days=x)).strftime('%Y-%m-%d') for x in range(38) if HolidayCheck(base - timedelta(days=x))==False]
+dates = ['2020-06-01', '2020-06-02', '2020-06-03', '2020-06-04', '2020-06-05', '2020-06-08', '2020-06-09', '2020-06-10',
+         '2020-06-11', '2020-06-12', '2020-06-15', '2020-06-16', '2020-06-17', '2020-06-18', '2020-06-19', '2020-06-22',
+         '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-29', '2020-06-30', '2020-06-01', '2020-06-02',
+         '2020-06-06', '2020-06-07']
+for date in dates:
     print(date)
     etfwhichfailed = []
     # MAKE A LIST OF WORKING ETFs.
