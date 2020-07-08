@@ -250,9 +250,9 @@ class PerMinDataOperations():
         dt_ts = self.getMarketConditionTime()
         print("LiveFetchETFPrice " + str(dt_ts))
         if etfname:
-            etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts, "sym": etfname},
+            etf_live_prices_cursor = trade_per_min_WS.find({"e": {'$lte':dt_ts}, "sym": etfname},
                                                            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1,
-                                                            "v": 1, "e": 1})
+                                                            "v": 1, "e": 1}).sort([('e',-1)]).limit(1)
         else:
             etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts},
                                                            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1,

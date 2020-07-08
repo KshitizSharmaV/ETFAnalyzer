@@ -78,7 +78,7 @@ class CalculateAndSavePnLData():
                          '% R_Sell', 'Magnitue Of Arbitrage']]
                     final_res.extend(PNLOverDates.reset_index().rename(columns={'index': 'Symbol'}).to_dict('records'))
                     print(final_res)
-                    # self.Save_PnLData(final_res)
+                    self.Save_PnLData(final_res)
                 except Exception as e:
                     traceback.print_exc()
                     logger.exception(e)
