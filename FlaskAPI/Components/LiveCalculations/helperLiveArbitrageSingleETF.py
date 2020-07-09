@@ -4,8 +4,7 @@ from PolygonTickData.Helper import Helper
 from datetime import datetime, timedelta, date
 import numpy as np
 import sys
-import numpy as np
-
+from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import calculateArbitrageResults
 
 daylightSavingAdjutment = 4 if date(2020,3,8)< datetime.now().date()< date(2020,11,1) else 5
@@ -22,7 +21,13 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         PriceDF['Price'] = (PriceDF['high']+PriceDF['low'])/2
         # Full day historical Arbitrage for ETF
         ArbitrageDFSemi = FuncArbitrageData(etfname=etfname)
-        
+
+        # noh = list(MongoDBConnectors().get_pymongo_readonly_devlocal_production().ETF_db.ETFHoldings.find({'ETFTicker':etfname},{'_id':0, 'NumberOfHolding':1}).sort([('FundHoldingsDate',-1)]).limit(1))[0]['NumberOfHolding']
+        # x = noh if noh<10 else 10
+        # etmoverslist = ['ETFMover%{}'.format(i+1) for i in range(x)]
+        # changes = ['Change%{}'.format(i+1) for i in range(x)]
+        # etmoverslist.extend(changes)
+
         ArbitrageDf = ArbitrageDFSemi.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
         ArbitrageDf =ArbitrageDf[['symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %']+etmoverslist]
         ArbitrageDf=ArbitrageDf.round(5)
