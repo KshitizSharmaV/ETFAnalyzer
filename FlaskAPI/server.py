@@ -180,20 +180,18 @@ def getDailyChangeUnderlyingStocks(ETFName,date):
     MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
     etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
     ETFDataObject = etfdata.to_mongo().to_dict()
-    TickerSymbol=pd.DataFrame(ETFDataObject['holdings'])['TickerSymbol']
-    PolygonObj=PolgonDataCreateURLS()
-    date = date[:4]+'-'+date[4:6]+'-'+date[6:]
-    openCloseUrls = [PolygonObj.PolygonDailyOpenClose(date=date, symbol=etfname) for etfname in TickerSymbol if etfname!='CASH']
-    responses=[]
-    for url in openCloseUrls:
-        response = requests.get(url)
-        responses.append(json.loads(response.text))
-    responses=pd.DataFrame(responses)
-    responses['DailyChangepct'] = ((responses['close'] - responses['open'])/responses['open'])*100
+    TickerSymbol=pd.DataFrame(ETFDataObject['holdings'])['TickerSymbol'].to_list()
+    TickerSymbol.remove('CASH') if 'CASH' in TickerSymbol else TickerSymbol
+    openclosedata_cursor = connection.ETF_db.DailyOpenCloseCollection.find({'dateForData':datetime.strptime(date, '%Y%m%d'), 'Symbol':{'$in':TickerSymbol}},{'_id':0})
+    responses = list(openclosedata_cursor)
+    responses = pd.DataFrame.from_records(responses)
+    print(responses)
+    responses['DailyChangepct'] = ((responses['Close'] - responses['Open Price'])/responses['Open Price'])*100
     responses['DailyChangepct'] = responses['DailyChangepct'].round(3)
+    responses.rename(columns={'Symbol':'symbol','Volume':'volume'}, inplace=True)
     print(responses[['symbol','DailyChangepct','volume']].to_dict(orient='records'))
     return jsonify(responses[['symbol','DailyChangepct','volume']].to_dict(orient='records'))
-    
+
     
 ############################################
 # Live Arbitrage All ETFs
