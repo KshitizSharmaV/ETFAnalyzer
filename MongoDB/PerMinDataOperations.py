@@ -81,9 +81,9 @@ class PerMinDataOperations():
         # start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
 
         FetchDataForTimeObject = {}
-        print("*************")
-        print("start_dt" + str(start_dt))
-        print("end_dt" + str(end_dt))
+        # print("*************")
+        # print("start_dt" + str(start_dt))
+        # print("end_dt" + str(end_dt))
 
         FetchDataForTimeObject['start_dt'] = int(start_dt.timestamp() * 1000)
         FetchDataForTimeObject['end_dt'] = int(end_dt.timestamp() * 1000) if end_dt else end_dt
@@ -153,13 +153,13 @@ class PerMinDataOperations():
         dt=None
 
         # Testing - KTZ
-        print(now)
-        print(currentTime)
-        print(self.UTCEndTime)
-        print(self.DAYendTime)
-        print((not ifaholiday))
-        print(self.DAYendTimeZeroZeo)
-        print(datetime.time(self.StartHour, 30))
+        # print(now)
+        # print(currentTime)
+        # print(self.UTCEndTime)
+        # print(self.DAYendTime)
+        # print((not ifaholiday))
+        # print(self.DAYendTimeZeroZeo)
+        # print(datetime.time(self.StartHour, 30))
 
         ##########################################################################################
 
@@ -213,7 +213,7 @@ class PerMinDataOperations():
         '''
         ##########################################################################################
         # Fix for adjustment datetime to unix timestamp
-        print("Live Single Arbitrage: " + str(dt))
+        # print("getMarketConditionTime returning : " + str(dt))
         # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         return int(dt.timestamp() * 1000)
 
