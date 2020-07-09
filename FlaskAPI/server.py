@@ -199,17 +199,17 @@ def getDailyChangeUnderlyingStocks(ETFName,date):
 
 from MongoDB.PerMinDataOperations import PerMinDataOperations
 
-
 @app.route('/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
-        live_prices = PerMinDataOperations().LiveFetchETFPrice()
-        print(live_prices)
-        ndf = live_data.merge(live_prices, how='left', on='symbol')
-        ndf.dropna(inplace=True)
-        ndf=ndf.round(4)
-        return ndf.to_dict()
+        live_data = live_data[['symbol','Arbitrage in $','ETF Trading Spread in $','ETF Price','ETF Change Price %','Net Asset Value Change%','ETFMover%1','Change%1']]
+        live_data['Absolute Arbitrage']=abs(live_data['Arbitrage in $']) - live_data['ETF Trading Spread in $']
+        live_data['Absolute Arbitrage']=live_data['Absolute Arbitrage'].mask(live_data['Absolute Arbitrage'].lt(0),0) # Replace -ve value with 0
+        live_data = live_data.round(3)
+        print(live_data)
+        print(live_data.columns)
+        return jsonify(live_data.to_dict(orient='records'))
     except Exception as e:
         print("Issue in Flask app while fetching ETF Description Data")
         print(traceback.format_exc())
