@@ -142,5 +142,5 @@ class CalculateAndSavePnLData():
 
 if __name__ == '__main__':
     obj = CalculateAndSavePnLData()
-    # obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
-    obj.retrievePNLForAllDays()
+    obj.Save_PnLData(obj.retrievePNLForAllETF_ForOneDay())
+    # obj.retrievePNLForAllDays()
