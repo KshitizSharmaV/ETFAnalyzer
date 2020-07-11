@@ -65,10 +65,8 @@ def fetchOHLCDailyData(ETFName, StartDate):
 @app.route('/ETfDescription/getHoldingsData/<ETFName>/<StartDate>')
 def fetchHoldingsData(ETFName, StartDate):
     MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-    print("fetchHoldingsData calle")
     etfdata = LoadHoldingsdata().getAllETFData(ETFName, StartDate)
     ETFDataObject = etfdata.to_mongo().to_dict()
-    print(ETFDataObject['holdings'])
     # HoldingsDatObject=pd.DataFrame(ETFDataObject['holdings']).set_index('TickerSymbol').round(2).T.to_dict()
     # print(HoldingsDatObject)
     return jsonify(ETFDataObject['holdings'])
@@ -108,13 +106,14 @@ def SendETFHoldingsData(ETFName, date):
 ############################################
 # Historical Arbitrage
 ############################################
-from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays
+from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays, OverBoughtBalancedOverSold
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChangers
 
 
 # Divide Columnt into movers and the price by which they are moving
 @app.route('/PastArbitrageData/<ETFName>/<date>')
 def FetchPastArbitrageData(ETFName, date):
+    print("Historical Data For %s & date %s" %(ETFName,str(date)))
     ColumnsForDisplay = ['Time', '$Spread', 'Arbitrage in $', 'Absolute Arbitrage',
                          'Over Bought/Sold',
                          'ETFMover%1_ticker',
@@ -175,13 +174,12 @@ def fetchPNLForETFForALlDays(ETFName):
     print("All ETF PNL Statement is called")
     PNLOverDates = retrievePNLForAllDays(etfname=ETFName, magnitudeOfArbitrageToFilterOn=0)
     PNLOverDates = pd.DataFrame(PNLOverDates).T
-    print(PNLOverDates)
     PNLOverDates['Date'] = PNLOverDates.index
     PNLOverDates.columns = ['Sell Return%', 'Buy Return%', '# T.Buy', '# R.Buy', '% R.Buy', '# T.Sell', '# R.Sell',
                             '% R.Sell',
                             'Magnitue Of Arbitrage', 'Date']
     PNLOverDates = PNLOverDates.to_dict(orient='records')
-    print(PNLOverDates)
+    print("PNLOverDates: "+str(PNLOverDates))
     return jsonify(PNLOverDates)
 
 
@@ -201,11 +199,9 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
         {'dateForData': datetime.strptime(date, '%Y%m%d'), 'Symbol': {'$in': TickerSymbol}}, {'_id': 0})
     responses = list(openclosedata_cursor)
     responses = pd.DataFrame.from_records(responses)
-    print(responses)
     responses['DailyChangepct'] = ((responses['Close'] - responses['Open Price']) / responses['Open Price']) * 100
     responses['DailyChangepct'] = responses['DailyChangepct'].round(3)
     responses.rename(columns={'Symbol': 'symbol', 'Volume': 'volume'}, inplace=True)
-    print(responses[['symbol', 'DailyChangepct', 'volume']].to_dict(orient='records'))
     return jsonify(responses[['symbol', 'DailyChangepct', 'volume']].to_dict(orient='records'))
 
 
@@ -219,12 +215,14 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 @app.route('/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
+        print("All Etfs Live Arbitrage is called")
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
                                'Net Asset Value Change%', 'ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4',
                                'ETFMover%5', 'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5']]
-        live_data['Absolute Arbitrage'] = abs(live_data['Arbitrage in $']) - live_data['ETF Trading Spread in $']
-        live_data['Absolute Arbitrage'] = live_data['Absolute Arbitrage'].mask(live_data['Absolute Arbitrage'].lt(0),0)  # Replace -ve value with 0
+        live_data=OverBoughtBalancedOverSold(df=live_data)
+        live_data.rename(columns={'Magnitude of Arbitrage': 'Absolute Arbitrage'}, inplace=True)
+
         live_data = live_data.round(3)
         print(live_data)
         print(live_data.columns)
