@@ -166,10 +166,12 @@ class PerMinDataOperations():
         '''Piyush's Logic'''
         '''Market operating time on a Non-Holiday UTC 13:30:00 (self.UTCStartTime) to 20:00:00 (self.UTCEndTime)'''
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
+            print("LINE 168")
             dt = datetime.datetime.now().replace(second=0, microsecond=0)
 
         '''Before Market opens same day UTC 4:00:00 (self.DAYendTimeZeroZeo) to 13:30:00 (self.UTCStartTime) OR if it's a holiday'''
         if currentTime > self.DAYendTimeZeroZeo and currentTime < self.UTCStartTime or ifaholiday:
+            print("LINE 172")
             dt = LastWorkingDay(todaysDate - datetime.timedelta(days=1)).replace(hour=self.EndHour, minute=0, second=0,
                                                                                  microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
@@ -178,13 +180,16 @@ class PerMinDataOperations():
         '''Here 2 conditions will be used.'''
         '''After market closes same day UTC 20:00:00 (self.UTCEndTime) to 23:59:59 (UTC Date Change Time). On a Non-Holiday.'''
         if currentTime < datetime.time(23, 59, 59) and currentTime > self.UTCEndTime and (not ifaholiday):
+            print("LINE 182")
             dt = now.replace(hour=self.EndHour, minute=0, second=0, microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
             dt = dt.astimezone(tz.tzlocal())
         '''After market closes 00:00:00 (UTC New Date Time) to 3:59:59 (self.DAYendTimeZeroZeo). Doesn't matter if it's a holiday.'''
         if currentTime > datetime.time(0, 0) and currentTime < self.DAYendTimeZeroZeo:
+            print("LINE 188")
             dt = now.replace(hour=self.EndHour, minute=0, second=0, microsecond=0)
             dt = dt - datetime.timedelta(days=1)
+            dt = LastWorkingDay(dt)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
             dt = dt.astimezone(tz.tzlocal())
 
