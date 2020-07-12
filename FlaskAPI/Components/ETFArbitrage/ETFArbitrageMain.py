@@ -40,19 +40,23 @@ InverseSignal = ['FTEC']
 MaintainSignal = ['XLK','XLC','XLP']
 
 
-# Calcualte Arbitrage and other results for a df
-def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilterOn=0, BuildMomentumSignals=False, BuildPatternSignals=False, includeMovers=True, getScatterPlot=True):
+def OverBoughtBalancedOverSold(df=None, magnitudeOfArbitrageToFilterOn=0):
     df['Magnitude of Arbitrage']=abs(df['Arbitrage in $']) - df['ETF Trading Spread in $']
     # Replace all negative values with 0 
     df['Magnitude of Arbitrage']=df['Magnitude of Arbitrage'].mask(df['Magnitude of Arbitrage'].lt(0),0)
     df['Over Bought/Sold'] = 'Balanced'
-    
     df.loc[(df['Magnitude of Arbitrage']>magnitudeOfArbitrageToFilterOn) & 
            (df['Arbitrage in $']>0), 'Over Bought/Sold'] = 'Over Bought'
-
     df.loc[(df['Magnitude of Arbitrage']>magnitudeOfArbitrageToFilterOn) & 
        (df['Arbitrage in $']<0), 'Over Bought/Sold'] = 'Over Sold'
+    return df
 
+# Calcualte Arbitrage and other results for a df
+def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilterOn=0, BuildMomentumSignals=False, BuildPatternSignals=False, includeMovers=True, getScatterPlot=True):
+    
+    # Get all signals if the etf is oversold or overbought
+    df = OverBoughtBalancedOverSold(df=df, magnitudeOfArbitrageToFilterOn = magnitudeOfArbitrageToFilterOn)
+    
     df=df.set_index('Time')
 
     # Build Signals if True passed by user, default is False
@@ -124,8 +128,6 @@ def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrage
 
 # Historical arbitrage data for just 1 etf for 1 date
 def RetrieveETFArbitrageData(etfname=None, date=None, magnitudeOfArbitrageToFilterOn=0):
-    print(etfname)
-    print(date)
     s=arbitragecollection.find({'ETFName':etfname,'dateOfAnalysis':datetime.datetime.strptime(date,'%Y%m%d')})
     # Iter over the collection results - It's just 1 item
     PNLStatementForTheDay={}

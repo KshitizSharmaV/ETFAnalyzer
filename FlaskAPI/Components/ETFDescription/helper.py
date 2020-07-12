@@ -129,5 +129,4 @@ def fetchOHLCHistoricalData(etfname=None, StartDate=None):
     # Helper Class from PolygonTickData.Helper for converting uni timestamp to human timestamp
     helperObjTimeConversion = Helper()
     data['date'] = data['date'].apply(lambda x: helperObjTimeConversion.getHumanTime(ts=x, divideby=1000))
-    print(data)
     return data
