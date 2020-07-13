@@ -75,7 +75,6 @@ def fetchHoldingsData(ETFName, StartDate):
 
 @app.route('/api/ETfDescription/EtfData/<ETFName>/<date>')
 def SendETFHoldingsData(ETFName, date):
-    req = request.__dict__['environ']['REQUEST_URI']
     try:
         allData = {}
         MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
@@ -123,20 +122,18 @@ def FetchPastArbitrageData(ETFName, date):
     # Retreive data for Components
     data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
                                                                                      magnitudeOfArbitrageToFilterOn=0)
-
-    # Check if data doesn't exsist
-    if data.empty:
-        print("No Data Exist")
-
-    ########### Code to modify the ETF Movers and Underlying with highest change %
-    # Seperate ETF Movers and the percentage of movement
-    etfmoversDictCount, highestChangeDictCount = etfMoversChangers(data)
-    ########## Code to modify the ETF Movers and Underlying with highest change %
-
-    # Sort the data frame on time since Sell and Buy are concatenated one after other
     data = data.sort_index()
-    # Time Manpulation
     data.index = data.index.time
+    data['Time'] = data.index
+    pricedf['Time']=pricedf['date']
+    pricedf['Time'] = [x.time() for x in pricedf['Time']]
+    pricedf=pd.merge(data[['Time','Over Bought/Sold']],pricedf,on='Time',how='right')
+    pricedf =pricedf[pricedf['Over Bought/Sold'].notna()]
+    del pricedf['Time']
+    
+    # Seperate ETF Movers and the Underlying with highest change %
+    etfmoversDictCount, highestChangeDictCount = etfMoversChangers(data)
+    
     data.index = data.index.astype(str)
 
     # Round of DataFrame 
@@ -148,13 +145,11 @@ def FetchPastArbitrageData(ETFName, date):
 
     # Get the price dataframe
     allData = {}
-    # Columns needed to display
     data['Time'] = data.index
     data = data[ColumnsForDisplay]
-    # PNL for all dates for the etf
-    print("Price Df")
+    print("Historical DataFrame")
     print(data)
-
+        
     allData['SignalCategorization'] = json.dumps(
         CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $', PriceColumn='T', Pct_change=False))
 
@@ -247,6 +242,16 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
                                       FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, callAllDayArbitrage=True)
+    
+    pricedf= res['Prices']
+    pricedf =pricedf.reset_index(drop=True)
+    pricedf['Time']=pricedf['date']
+    pricedf['Time'] = [str(x.time()) for x in pricedf['Time']]
+    pricedf=pd.merge(res['Arbitrage'][['Time','Over Bought/Sold']],pricedf,on='Time',how='right')
+    pricedf =pricedf[pricedf['Over Bought/Sold'].notna()]
+    del pricedf['Time']
+    res['Prices'] = pricedf
+
     res['Prices'] = res['Prices'].to_csv(sep='\t', index=False)
     res['pnlstatementforday'] = json.dumps(res['pnlstatementforday'])
     res['SignalCategorization'] = json.dumps(
