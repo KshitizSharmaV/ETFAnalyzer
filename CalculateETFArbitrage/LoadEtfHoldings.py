@@ -76,6 +76,8 @@ class LoadHoldingsdata(object):
 
     def getAllETFData(self, etfname, fundholdingsdate):
         try:
+            # if not type(fundholdingsdate)==datetime:
+            #     fundholdingsdate = datetime.strptime(fundholdingsdate,'%Y%m%d')
             etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
                 '-FundHoldingsDate').first()
             return etfdata
