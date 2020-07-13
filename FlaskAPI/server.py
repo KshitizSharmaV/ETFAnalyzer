@@ -36,7 +36,7 @@ from FlaskAPI.Components.ETFDescription.helper import fetchETFsWithSameIssuer, f
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 
 
-@app.route('/ETfDescription/getETFWithSameIssuer/<IssuerName>')
+@app.route('/api/ETfDescription/getETFWithSameIssuer/<IssuerName>')
 def getETFWithSameIssuer(IssuerName):
     etfswithsameIssuer = fetchETFsWithSameIssuer(connection, Issuer=IssuerName)
     if len(etfswithsameIssuer) == 0:
@@ -45,7 +45,7 @@ def getETFWithSameIssuer(IssuerName):
     return jsonify(etfswithsameIssuer)
 
 
-@app.route('/ETfDescription/getETFsWithSameETFdbCategory/<ETFdbCategory>')
+@app.route('/api/ETfDescription/getETFsWithSameETFdbCategory/<ETFdbCategory>')
 def getETFsWithSameETFdbCategory(ETFdbCategory):
     etfsWithSameEtfDbCategory = fetchETFsWithSameETFdbCategory(connection=connection, ETFdbCategory=ETFdbCategory)
     if len(etfsWithSameEtfDbCategory) == 0:
@@ -54,7 +54,7 @@ def getETFsWithSameETFdbCategory(ETFdbCategory):
     return jsonify(etfsWithSameEtfDbCategory)
 
 
-@app.route('/ETfDescription/getOHLCDailyData/<ETFName>/<StartDate>')
+@app.route('/api/ETfDescription/getOHLCDailyData/<ETFName>/<StartDate>')
 def fetchOHLCDailyData(ETFName, StartDate):
     StartDate = StartDate.split(' ')[0]
     OHLCData = fetchOHLCHistoricalData(etfname=ETFName, StartDate=StartDate)
@@ -62,8 +62,9 @@ def fetchOHLCDailyData(ETFName, StartDate):
     return OHLCData
 
 
-@app.route('/ETfDescription/getHoldingsData/<ETFName>/<StartDate>')
+@app.route('/api/ETfDescription/getHoldingsData/<ETFName>/<StartDate>')
 def fetchHoldingsData(ETFName, StartDate):
+    print("StartDate:{}".format(StartDate))
     MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
     etfdata = LoadHoldingsdata().getAllETFData(ETFName, StartDate)
     ETFDataObject = etfdata.to_mongo().to_dict()
@@ -72,7 +73,7 @@ def fetchHoldingsData(ETFName, StartDate):
     return jsonify(ETFDataObject['holdings'])
 
 
-@app.route('/ETfDescription/EtfData/<ETFName>/<date>')
+@app.route('/api/ETfDescription/EtfData/<ETFName>/<date>')
 def SendETFHoldingsData(ETFName, date):
     req = request.__dict__['environ']['REQUEST_URI']
     try:
@@ -111,7 +112,7 @@ from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChan
 
 
 # Divide Columnt into movers and the price by which they are moving
-@app.route('/PastArbitrageData/<ETFName>/<date>')
+@app.route('/api/PastArbitrageData/<ETFName>/<date>')
 def FetchPastArbitrageData(ETFName, date):
     print("Historical Data For %s & date %s" %(ETFName,str(date)))
     ColumnsForDisplay = ['Time', '$Spread', 'Arbitrage in $', 'Absolute Arbitrage',
@@ -169,7 +170,7 @@ def FetchPastArbitrageData(ETFName, date):
     return json.dumps(allData)
 
 
-@app.route('/PastArbitrageData/CommonDataAcrossEtf/<ETFName>')
+@app.route('/api/PastArbitrageData/CommonDataAcrossEtf/<ETFName>')
 def fetchPNLForETFForALlDays(ETFName):
     print("All ETF PNL Statement is called")
     PNLOverDates = retrievePNLForAllDays(etfname=ETFName, magnitudeOfArbitrageToFilterOn=0)
@@ -188,7 +189,7 @@ from CommonServices.ThreadingRequests import IOBoundThreading
 import requests
 
 
-@app.route('/PastArbitrageData/DailyChange/<ETFName>/<date>')
+@app.route('/api/PastArbitrageData/DailyChange/<ETFName>/<date>')
 def getDailyChangeUnderlyingStocks(ETFName, date):
     MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
     etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
@@ -212,7 +213,7 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
 from MongoDB.PerMinDataOperations import PerMinDataOperations
 
 
-@app.route('/ETfLiveArbitrage/AllTickers')
+@app.route('/api/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
         print("All Etfs Live Arbitrage is called")
@@ -241,7 +242,7 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
     analyzeSignalPerformane, AnalyzeDaysPerformance, CategorizeSignals
 
 
-@app.route('/ETfLiveArbitrage/Single/<etfname>')
+@app.route('/api/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
@@ -264,7 +265,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     return json.dumps(res)
 
 
-@app.route('/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
+@app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     PerMinObj = PerMinDataOperations()
     res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice,
