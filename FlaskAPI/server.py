@@ -220,6 +220,7 @@ def SendLiveArbitrageDataAllTickers():
         live_data.rename(columns={'Magnitude of Arbitrage': 'Absolute Arbitrage'}, inplace=True)
 
         live_data = live_data.round(3)
+        live_data = live_data.fillna(0)
         print(live_data)
         print(live_data.columns)
         return jsonify(live_data.to_dict(orient='records'))
