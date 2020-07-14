@@ -187,9 +187,8 @@ class PerMinDataOperations():
         '''After market closes 00:00:00 (UTC New Date Time) to 3:59:59 (self.DAYendTimeZeroZeo). Doesn't matter if it's a holiday.'''
         if currentTime > datetime.time(0, 0) and currentTime < self.DAYendTimeZeroZeo:
             print("LINE 188")
-            dt = now.replace(hour=self.EndHour, minute=0, second=0, microsecond=0)
-            dt = dt - datetime.timedelta(days=1)
-            dt = LastWorkingDay(dt)
+            dt = LastWorkingDay(todaysDate - datetime.timedelta(days=1)).replace(hour=self.EndHour, minute=0, second=0,
+                                                                                 microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
             dt = dt.astimezone(tz.tzlocal())
 
