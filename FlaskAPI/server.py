@@ -1,5 +1,5 @@
 import sys
-
+sys.path.append("..")
 from pymongo.errors import ConnectionFailure,ServerSelectionTimeoutError
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
