@@ -244,10 +244,13 @@ class PerMinDataOperations():
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts},
                 {"_id": 0, "Timestamp": 1, "ArbitrageData": 1})
-            [data.extend(item['ArbitrageData']) for item in live_per_min_cursor]
+            result_list = list(live_per_min_cursor)
+            data = []
+            ts = [item['Timestamp'] for item in result_list]
+            [data.extend(item['ArbitrageData']) for item in result_list]
             liveArbitrageData_onemin = pd.DataFrame.from_records(data)
 
-        return liveArbitrageData_onemin
+        return liveArbitrageData_onemin, ts
 
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):

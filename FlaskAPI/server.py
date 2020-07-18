@@ -315,7 +315,7 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 def SendLiveArbitrageDataAllTickers():
     try:
         print("All Etfs Live Arbitrage is called")
-        live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
+        live_data, ts = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
                                'Net Asset Value Change%', 'ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4',
                                'ETFMover%5', 'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5']]
@@ -324,6 +324,7 @@ def SendLiveArbitrageDataAllTickers():
 
         live_data = live_data.round(3)
         live_data = live_data.fillna(0)
+        live_data['Timestamp'] = ts[0]
         print(live_data)
         print(live_data.columns)
         return jsonify(live_data.to_dict(orient='records'))
