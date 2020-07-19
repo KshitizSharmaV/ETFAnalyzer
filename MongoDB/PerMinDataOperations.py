@@ -238,6 +238,7 @@ class PerMinDataOperations():
                 data.extend(item['ArbitrageData'])
             liveArbitrageData_onemin = pd.DataFrame.from_records(data)
             liveArbitrageData_onemin['Timestamp'] = getTimeStamps
+            return liveArbitrageData_onemin
 
         else:
             # Data For Multiple Ticker for live minute
@@ -249,8 +250,7 @@ class PerMinDataOperations():
             ts = [item['Timestamp'] for item in result_list]
             [data.extend(item['ArbitrageData']) for item in result_list]
             liveArbitrageData_onemin = pd.DataFrame.from_records(data)
-
-        return liveArbitrageData_onemin, ts
+            return liveArbitrageData_onemin, ts
 
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):
