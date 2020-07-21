@@ -14,7 +14,7 @@ from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from CommonServices import ImportExtensions
 from MongoDB.PerMinDataOperations import PerMinDataOperations
 from MongoDB.Schemas import trade_per_min_WS
-from ETFLiveAnalysisWS.Helper.CalculationHelper import LiveHelper, tradestruct
+from ETFLiveAnalysisProdWS.Helper.CalculationHelper import LiveHelper, tradestruct
 from functools import partial
 
 
