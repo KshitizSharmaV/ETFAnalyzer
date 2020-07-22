@@ -16,7 +16,8 @@ import traceback
 import sys
 import getpass
 from FlaskAPI.Helpers.CustomAPIErrorHandle import CustomAPIErrorHandler
-sys.path.append("..")
+import time
+
 app = Flask(__name__)
 
 CORS(app)
@@ -314,19 +315,21 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 @app.route('/api/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
+        start = time.time()
         print("All Etfs Live Arbitrage is called")
-        live_data, ts = PerMinDataOperations().LiveFetchPerMinArbitrage()
+        live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
                                'Net Asset Value Change%', 'ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4',
-                               'ETFMover%5', 'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5']]
+                               'ETFMover%5', 'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5', 'Timestamp']]
         live_data=OverBoughtBalancedOverSold(df=live_data)
         live_data.rename(columns={'Magnitude of Arbitrage': 'Absolute Arbitrage'}, inplace=True)
 
         live_data = live_data.round(3)
         live_data = live_data.fillna(0)
-        live_data['Timestamp'] = ts[0]
         print(live_data)
         print(live_data.columns)
+        end = time.time()
+        print("SendLiveArbitrageDataAllTickers Time : {}".format(end-start))
         return jsonify(live_data.to_dict(orient='records'))
     except ConnectionFailure:
         traceback.print_exc()
@@ -345,7 +348,6 @@ def SendLiveArbitrageDataAllTickers():
 ############################################
 # Live Arbitrage Single ETF
 ############################################
-import time
 from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fecthArbitrageANDLivePrices, \
     analyzeSignalPerformane, AnalyzeDaysPerformance, CategorizeSignals
 
@@ -353,6 +355,7 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
     try:
+        start = time.time()
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
                                           FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, callAllDayArbitrage=True)
@@ -360,7 +363,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
         pricedf= res['Prices']
         pricedf =pricedf.reset_index(drop=True)
         pricedf['Time']=pricedf['date']
-        pricedf['Time'] = [str(x.time()) for x in pricedf['Time']]
+        pricedf['Time'] = pricedf['Time'].apply(lambda x: str(x.time()))
         pricedf=pd.merge(res['Arbitrage'][['Time','Over Bought/Sold']],pricedf,on='Time',how='right')
         pricedf =pricedf[pricedf['Over Bought/Sold'].notna()]
         del pricedf['Time']
@@ -381,6 +384,10 @@ def SendLiveArbitrageDataSingleTicker(etfname):
             res['Arbitrage'][['ETF Change Price %', 'Net Asset Value Change%']].to_dict(orient='records'))
         res['ArbitrageLineChart'] = res['Arbitrage'][['Arbitrage in $', 'Time']].to_dict('records')
         res['Arbitrage'] = res['Arbitrage'].to_json()
+
+        end = time.time()
+
+        print("Executing Time SendLiveArbitrageDataSingleTicker : {}".format(end-start))
         return json.dumps(res)
     except ConnectionFailure:
         traceback.print_exc()
@@ -400,12 +407,15 @@ def SendLiveArbitrageDataSingleTicker(etfname):
 @app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     try:
+        start = time.time()
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice,
                                           FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage, callAllDayArbitrage=False)
         res['Prices'] = res['Prices'].to_dict()
         res['Arbitrage'] = res['Arbitrage'].to_dict()
         res['SignalInfo'] = analyzeSignalPerformane(res['Arbitrage']['Arbitrage in $'][0])
+        end = time.time()
+        print("Execution Time UpdateLiveArbitrageDataTablesAndPrices : {}".format(end-start))
         return res
     except ConnectionFailure:
         traceback.print_exc()
