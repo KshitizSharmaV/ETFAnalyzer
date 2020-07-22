@@ -81,6 +81,7 @@ class PerMinAnalysis():
             cols = list(mergeDF.columns)
             cols = [cols[0]] + [cols[-1]] + cols[1:-1]
             mergeDF = mergeDF[cols]
+            mergeDF['Timestamp'] = end_dt_ts
             SaveCalculatedArbitrage().insertIntoPerMinCollection(end_ts=end_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
 
             logger.debug("arbDF")
@@ -112,7 +113,7 @@ if __name__=='__main__':
     if not msgStatus:
         logger.debug("Failed to Update tickerlist & etf-hold.json")
         sys.exit("Failed to Update tickerlist & etf-hold.json")
-    
+
     #######################################################
     # Load Files Components, # Below 3 Objects' life to be maintained throughout the day while market is open
     #######################################################
