@@ -74,17 +74,8 @@ class PerMinDataOperations():
             end_dt = lastworkinDay.replace(hour=self.EndHour, minute=00, second=0, microsecond=0)
             end_dt = end_dt.replace(tzinfo=tz.gettz('UTC'))
             end_dt = end_dt.astimezone(tz.tzlocal())
-            # end_dt=end_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
-
-        # start_dt = start_dt.replace(hour=self.StartHour,minute=30,second=0, microsecond=0)
-        # Fix for breaking code
-        # start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
 
         FetchDataForTimeObject = {}
-        # print("*************")
-        # print("start_dt" + str(start_dt))
-        # print("end_dt" + str(end_dt))
-
         FetchDataForTimeObject['start_dt'] = int(start_dt.timestamp() * 1000)
         FetchDataForTimeObject['end_dt'] = int(end_dt.timestamp() * 1000) if end_dt else end_dt
 
@@ -94,38 +85,27 @@ class PerMinDataOperations():
     def FetchFullDayPerMinArbitrage(self, etfname):
         markettimeStatus = self.getMarketConditionsForFullDayData()
         if markettimeStatus['end_dt']:
-            print("FetchFullDayPerMinArbitrage start " + str(markettimeStatus['start_dt']))
-            print("FetchFullDayPerMinArbitrage end " + str(markettimeStatus['end_dt']))
             full_day_data_cursor = arbitrage_per_min.find(
                 {"Timestamp": {"$gte": markettimeStatus['start_dt'], "$lte": markettimeStatus['end_dt']},
-                 "ArbitrageData.symbol": etfname},
-                {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
+                 "symbol": etfname},
+                {"_id": 0})
         else:
-            print("FetchFullDayPerMinArbitrage start " + str(markettimeStatus['start_dt']))
             full_day_data_cursor = arbitrage_per_min.find(
-                {"Timestamp": {"$gte": markettimeStatus['start_dt']}, "ArbitrageData.symbol": etfname},
-                {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
+                {"Timestamp": {"$gte": markettimeStatus['start_dt']}, "symbol": etfname},
+                {"_id": 0})
 
-        data = []
-        getTimeStamps = []
-        for item in full_day_data_cursor:
-            getTimeStamps.append(item['Timestamp'])
-            data.extend(item['ArbitrageData'])
-        full_day_data_df = pd.DataFrame.from_records(data)
-        full_day_data_df['Timestamp'] = getTimeStamps
+        full_day_data_list = list(full_day_data_cursor)
+        full_day_data_df = pd.DataFrame.from_records(full_day_data_list)
         return full_day_data_df
 
     # Full full  day prices for 1 etf
     def FetchFullDayPricesForETF(self, etfname):
         markettimeStatus = self.getMarketConditionsForFullDayData()
         if markettimeStatus['end_dt']:
-            print("FetchFullDayPerMin Prices start " + str(markettimeStatus['start_dt']))
-            print("FetchFullDayPerMin Prices end " + str(markettimeStatus['end_dt']))
             full_day_prices_etf_cursor = trade_per_min_WS.find(
                 {"e": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
                 {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "e": 1})
         else:
-            print("FetchFullDayPerMin Prices start " + str(markettimeStatus['start_dt']))
             full_day_prices_etf_cursor = trade_per_min_WS.find(
                 {"e": {"$gte": markettimeStatus['start_dt']}, "sym": etfname},
                 {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "e": 1})
@@ -152,26 +132,15 @@ class PerMinDataOperations():
         ifaholiday = HolidayCheck(todaysDate)
         dt=None
 
-        # Testing - KTZ
-        # print(now)
-        # print(currentTime)
-        # print(self.UTCEndTime)
-        # print(self.DAYendTime)
-        # print((not ifaholiday))
-        # print(self.DAYendTimeZeroZeo)
-        # print(datetime.time(self.StartHour, 30))
-
         ##########################################################################################
 
         '''Piyush's Logic'''
         '''Market operating time on a Non-Holiday UTC 13:30:00 (self.UTCStartTime) to 20:00:00 (self.UTCEndTime)'''
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
-            print("LINE 168")
             dt = datetime.datetime.now().replace(second=0, microsecond=0)
 
         '''Before Market opens same day UTC 4:00:00 (self.DAYendTimeZeroZeo) to 13:30:00 (self.UTCStartTime) OR if it's a holiday'''
         if currentTime > self.DAYendTimeZeroZeo and currentTime < self.UTCStartTime or ifaholiday:
-            print("LINE 172")
             dt = LastWorkingDay(todaysDate - datetime.timedelta(days=1)).replace(hour=self.EndHour, minute=0, second=0,
                                                                                  microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
@@ -180,77 +149,38 @@ class PerMinDataOperations():
         '''Here 2 conditions will be used.'''
         '''After market closes same day UTC 20:00:00 (self.UTCEndTime) to 23:59:59 (UTC Date Change Time). On a Non-Holiday.'''
         if currentTime < datetime.time(23, 59, 59) and currentTime > self.UTCEndTime and (not ifaholiday):
-            print("LINE 182")
             dt = now.replace(hour=self.EndHour, minute=0, second=0, microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
             dt = dt.astimezone(tz.tzlocal())
         '''After market closes 00:00:00 (UTC New Date Time) to 3:59:59 (self.DAYendTimeZeroZeo). Doesn't matter if it's a holiday.'''
         if currentTime > datetime.time(0, 0) and currentTime < self.DAYendTimeZeroZeo:
-            print("LINE 188")
             dt = LastWorkingDay(todaysDate - datetime.timedelta(days=1)).replace(hour=self.EndHour, minute=0, second=0,
                                                                                  microsecond=0)
             dt = dt.replace(tzinfo=tz.gettz('UTC'))
             dt = dt.astimezone(tz.tzlocal())
 
-        ##########################################################################################
-        '''Kshitiz's Logic'''
-        '''
-        # Current Market 930 to 4
-        if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
-            dt = now.replace(second=0, microsecond=0)
-            # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
-            dt = datetime.datetime.now().replace(second=0, microsecond=0)
-
-        # After Market
-        #elif (currentTime >= self.UTCEndTime) and (currentTime < self.DAYendTime) and (not ifaholiday): - KTZ removed this
-        elif (currentTime >= self.UTCEndTime) and (not ifaholiday):
-            dt = now.replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
-            # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
-            dt = dt.replace(tzinfo = tz.gettz('UTC'))
-            dt = dt.astimezone(tz.tzlocal())
-
-        # Next day of market before 9:30 am or holiday
-        elif (currentTime > self.DAYendTimeZeroZeo) and (currentTime < self.UTCStartTime) or ifaholiday:
-            dt=LastWorkingDay(todaysDate-datetime.timedelta(days=1)).replace(hour=self.EndHour,minute=0,second=0, microsecond=0)
-            dt = dt.replace(tzinfo=tz.gettz('UTC'))
-            dt = dt.astimezone(tz.tzlocal())
-        '''
-        ##########################################################################################
-        # Fix for adjustment datetime to unix timestamp
-        # print("getMarketConditionTime returning : " + str(dt))
-        # dt = dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
         return int(dt.timestamp() * 1000)
 
     #  Live arbitrage for 1 etf or all etf
     def LiveFetchPerMinArbitrage(self, etfname=None):
         dt_ts = self.getMarketConditionTime()
-        print("LiveFetchPerMinArbitrage " + str(dt_ts))
-        data = []
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
-                {"Timestamp": dt_ts, "ArbitrageData.symbol": etfname},
-                {"_id": 0, "Timestamp": 1, "ArbitrageData.$": 1})
+                {"Timestamp": dt_ts, "symbol": etfname},
+                {"_id": 0})
 
-            data = []
-            getTimeStamps = []
-            for item in live_per_min_cursor:
-                getTimeStamps.append(item['Timestamp'])
-                data.extend(item['ArbitrageData'])
+            data = list(live_per_min_cursor)
             liveArbitrageData_onemin = pd.DataFrame.from_records(data)
-            liveArbitrageData_onemin['Timestamp'] = getTimeStamps
             return liveArbitrageData_onemin
 
         else:
             # Data For Multiple Ticker for live minute
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts},
-                {"_id": 0, "Timestamp": 1, "ArbitrageData": 1})
+                {"_id": 0})
             result_list = list(live_per_min_cursor)
-            data = []
-            ts = [item['Timestamp'] for item in result_list]
-            [data.extend(item['ArbitrageData']) for item in result_list]
-            liveArbitrageData_onemin = pd.DataFrame.from_records(data)
-            return liveArbitrageData_onemin, ts
+            liveArbitrageData_onemin = pd.DataFrame.from_records(result_list)
+            return liveArbitrageData_onemin
 
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):
