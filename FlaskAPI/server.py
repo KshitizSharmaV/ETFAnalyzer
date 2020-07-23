@@ -145,11 +145,11 @@ def FetchPastArbitrageData(ETFName, date):
                              'Over Bought/Sold',
                              'ETFMover%1_ticker',
                              'Change%1_ticker',
-                             'T', 'T+1']
+                             'T', 'ETF Price']
         # Retreive data for Components
         data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
                                                                                          magnitudeOfArbitrageToFilterOn=0)
-        data = data.sort_index()
+        data = data.sort_index(ascending=False)
         data.index = data.index.time
         data['Time'] = data.index
         pricedf['Time']=pricedf['date']
@@ -183,7 +183,7 @@ def FetchPastArbitrageData(ETFName, date):
         data = data.reset_index(drop=True)
 
         allData['etfhistoricaldata'] = data.to_json()
-        allData['ArbitrageCumSum'] = data[['Arbitrage in $', 'Time']].to_dict('records')
+        allData['ArbitrageCumSum'] = data[::-1][['Arbitrage in $', 'Time']].to_dict('records')
         allData['etfPrices'] = pricedf.to_csv(sep='\t', index=False)
         allData['PNLStatementForTheDay'] = json.dumps(PNLStatementForTheDay)
         allData['scatterPlotData'] = json.dumps(scatterPlotData)

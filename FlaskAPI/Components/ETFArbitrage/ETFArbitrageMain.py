@@ -63,7 +63,7 @@ def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilte
     df=MomentumSignals(df,tp=10) if BuildMomentumSignals else df
     df=PatternSignals(df) if BuildPatternSignals else df
         
-    columnsneeded=['ETF Trading Spread in $','Arbitrage in $','Magnitude of Arbitrage','Over Bought/Sold']
+    columnsneeded=['ETF Trading Spread in $','Arbitrage in $','Magnitude of Arbitrage','Over Bought/Sold','ETF Price']
     #columnsneeded=columnsneeded+MomentumsignalsColumns+CandlesignalsColumns+MajorUnderlyingMovers
     columnsneeded=columnsneeded+MajorUnderlyingMovers if includeMovers else columnsneeded
 
