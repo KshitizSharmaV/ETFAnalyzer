@@ -184,7 +184,7 @@ def FetchPastArbitrageData(ETFName, date):
 
         allData['etfhistoricaldata'] = data.to_json()
         allData['ArbitrageCumSum'] = data[::-1][['Arbitrage in $', 'Time']].to_dict('records')
-        allData['etfPrices'] = pricedf.to_csv(sep='\t', index=False)
+        allData['etfPrices'] = pricedf[::-1].to_csv(sep='\t', index=False)
         allData['PNLStatementForTheDay'] = json.dumps(PNLStatementForTheDay)
         allData['scatterPlotData'] = json.dumps(scatterPlotData)
         allData['etfmoversDictCount'] = json.dumps(etfmoversDictCount)
