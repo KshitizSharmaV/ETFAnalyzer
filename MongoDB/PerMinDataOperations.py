@@ -202,4 +202,5 @@ class PerMinDataOperations():
                                    'v': 'TickVolume', 'e': 'date'}, inplace=True)
         if etfname:
             livePrices.drop(columns=['symbol'], inplace=True)
+            livePrices['date'] = dt_ts
         return livePrices
