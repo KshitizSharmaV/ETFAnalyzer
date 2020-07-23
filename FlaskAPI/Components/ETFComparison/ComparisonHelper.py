@@ -1,6 +1,6 @@
 import json
 import traceback
-
+from flask import Response
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 from MongoDB.Schemas import MongoDBConnectors
 import numpy as np
@@ -11,6 +11,8 @@ def ETFandHoldingsData(ETFName, date):
         MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         # Load all the data holdings data together
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
+        if type(etfdata) == Response:
+            return etfdata
         ETFDataObject = etfdata.to_mongo().to_dict()
         print(ETFDataObject)
         HoldingsDatObject = pd.DataFrame(ETFDataObject['holdings']).set_index('TickerSymbol').T.to_dict()

@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from pymongo.errors import ConnectionFailure,ServerSelectionTimeoutError
+from pymongo.errors import ConnectionFailure,ServerSelectionTimeoutError, NetworkTimeout
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from mongoengine import *
@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import traceback
 import sys
 import getpass
-from FlaskAPI.Helpers.CustomAPIErrorHandle import CustomAPIErrorHandler
+from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler, CustomAPIErrorHandler
 import time
 
 app = Flask(__name__)
@@ -47,18 +47,10 @@ def getETFWithSameIssuer(IssuerName):
             etfswithsameIssuer['None'] = {'ETFName': 'None',
                                           'TotalAssetsUnderMgmt': "No Other ETF was found with same Issuer"}
         return jsonify(etfswithsameIssuer)
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 @app.route('/api/ETfDescription/getETFsWithSameETFdbCategory/<ETFdbCategory>')
@@ -69,18 +61,10 @@ def getETFsWithSameETFdbCategory(ETFdbCategory):
             etfsWithSameEtfDbCategory['None'] = {'ETFName': 'None',
                                                  'TotalAssetsUnderMgmt': "No Other ETF was found with same ETF DB Category"}
         return jsonify(etfsWithSameEtfDbCategory)
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 @app.route('/api/ETfDescription/getOHLCDailyData/<ETFName>/<StartDate>')
@@ -90,18 +74,10 @@ def fetchOHLCDailyData(ETFName, StartDate):
         OHLCData = fetchOHLCHistoricalData(etfname=ETFName, StartDate=StartDate)
         OHLCData = OHLCData.to_csv(sep='\t', index=False)
         return OHLCData
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 @app.route('/api/ETfDescription/getHoldingsData/<ETFName>/<StartDate>')
@@ -110,22 +86,16 @@ def fetchHoldingsData(ETFName, StartDate):
         print("StartDate:{}".format(StartDate))
         MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, StartDate)
+        if type(etfdata) == Response:
+            return etfdata
         ETFDataObject = etfdata.to_mongo().to_dict()
         # HoldingsDatObject=pd.DataFrame(ETFDataObject['holdings']).set_index('TickerSymbol').round(2).T.to_dict()
         # print(HoldingsDatObject)
         return jsonify(ETFDataObject['holdings'])
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 @app.route('/api/ETfDescription/EtfData/<ETFName>/<date>')
 def SendETFHoldingsData(ETFName, date):
@@ -133,6 +103,8 @@ def SendETFHoldingsData(ETFName, date):
         allData = {}
         MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
+        if type(etfdata) == Response:
+            return etfdata
         ETFDataObject = etfdata.to_mongo().to_dict()
 
         allData['SimilarTotalAsstUndMgmt'] = fetchETFsWithSimilarTotAsstUndMgmt(connection=connection,
@@ -151,18 +123,10 @@ def SendETFHoldingsData(ETFName, date):
 
         allData['ETFDataObject'] = ETFDataObject
         return json.dumps(allData)
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 ############################################
@@ -226,18 +190,10 @@ def FetchPastArbitrageData(ETFName, date):
         allData['etfmoversDictCount'] = json.dumps(etfmoversDictCount)
         allData['highestChangeDictCount'] = json.dumps(highestChangeDictCount)
         return json.dumps(allData)
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 
@@ -254,18 +210,10 @@ def fetchPNLForETFForALlDays(ETFName):
         PNLOverDates = PNLOverDates.to_dict(orient='records')
         print("PNLOverDates: "+str(PNLOverDates))
         return jsonify(PNLOverDates)
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 
@@ -279,6 +227,8 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
     try:
         MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
+        if type(etfdata) == Response:
+            return etfdata
         ETFDataObject = etfdata.to_mongo().to_dict()
         TickerSymbol = pd.DataFrame(ETFDataObject['holdings'])['TickerSymbol'].to_list()
         TickerSymbol.remove('CASH') if 'CASH' in TickerSymbol else TickerSymbol
@@ -290,18 +240,10 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
         responses['DailyChangepct'] = responses['DailyChangepct'].round(3)
         responses.rename(columns={'Symbol': 'symbol', 'Volume': 'volume'}, inplace=True)
         return jsonify(responses[['symbol', 'DailyChangepct', 'volume']].to_dict(orient='records'))
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 
@@ -315,7 +257,6 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 @app.route('/api/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
-        start = time.time()
         print("All Etfs Live Arbitrage is called")
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
@@ -328,21 +269,11 @@ def SendLiveArbitrageDataAllTickers():
         live_data = live_data.fillna(0)
         print(live_data)
         print(live_data.columns)
-        end = time.time()
-        print("SendLiveArbitrageDataAllTickers Time : {}".format(end-start))
         return jsonify(live_data.to_dict(orient='records'))
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 ############################################
@@ -355,11 +286,11 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
     try:
-        start = time.time()
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
                                           FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, callAllDayArbitrage=True)
-
+        if type(res) == Response:
+            return res
         pricedf= res['Prices']
         pricedf =pricedf.reset_index(drop=True)
         pricedf['Time']=pricedf['date']
@@ -384,51 +315,30 @@ def SendLiveArbitrageDataSingleTicker(etfname):
             res['Arbitrage'][['ETF Change Price %', 'Net Asset Value Change%']].to_dict(orient='records'))
         res['ArbitrageLineChart'] = res['Arbitrage'][['Arbitrage in $', 'Time']].to_dict('records')
         res['Arbitrage'] = res['Arbitrage'].to_json()
-
-        end = time.time()
-
-        print("Executing Time SendLiveArbitrageDataSingleTicker : {}".format(end-start))
         return json.dumps(res)
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 
 @app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     try:
-        start = time.time()
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice,
                                           FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage, callAllDayArbitrage=False)
+        if type(res) == Response:
+            return res
         res['Prices'] = res['Prices'].to_dict()
         res['Arbitrage'] = res['Arbitrage'].to_dict()
         res['SignalInfo'] = analyzeSignalPerformane(res['Arbitrage']['Arbitrage in $'][0])
-        end = time.time()
-        print("Execution Time UpdateLiveArbitrageDataTablesAndPrices : {}".format(end-start))
         return res
-    except ConnectionFailure:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
-    except ServerSelectionTimeoutError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('no database server is available for an operation', 503)
-    except UnboundLocalError:
-        traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error('Data for either given date or ETF is not available yet', 500)
     except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return CustomAPIErrorHandler().handle_error(e, 500)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
 

@@ -1,3 +1,4 @@
+import sys
 import traceback
 
 from mongoengine import *
@@ -5,6 +6,7 @@ from datetime import datetime
 import pandas as pd
 import getpass
 from CommonServices.LogCreater import CreateLogger
+from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
 logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
 logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLog.log', loggerName='HistArbErrorLogger')
 
@@ -92,6 +94,8 @@ class LoadHoldingsdata(object):
             logger2.exception(e)
             # logger.critical(e, exc_info=True)
             disconnect('ETF_db')
+            exc_type, exc_value, exc_tb = sys.exc_info()
+            return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
     def getHoldingsDataForAllETFfromDB(self, etfname):
         try:
