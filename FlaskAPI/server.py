@@ -340,6 +340,14 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
         traceback.print_exc()
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
+############################################
+# Get last working date
+############################################
+from CommonServices.Holidays import LastWorkingDay
+@app.route('/api/LastWorkingDate/')
+def LastWorkingDate():
+    lastworkinDay = LastWorkingDay(datetime.utcnow().date() - timedelta(days=2))
+    return json.dumps(datetime.strftime(lastworkinDay.date(),'%Y%m%d'))
 
 
 if __name__ == '__main__':
