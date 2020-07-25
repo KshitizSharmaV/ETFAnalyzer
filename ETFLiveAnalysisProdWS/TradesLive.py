@@ -62,7 +62,7 @@ def on_close(ws):
 
 
 def on_open(ws):
-    ws.send('{"action":"auth","params":"M_PKVL_rqHZI7VM9ZYO_hwPiConz5rIklx893F"}')
+    ws.send('{"action":"auth","params":"qOKbrjPAxnTvs4_hwPi GoFzgHgxgmyafq"}')
     tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
     tickerlistStr = ','.join([''.join(['AM.', str(elem)]) for elem in tickerlist])
     '''
