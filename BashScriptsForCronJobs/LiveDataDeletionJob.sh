@@ -2,3 +2,4 @@
 source /home/ubuntu/etfenv/bin/activate
 cd /home/ubuntu/ETFAnalyzer/ETFLiveAnalysisProdWS/ || exit
 python DeleteScript.py
+exit
