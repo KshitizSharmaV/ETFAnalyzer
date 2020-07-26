@@ -11,7 +11,7 @@ collread = conn.ETF_db.ArbitrageCollection
 collwrite = conn.ETF_db.ArbitrageCollectionNew
 
 cursor = collread.find()
-data = []
+count = 0
 for item in cursor:
     etf = item['ETFName']
     doa = item['dateOfAnalysis']
@@ -24,10 +24,14 @@ for item in cursor:
     df['dateWhenAnalysisRan'] = dwar
     df = df[['ETFName','dateOfAnalysis','dateWhenAnalysisRan']+cols]
     print(df)
-    data.append(df)
+    collwrite.insert(df.to_dict(orient='records'))
+    print("Inserted")
+    count+=1
 
-for df in data:
-    collwrite.insert_many(df.to_dict(orient='records'))
+print("Total {} ETF-Date records inserted".format(count))
+
+# for df in data:
+#     collwrite.insert_many(df.to_dict(orient='records'))
 
 # '''Speed Comparison'''
 # start2 = time.time()
