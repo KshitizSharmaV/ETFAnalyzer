@@ -80,9 +80,9 @@ if system_username == 'ubuntu':
     dailyopencloseCollection.create_index([("dateForData", DESCENDING), ("Symbol", ASCENDING)], unique=True)
 
 # Arbitrage
-arbitragecollection = db.ArbitrageCollection
+arbitragecollection = db.ArbitrageCollectionNew
 if system_username == 'ubuntu':
-    arbitragecollection.create_index([("dateOfAnalysis", DESCENDING), ("ETFName", ASCENDING)], unique=True)
+    arbitragecollection.create_index([("dateOfAnalysis", DESCENDING), ("ETFName", ASCENDING)])
 
 # Arbitrage Per Minute
 arbitrage_per_min = db.ArbitragePerMin

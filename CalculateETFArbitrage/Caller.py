@@ -78,11 +78,10 @@ for etfname in etflist:
             continue
         else:
             data.reset_index(inplace=True)
-            SaveCalculatedArbitrage().insertIntoCollection(ETFName=etfname,
-                                                           dateOfAnalysis=datetime.strptime(date, '%Y-%m-%d'),
-                                                           data=data.to_dict(orient='records'),
-                                                           dateWhenAnalysisRan=datetime.now()
-                                                           )
+            data['ETFName'] = etfname
+            data['dateOfAnalysis'] = datetime.strptime(date, '%Y-%m-%d')
+            data['dateWhenAnalysisRan'] = datetime.now()
+            SaveCalculatedArbitrage().insertIntoCollection(data=data.to_dict(orient='records'))
 
     except Exception as e:
         etfwhichfailed.append(etfname)

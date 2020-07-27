@@ -19,7 +19,7 @@ class CalculateAndSavePnLData():
         else:
             self.connforthis = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 
-        self.arbitragecollection = self.connforthis.ETF_db.ArbitrageCollection
+        self.arbitragecollection = self.connforthis.ETF_db.ArbitrageCollectionNew
 
     ########################################################################################
     # Use to populate DB for the first time, for all dates which are not present
@@ -28,7 +28,7 @@ class CalculateAndSavePnLData():
         try:
             date_list = self.returnres()
             date_list.sort()
-            date_list = [date for date in date_list if date>datetime.datetime(2020,6,4)]
+            date_list = [date for date in date_list if date > datetime.datetime(2020, 6, 4)]
             etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
             # final_res = []
             for date in date_list:
@@ -38,34 +38,42 @@ class CalculateAndSavePnLData():
                         presence = MongoDBConnectors().get_pymongo_readWrite_production_production().ETF_db.PNLDataCollection.find(
                             {'Date': date})
                     else:
-                        presence = MongoDBConnectors().get_pymongo_readonly_devlocal_production().ETF_db.PNLDataCollection.find(
+                        presence = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PNLDataCollection.find(
                             {'Date': date})
 
                     presence_list = list(presence)
                     etf_already_present = [item['Symbol'] for item in presence_list]
-                    etf_to_be_done = list(set(etflist)-set(etf_already_present))
-                    if len(presence_list)==len(etflist):
+                    etf_to_be_done = list(set(etflist) - set(etf_already_present))
+                    if len(presence_list) == len(etflist):
                         continue
                     all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': date})
+                    all_etf_arb = list(all_etf_arb_cursor)
+                    hist_arb_present_syms = list(set([etf['ETFName'] for etf in all_etf_arb]))
+                    if len(hist_arb_present_syms) == len(presence_list):
+                        print('ETFs with Hist Arb present already done')
+                        continue
                     PNLOverDates = {}
                     final_res = []
+
+                    all_etf_arb = [[etf_arb for etf_arb in all_etf_arb if etf_arb['ETFName'] == etf] for etf in
+                                   etf_to_be_done]
                     # Iter over the collection results
-                    for etf_arb in all_etf_arb_cursor:
-                        if etf_arb['ETFName'] in etf_to_be_done:
-                            try:
-                                print(etf_arb['ETFName'])
-                                logger.debug(etf_arb['ETFName'])
-                                allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
-                                    arbitrageDataFromMongo=etf_arb,
-                                    magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
-                                PNLOverDates[str(etf_arb['ETFName'])] = pnlstatementforday
-                            except Exception as e0:
-                                print("Exception in {}".format(etf_arb['ETFName']))
-                                logger.warning("Exception in {}".format(etf_arb['ETFName']))
-                                print(e0)
-                                traceback.print_exc()
-                                logger.exception(e0)
-                                pass
+                    for etf_arblist in all_etf_arb:
+                        # if etf_arb['ETFName'] in etf_to_be_done:
+                        try:
+                            print(etf_arblist[0]['ETFName'])
+                            logger.debug(etf_arblist[0]['ETFName'])
+                            allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
+                                arbitrageDataFromMongo=etf_arblist,
+                                magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
+                            PNLOverDates[str(etf_arblist[0]['ETFName'])] = pnlstatementforday
+                        except Exception as e0:
+                            print("Exception in {}".format(etf_arblist[0]['ETFName']))
+                            logger.warning("Exception in {}".format(etf_arblist[0]['ETFName']))
+                            print(e0)
+                            traceback.print_exc()
+                            logger.exception(e0)
+                            pass
                     PNLOverDates = pd.DataFrame(PNLOverDates).T
                     # del PNLOverDates['Magnitue Of Arbitrage']
                     PNLOverDates.columns = ['Sell Return%', 'Buy Return%', 'Magnitue Of Arbitrage', '# T_Buy',
@@ -98,12 +106,16 @@ class CalculateAndSavePnLData():
             [('dateOfAnalysis', -1)]).limit(1)
         last_date = list(last_date_cursor)[0]['dateOfAnalysis']
         all_etf_arb_cursor = self.arbitragecollection.find({'dateOfAnalysis': last_date})
+        all_etf_df = pd.DataFrame.from_records(list(all_etf_arb_cursor))
+        all_etf_df.set_index('ETFName', inplace=True)
+        groups = all_etf_df.groupby('ETFName').groups
         PNLOverDates = {}
         # Iter over the collection results
-        for etf_arb in all_etf_arb_cursor:
+        for etf in groups.keys():
+            data_to_be_passed = all_etf_df.loc[etf].reset_index().to_dict(orient='records')
             allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(
-                arbitrageDataFromMongo=etf_arb, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
-            PNLOverDates[str(etf_arb['ETFName'])] = pnlstatementforday
+                arbitrageDataFromMongo=data_to_be_passed, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
+            PNLOverDates[str(data_to_be_passed[0]['ETFName'])] = pnlstatementforday
         PNLOverDates = pd.DataFrame(PNLOverDates).T
         # del PNLOverDates['Magnitue Of Arbitrage']
         PNLOverDates.columns = ['Sell Return%', 'Buy Return%', 'Magnitue Of Arbitrage', '# T_Buy', '# R_Buy',

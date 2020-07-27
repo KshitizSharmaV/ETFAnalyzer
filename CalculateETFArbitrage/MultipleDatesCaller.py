@@ -17,6 +17,7 @@ import pandas as pd
 from datetime import datetime
 from datetime import timedelta
 import getpass
+from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 from CalculateETFArbitrage.Control import ArbitrageCalculation
 from MongoDB.SaveArbitrageCalcs import SaveCalculatedArbitrage
 from CalculateETFArbitrage.GetRelevantHoldings import RelevantHoldings
@@ -50,7 +51,7 @@ logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLo
 #          '2020-06-11', '2020-06-12', '2020-06-15', '2020-06-16', '2020-06-17', '2020-06-18', '2020-06-19', '2020-06-22',
 #          '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-29', '2020-06-30', '2020-06-01', '2020-06-02',
 #          '2020-06-06', '2020-06-07']
-dates = ['2020-07-08']
+dates = ['2020-07-22', '2020-07-23', '2020-07-24']
 for date in dates:
     print(date)
     etfwhichfailed = []
@@ -78,6 +79,15 @@ for date in dates:
     print(etflist)
     print(len(etflist))
 
+    # REMOVE ALL QUOTES DATA AND TRADES DATA FOR THE UPDATED ETF LIST FOR THE GIVEN DATE
+    del_list = etflist.copy()
+    rem_conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+    quotes_del = rem_conn.ETF_db.QuotesData.delete_many({'dateForData': datetime.strptime(date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
+    print(quotes_del.deleted_count)
+    sym_list = [del_list.extend(LoadHoldingsdata().LoadHoldingsAndClean(etf, datetime.strptime(date, '%Y-%m-%d')).getSymbols()) for etf in etflist]
+    trades_del = rem_conn.ETF_db.TradesData.delete_many({'dateForData': datetime.strptime(date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
+    print(trades_del.deleted_count)
+
     for etfname in etflist:
         try:
             print("Doing Analysis for ETF= " + etfname)
@@ -91,11 +101,10 @@ for date in dates:
                 continue
             else:
                 data.reset_index(inplace=True)
-                SaveCalculatedArbitrage().insertIntoCollection(ETFName=etfname,
-                                                               dateOfAnalysis=datetime.strptime(date, '%Y-%m-%d'),
-                                                               data=data.to_dict(orient='records'),
-                                                               dateWhenAnalysisRan=datetime.now()
-                                                               )
+                data['ETFName'] = etfname
+                data['dateOfAnalysis'] = datetime.strptime(date, '%Y-%m-%d')
+                data['dateWhenAnalysisRan'] = datetime.now()
+                SaveCalculatedArbitrage().insertIntoCollection(data=data.to_dict(orient='records'))
 
         except Exception as e:
             etfwhichfailed.append(etfname)
