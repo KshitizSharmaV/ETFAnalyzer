@@ -81,7 +81,10 @@ for date in dates:
 
     # REMOVE ALL QUOTES DATA AND TRADES DATA FOR THE UPDATED ETF LIST FOR THE GIVEN DATE
     del_list = etflist.copy()
-    rem_conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+    if getpass.getuser()=='ubuntu':
+        rem_conn = MongoDBConnectors().get_pymongo_readWrite_production_production()
+    else:
+        rem_conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
     quotes_del = rem_conn.ETF_db.QuotesData.delete_many({'dateForData': datetime.strptime(date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
     print(quotes_del.deleted_count)
     sym_list = [del_list.extend(LoadHoldingsdata().LoadHoldingsAndClean(etf, datetime.strptime(date, '%Y-%m-%d')).getSymbols()) for etf in etflist]
