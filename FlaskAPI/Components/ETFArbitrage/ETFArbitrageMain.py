@@ -11,11 +11,7 @@ from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import LoadETFPrices
 from FlaskAPI.Components.ETFArbitrage.MomentumSignal import MomentumSignals
 from FlaskAPI.Components.ETFArbitrage.CandleStickPattern import PatternSignals
 
-system_username = getpass.getuser()
-if system_username == 'ubuntu':
-    connectionLocal = MongoDBConnectors().get_pymongo_readWrite_production_production()
-else:
-    connectionLocal = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+connectionLocal = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 db = connectionLocal.ETF_db
 TradesData = db.TradesData
 arbitragecollection = db.ArbitrageCollectionNew

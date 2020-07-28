@@ -1,34 +1,27 @@
-import sys
+import sys,os, pathlib
 sys.path.append("..")
-from pymongo.errors import ConnectionFailure,ServerSelectionTimeoutError, NetworkTimeout
-from flask import Flask, request, jsonify, Response
+import getpass
+from flask import Flask, jsonify, render_template, Response
 from flask_cors import CORS
 from mongoengine import *
-import sys
 import json
 import pandas as pd
-from mongoengine import connect
 import numpy as np
-import math
-import ast
 from datetime import datetime, timedelta
 import traceback
-import sys
-import getpass
 from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler, CustomAPIErrorHandler
-import time
+from MongoDB.MongoDBConnections import MongoDBConnectors
+from FlaskAPI.Helpers.FlaskAppMaker import flaskAppMaker
 
-app = Flask(__name__)
+connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+
+app = flaskAppMaker().create_app()
 
 CORS(app)
 
-from MongoDB.MongoDBConnections import MongoDBConnectors
+if sys.platform.startswith('linux') and getpass.getuser() == 'ubuntu':
+    flaskAppMaker().get_index_page()
 
-system_username = getpass.getuser()
-if system_username == 'ubuntu':
-    connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
-else:
-    connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 ############################################
 # ETF Description Page
 ############################################
