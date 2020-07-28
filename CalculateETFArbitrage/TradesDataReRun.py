@@ -29,8 +29,8 @@ def listOfHolidays():
 def runTradesForAllETFs():
     start_time = time.time()
     etflist = list(pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns)
-    start = datetime.datetime.strptime("2020-06-05", "%Y-%m-%d")
-    end = datetime.datetime.strptime("2020-07-24", "%Y-%m-%d")
+    start = datetime.datetime.strptime("2020-07-24", "%Y-%m-%d")
+    end = datetime.datetime.strptime("2020-07-25", "%Y-%m-%d")
     date_array = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days)]
     datelist = [date.strftime('%Y-%m-%d') for date in date_array]
     list_of_holidays = listOfHolidays()

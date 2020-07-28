@@ -20,7 +20,7 @@ class AllCollectionsStatusCheck():
         pass
 
     def Historic_Arbitrage_Status_Check(self, date_to_check_in_string=None):
-        collection = self.db.ArbitrageCollection
+        collection = self.db.ArbitrageCollectionNew
         date_to_check = datetime.strptime(date_to_check_in_string, '%Y%m%d')
         result_cursor = collection.find({'dateOfAnalysis': date_to_check}, {'_id': 0, 'ETFName': 1})
         result = [etf['ETFName'] for etf in result_cursor]
