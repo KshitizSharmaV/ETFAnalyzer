@@ -207,6 +207,7 @@ def fetchPNLForETFForALlDays(ETFName):
         PNLOverDates.columns = ['Sell Return%', 'Buy Return%', '# T.Buy', '# R.Buy', '% R.Buy', '# T.Sell', '# R.Sell',
                                 '% R.Sell',
                                 'Magnitue Of Arbitrage', 'Date']
+        PNLOverDates = PNLOverDates.dropna()
         PNLOverDates = PNLOverDates.to_dict(orient='records')
         print("PNLOverDates: "+str(PNLOverDates))
         return jsonify(PNLOverDates)
