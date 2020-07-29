@@ -1,10 +1,10 @@
 from pymongo import ASCENDING, DESCENDING
-import getpass
+import getpass, socket
 from MongoDB.MongoDBConnections import MongoDBConnectors
 
 system_username = getpass.getuser()
-
-if system_username == 'ubuntu':
+system_private_ip = socket.gethostbyname(socket.gethostname())
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     ''' Production to Production:'''
     connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
 else:
@@ -19,7 +19,7 @@ else:
 
 db = connection.ETF_db
 
-if system_username == 'ubuntu':
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     ''' Production to Production:'''
     motor_client = MongoDBConnectors().get_motorasync_readWrite_production_production()
 else:
@@ -36,7 +36,7 @@ motor_db = motor_client.ETF_db
 
 # Quotes Pipeline
 quotesCollection = db.QuotesData
-if system_username == 'ubuntu':
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     quotesCollection.create_index([("dateForData", DESCENDING), ("symbol", ASCENDING)])
 quotespipeline = [
     {'$match': ''},
@@ -56,7 +56,7 @@ quotespipeline = [
 
 # Trades Pipeline
 tradeCollection = db.TradesData
-if system_username == 'ubuntu':
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     tradeCollection.create_index([("dateForData", DESCENDING), ("symbol", ASCENDING)])
 tradespipeline = [
     {'$match': ''},
@@ -76,17 +76,17 @@ tradespipeline = [
 
 # Daily Open Close Collection
 dailyopencloseCollection = db.DailyOpenCloseCollection
-if system_username == 'ubuntu':
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     dailyopencloseCollection.create_index([("dateForData", DESCENDING), ("Symbol", ASCENDING)], unique=True)
 
 # Arbitrage
 arbitragecollection = db.ArbitrageCollectionNew
-if system_username == 'ubuntu':
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     arbitragecollection.create_index([("dateOfAnalysis", DESCENDING), ("ETFName", ASCENDING)])
 
 # Arbitrage Per Minute
 arbitrage_per_min = db.ArbitragePerMin
-if system_username == 'ubuntu':
+if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     arbitrage_per_min.create_index([('Timestamp', DESCENDING)])
 
 # Trade Aggregate Minute for all Tickers.

@@ -5,13 +5,18 @@ import time
 import numpy as np
 import talib
 import getpass
+import socket
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import LoadETFPrices, LoadETFArbitrageData, \
     analysePerformance, countRightSignals
 from FlaskAPI.Components.ETFArbitrage.MomentumSignal import MomentumSignals
 from FlaskAPI.Components.ETFArbitrage.CandleStickPattern import PatternSignals
 
-connectionLocal = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+sys_private_ip = socket.gethostbyname(socket.gethostname())
+if sys_private_ip == '172.31.76.32':
+    connectionLocal = MongoDBConnectors().get_pymongo_readWrite_production_production()
+else:
+    connectionLocal = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 db = connectionLocal.ETF_db
 TradesData = db.TradesData
 arbitragecollection = db.ArbitrageCollectionNew

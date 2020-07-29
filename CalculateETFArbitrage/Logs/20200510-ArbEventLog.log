@@ -1,6 +1,0 @@
-2020-05-10 01:13:12,965 - root - DEBUG - Command createIndexes with request id 1714636915 started on server ('18.213.229.80', 27017)
-2020-05-10 01:13:13,300 - root - DEBUG - Command createIndexes with request id 1714636915 on server ('18.213.229.80', 27017) succeeded in 335074 microseconds
-2020-05-10 01:13:13,302 - root - DEBUG - Command find with request id 1957747793 started on server ('18.213.229.80', 27017)
-2020-05-10 01:13:13,848 - root - DEBUG - Command find with request id 1957747793 on server ('18.213.229.80', 27017) succeeded in 545516 microseconds
-2020-05-10 01:13:14,185 - root - DEBUG - Command endSessions with request id 424238335 started on server ('18.213.229.80', 27017)
-2020-05-10 01:13:14,448 - root - DEBUG - Command endSessions with request id 424238335 on server ('18.213.229.80', 27017) succeeded in 262857 microseconds
