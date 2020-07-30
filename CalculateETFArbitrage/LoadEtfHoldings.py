@@ -1,18 +1,19 @@
 import sys
+
 sys.path.append('..')
 import traceback
 
-from mongoengine import *
 from datetime import datetime
 import pandas as pd
 import getpass
 from CommonServices.LogCreater import CreateLogger
 from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
+
 logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
 logger2 = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbErrorLog.log', loggerName='HistArbErrorLogger')
 
-from HoldingsDataScripts.ETFMongo import ETF
 from MongoDB.MongoDBConnections import MongoDBConnectors
+
 
 class LoadHoldingsdata(object):
     def __init__(self):
@@ -20,6 +21,11 @@ class LoadHoldingsdata(object):
         self.weights = None
         self.symbols = None
         self.system_username = getpass.getuser()
+        if self.system_username == 'ubuntu':
+            self.conn = MongoDBConnectors().get_pymongo_readWrite_production_production()
+        else:
+            self.conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+            # self.conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 
     def LoadHoldingsAndClean(self, etfname, fundholdingsdate):
         try:
@@ -46,26 +52,19 @@ class LoadHoldingsdata(object):
             logger.debug("Data Successfully Loaded")
             return self
         except Exception as e:
-            logger.error("Holdings Data Not Loaded for etf : {}",format(etfname))
-            # logger.critical(e, exc_info=True)
-            logger2.error("Holdings Data Not Loaded for etf : {}",format(etfname))
+            logger.error("Holdings Data Not Loaded for etf : {}", format(etfname))
+            logger2.error("Holdings Data Not Loaded for etf : {}", format(etfname))
             logger.exception(e)
             logger2.exception(e)
 
     def getHoldingsDatafromDB(self, etfname, fundholdingsdate):
         try:
-            if self.system_username == 'ubuntu':
-                MongoDBConnectors().get_mongoengine_readWrite_production_production()
-            else:
-                MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-                # MongoDBConnectors().get_mongoengine_devlocal_devlocal()
-
-            etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
-                '-FundHoldingsDate').first()
-            print(etfdata)
-            holdingsdatadf = pd.DataFrame(etfdata.to_mongo().to_dict()['holdings'])
-            print(str(etfdata.FundHoldingsDate))
-            disconnect('ETF_db')
+            etfdata = self.conn.ETF_db.ETFHoldings.find(
+                {'ETFTicker': etfname, 'FundHoldingsDate': {'$lte': fundholdingsdate}}).sort(
+                [('FundHoldingsDate', -1)]).limit(1)
+            etfdata = list(etfdata)[0]
+            holdingsdatadf = pd.DataFrame(etfdata['holdings'])
+            print(str(etfdata['FundHoldingsDate']))
             return holdingsdatadf
 
         except Exception as e:
@@ -75,14 +74,14 @@ class LoadHoldingsdata(object):
             logger.exception(e)
             logger2.exception(e)
             # logger.critical(e, exc_info=True)
-            disconnect('ETF_db')
 
     def getAllETFData(self, etfname, fundholdingsdate):
         try:
-            # if not type(fundholdingsdate)==datetime:
-            #     fundholdingsdate = datetime.strptime(fundholdingsdate,'%Y%m%d')
-            etfdata = ETF.objects(ETFTicker=etfname, FundHoldingsDate__lte=fundholdingsdate).order_by(
-                '-FundHoldingsDate').first()
+            if not type(fundholdingsdate)==datetime:
+                fundholdingsdate = datetime.strptime(fundholdingsdate,'%Y%m%d')
+            etfdata = self.conn.ETF_db.ETFHoldings.find(
+                {'ETFTicker': etfname, 'FundHoldingsDate': {'$lte':fundholdingsdate} }).sort(
+                [('FundHoldingsDate', -1)]).limit(1)
             return etfdata
 
         except Exception as e:
@@ -93,23 +92,17 @@ class LoadHoldingsdata(object):
             traceback.print_exc()
             logger.exception(e)
             logger2.exception(e)
-            # logger.critical(e, exc_info=True)
-            disconnect('ETF_db')
             exc_type, exc_value, exc_tb = sys.exc_info()
             return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
     def getHoldingsDataForAllETFfromDB(self, etfname):
         try:
-            if self.system_username == 'ubuntu':
-                MongoDBConnectors().get_mongoengine_readWrite_production_production()
-            else:
-                MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-                # MongoDBConnectors().get_mongoengine_devlocal_devlocal()
-            etfdata = ETF.objects(ETFTicker=etfname).order_by('-FundHoldingsDate').first()
-            print(etfdata.ETFTicker)
-            holdingsdatadf = pd.DataFrame(etfdata.to_mongo().to_dict()['holdings'])
-            print(str(etfdata.FundHoldingsDate))
-            disconnect('ETF_db')
+            etfdata = self.conn.ETF_db.ETFHoldings.find({'ETFTicker': etfname}).sort([('FundHoldingsDate', -1)]).limit(
+                1)
+            etfdata = list(etfdata)[0]
+            print(etfdata['ETFTicker'])
+            holdingsdatadf = pd.DataFrame(etfdata['holdings'])
+            print(str(etfdata['FundHoldingsDate']))
             return holdingsdatadf['TickerSymbol'].to_list()
         except Exception as e:
             print("Can't Fetch Fund Holdings Data for all ETFs")
@@ -119,7 +112,6 @@ class LoadHoldingsdata(object):
             logger.exception(e)
             logger2.exception(e)
             traceback.print_exc()
-            disconnect('ETF_db')
 
     def getETFWeights(self):
         return self.weights

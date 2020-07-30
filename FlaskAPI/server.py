@@ -19,8 +19,11 @@ app = flaskAppMaker().create_app()
 
 CORS(app)
 
-if sys.platform.startswith('linux') and getpass.getuser() == 'ubuntu':
-    flaskAppMaker().get_index_page()
+# if sys.platform.startswith('linux') and getpass.getuser() == 'ubuntu':
+#     flaskAppMaker().get_index_page()
+@app.route('/')
+def index():
+    return render_template("index.html")
 
 ############################################
 # ETF Description Page
@@ -77,11 +80,10 @@ def fetchOHLCDailyData(ETFName, StartDate):
 def fetchHoldingsData(ETFName, StartDate):
     try:
         print("StartDate:{}".format(StartDate))
-        MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, StartDate)
         if type(etfdata) == Response:
             return etfdata
-        ETFDataObject = etfdata.to_mongo().to_dict()
+        ETFDataObject = list(etfdata)[0]
         # HoldingsDatObject=pd.DataFrame(ETFDataObject['holdings']).set_index('TickerSymbol').round(2).T.to_dict()
         # print(HoldingsDatObject)
         return jsonify(ETFDataObject['holdings'])
@@ -94,11 +96,10 @@ def fetchHoldingsData(ETFName, StartDate):
 def SendETFHoldingsData(ETFName, date):
     try:
         allData = {}
-        MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         if type(etfdata) == Response:
             return etfdata
-        ETFDataObject = etfdata.to_mongo().to_dict()
+        ETFDataObject = list(etfdata)[0]
 
         allData['SimilarTotalAsstUndMgmt'] = fetchETFsWithSimilarTotAsstUndMgmt(connection=connection,
                                                                                 totalassetUnderManagement=ETFDataObject[
@@ -228,11 +229,10 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
     if checkifDateIsBeforeJuneFive(date):
         return CustomAPIErrorHandler().handle_error('Data only available before June 5th 2020, please choose a date after 5th June', 500)
     try:
-        MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         if type(etfdata) == Response:
             return etfdata
-        ETFDataObject = etfdata.to_mongo().to_dict()
+        ETFDataObject = list(etfdata)[0]
         TickerSymbol = pd.DataFrame(ETFDataObject['holdings'])['TickerSymbol'].to_list()
         TickerSymbol.remove('CASH') if 'CASH' in TickerSymbol else TickerSymbol
         openclosedata_cursor = connection.ETF_db.DailyOpenCloseCollection.find(

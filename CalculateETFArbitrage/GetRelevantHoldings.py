@@ -1,5 +1,6 @@
 import sys  # Remove in production - KTZ
 import traceback
+
 sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/ETFAnalyzer',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/ETFsList_Scripts',
                  '/home/piyush/Desktop/etf0406/ETFAnalyzer/HoldingsDataScripts',
@@ -8,11 +9,11 @@ sys.path.extend(['/home/piyush/Desktop/etf0406', '/home/piyush/Desktop/etf0406/E
 sys.path.append("..")  # Remove in production - KTZ
 import pandas as pd
 from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
-from ETFsList_Scripts.List523ETFsMongo import ETFListDocument
 from MongoDB.MongoDBConnections import MongoDBConnectors
-from mongoengine import *
 import csv
 import getpass
+
+
 class RelevantHoldings():
     def __init__(self):
         self.listofetfs = []
@@ -21,27 +22,14 @@ class RelevantHoldings():
         self.NonChineseHoldings = set()
         self.NonChineseETFs = []
         self.system_username = getpass.getuser()
+
     def getAllETFNames(self):
         try:
-            if self.system_username == 'ubuntu':
-                MongoDBConnectors().get_mongoengine_readWrite_production_production()
-            else:
-                MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-            # if self.system_username == 'ubuntu':
-            #     MongoDBConnectors().get_mongoengine_readWrite_production_production()
-            # else:
-            #     MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
-            # etflistdocument = ETFListDocument.objects().order_by('-Download_date').first()
-            # # print(etflistdocument)
-            # self.listofetfs = [str(etf.Symbol) for etf in etflistdocument.etflist]
-            # print(self.listofetfs)
-            # print(len(self.listofetfs))
             etfdf = pd.read_csv("../CSVFiles/250M_WorkingETFs.csv")
             self.listofetfs = etfdf['Symbol']
             print(self.listofetfs)
             print(len(self.listofetfs))
             return self.listofetfs
-
 
         except Exception as e:
             traceback.print_exc()
@@ -49,7 +37,6 @@ class RelevantHoldings():
             print(e)
 
     def getAllNonChineseHoldingsETFs(self):
-
         self.getAllETFNames()
         for etf in self.listofetfs:
             try:
@@ -91,6 +78,7 @@ class RelevantHoldings():
         with open(filename, 'w') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(etflist)
+
 
 if __name__ == "__main__":
     non = RelevantHoldings().getAllNonChineseHoldingsETFs()
