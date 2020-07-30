@@ -16,13 +16,14 @@ def retry(exceptions, total_tries=4, initial_wait=0.5, backoff_factor=2, logger=
         backoff_factor: Backoff multiplier (e.g. value of 2 will double the delay each retry).
         logger: logger to be used, if none specified print
     """
+
     def retry_decorator(f):
         @wraps(f)
         def func_with_retries(*args, **kwargs):
             _tries, _delay = total_tries + 1, initial_wait
             while _tries > 1:
                 try:
-                    log(f'{total_tries + 2 - _tries}. try:', logger)
+                    log(f'{total_tries + 2 - _tries}. try: {f.__name__}', logger)
                     return f(*args, **kwargs)
                 except exceptions as e:
                     _tries -= 1
@@ -41,6 +42,7 @@ def retry(exceptions, total_tries=4, initial_wait=0.5, backoff_factor=2, logger=
                     _delay *= backoff_factor
 
         return func_with_retries
+
     return retry_decorator
 
 

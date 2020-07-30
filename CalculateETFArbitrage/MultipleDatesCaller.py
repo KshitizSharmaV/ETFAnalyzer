@@ -116,11 +116,11 @@ for date in dates:
             traceback.print_exc()
             logger.exception(e)
             logger2.exception(e)
-            # emailobj = EmailSender()
-            # msg = emailobj.message(subject="Exception Occurred",
-            #                        text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/MultipleDatesCaller.py {}".format(
-            #                            traceback.format_exc()))
-            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            email_obj = EmailSender()
+            msg = email_obj.message(subject="Exception Occurred",
+                                   text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/MultipleDatesCaller.py {}".format(
+                                       traceback.format_exc()))
+            email_obj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             continue
     if len(etfwhichfailed) > 0:
         RelevantHoldings().write_to_csv(etfwhichfailed, "etfwhichfailed.csv")
