@@ -12,6 +12,8 @@ import traceback
 from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler, CustomAPIErrorHandler
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Helpers.FlaskAppMaker import flaskAppMaker
+import firebase_admin
+from firebase_admin import credentials
 
 connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 
@@ -229,6 +231,8 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
     if checkifDateIsBeforeJuneFive(date):
         return CustomAPIErrorHandler().handle_error('Data only available before June 5th 2020, please choose a date after 5th June', 500)
     try:
+        print(request.headers.get('Authorization'))
+        #``
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         if type(etfdata) == Response:
             return etfdata
@@ -260,6 +264,7 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 @app.route('/api/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
+        print(request.headers.get('Authorization'))
         print("All Etfs Live Arbitrage is called")
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
