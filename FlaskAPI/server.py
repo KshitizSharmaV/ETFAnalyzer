@@ -1,7 +1,8 @@
-import sys,os, pathlib
+import sys, os, pathlib
+
 sys.path.append("..")
 import getpass
-from flask import Flask, jsonify, render_template, Response
+from flask import Flask, jsonify, render_template, Response, request
 from flask_cors import CORS
 from mongoengine import *
 import json
@@ -12,8 +13,7 @@ import traceback
 from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler, CustomAPIErrorHandler
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Helpers.FlaskAppMaker import flaskAppMaker
-import firebase_admin
-from firebase_admin import credentials
+from FlaskAPI.Helpers.APIAuthentication import authAPI
 
 connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 
@@ -21,11 +21,15 @@ app = flaskAppMaker().create_app()
 
 CORS(app)
 
+api_auth_object = authAPI()
+
+
 # if sys.platform.startswith('linux') and getpass.getuser() == 'ubuntu':
 #     flaskAppMaker().get_index_page()
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 ############################################
 # ETF Description Page
@@ -94,6 +98,7 @@ def fetchHoldingsData(ETFName, StartDate):
         traceback.print_exc()
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
+
 @app.route('/api/ETfDescription/EtfData/<ETFName>/<date>')
 def SendETFHoldingsData(ETFName, date):
     try:
@@ -128,22 +133,30 @@ def SendETFHoldingsData(ETFName, date):
 ############################################
 # Historical Arbitrage
 ############################################
-from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays, OverBoughtBalancedOverSold
+from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays, \
+    OverBoughtBalancedOverSold
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChangers
+
 
 # Check if data is avilable only after June 5
 def checkifDateIsBeforeJuneFive(datestr):
     date_time_obj = datetime.strptime(datestr, '%Y%m%d')
-    return datetime(2020,6,5) > date_time_obj
+    return datetime(2020, 6, 5) > date_time_obj
 
 
 # Divide Columnt into movers and the price by which they are moving
 @app.route('/api/PastArbitrageData/<ETFName>/<date>')
 def FetchPastArbitrageData(ETFName, date):
+    '''#####Auth body#####'''
+    res = api_auth_object.authenticate_api()
+    if type(res) == Response:
+        return res
+    ''' ################# '''
     if checkifDateIsBeforeJuneFive(date):
-        return CustomAPIErrorHandler().handle_error('Data not available before June 5th 2020, please choose a date after 5th June', 500)
+        return CustomAPIErrorHandler().handle_error(
+            'Data not available before June 5th 2020, please choose a date after 5th June', 500)
     try:
-        print("Historical Data For %s & date %s" %(ETFName,str(date)))
+        print("Historical Data For %s & date %s" % (ETFName, str(date)))
         ColumnsForDisplay = ['Time', '$Spread', 'Arbitrage in $', 'Absolute Arbitrage',
                              'Over Bought/Sold',
                              'ETFMover%1_ticker',
@@ -155,10 +168,10 @@ def FetchPastArbitrageData(ETFName, date):
         data = data.sort_index(ascending=False)
         data.index = data.index.time
         data['Time'] = data.index
-        pricedf['Time']=pricedf['date']
+        pricedf['Time'] = pricedf['date']
         pricedf['Time'] = [x.time() for x in pricedf['Time']]
-        pricedf=pd.merge(data[['Time','Over Bought/Sold']],pricedf,on='Time',how='right')
-        pricedf =pricedf[pricedf['Over Bought/Sold'].notna()]
+        pricedf = pd.merge(data[['Time', 'Over Bought/Sold']], pricedf, on='Time', how='right')
+        pricedf = pricedf[pricedf['Over Bought/Sold'].notna()]
         del pricedf['Time']
 
         # Seperate ETF Movers and the Underlying with highest change %
@@ -181,7 +194,8 @@ def FetchPastArbitrageData(ETFName, date):
         print(data)
 
         allData['SignalCategorization'] = json.dumps(
-            CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $', PriceColumn='T', Pct_change=False))
+            CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $', PriceColumn='T',
+                              Pct_change=False))
 
         data = data.reset_index(drop=True)
 
@@ -199,7 +213,6 @@ def FetchPastArbitrageData(ETFName, date):
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
-
 @app.route('/api/PastArbitrageData/CommonDataAcrossEtf/<ETFName>')
 def fetchPNLForETFForALlDays(ETFName):
     try:
@@ -212,7 +225,7 @@ def fetchPNLForETFForALlDays(ETFName):
                                 'Magnitue Of Arbitrage', 'Date']
         PNLOverDates = PNLOverDates.dropna()
         PNLOverDates = PNLOverDates.to_dict(orient='records')
-        print("PNLOverDates: "+str(PNLOverDates))
+        print("PNLOverDates: " + str(PNLOverDates))
         return jsonify(PNLOverDates)
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
@@ -220,19 +233,16 @@ def fetchPNLForETFForALlDays(ETFName):
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
-
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from CommonServices.ThreadingRequests import IOBoundThreading
-import requests
 
 
 @app.route('/api/PastArbitrageData/DailyChange/<ETFName>/<date>')
 def getDailyChangeUnderlyingStocks(ETFName, date):
     if checkifDateIsBeforeJuneFive(date):
-        return CustomAPIErrorHandler().handle_error('Data only available before June 5th 2020, please choose a date after 5th June', 500)
+        return CustomAPIErrorHandler().handle_error(
+            'Data only available before June 5th 2020, please choose a date after 5th June', 500)
     try:
-        print(request.headers.get('Authorization'))
-        #``
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         if type(etfdata) == Response:
             return etfdata
@@ -253,7 +263,6 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
-
 ############################################
 # Live Arbitrage All ETFs
 ############################################
@@ -264,13 +273,13 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 @app.route('/api/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     try:
-        print(request.headers.get('Authorization'))
+        api_auth_object.authenticate_api()
         print("All Etfs Live Arbitrage is called")
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
                                'Net Asset Value Change%', 'ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4',
                                'ETFMover%5', 'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5', 'Timestamp']]
-        live_data=OverBoughtBalancedOverSold(df=live_data)
+        live_data = OverBoughtBalancedOverSold(df=live_data)
         live_data.rename(columns={'Magnitude of Arbitrage': 'Absolute Arbitrage'}, inplace=True)
 
         live_data = live_data.round(3)
@@ -296,15 +305,16 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     try:
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
-                                          FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage, callAllDayArbitrage=True)
+                                          FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage,
+                                          callAllDayArbitrage=True)
         if type(res) == Response:
             return res
-        pricedf= res['Prices']
-        pricedf =pricedf.reset_index(drop=True)
-        pricedf['Time']=pricedf['date']
+        pricedf = res['Prices']
+        pricedf = pricedf.reset_index(drop=True)
+        pricedf['Time'] = pricedf['date']
         pricedf['Time'] = pricedf['Time'].apply(lambda x: str(x.time()))
-        pricedf=pd.merge(res['Arbitrage'][['Time','Over Bought/Sold']],pricedf,on='Time',how='right')
-        pricedf =pricedf[pricedf['Over Bought/Sold'].notna()]
+        pricedf = pd.merge(res['Arbitrage'][['Time', 'Over Bought/Sold']], pricedf, on='Time', how='right')
+        pricedf = pricedf[pricedf['Over Bought/Sold'].notna()]
         del pricedf['Time']
         res['Prices'] = pricedf
 
@@ -330,13 +340,13 @@ def SendLiveArbitrageDataSingleTicker(etfname):
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 
-
 @app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname):
     try:
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice,
-                                          FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage, callAllDayArbitrage=False)
+                                          FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage,
+                                          callAllDayArbitrage=False)
         if type(res) == Response:
             return res
         res['Prices'] = res['Prices'].to_dict()
@@ -348,25 +358,28 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
         traceback.print_exc()
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
+
 ############################################
 # Get last working date
 ############################################
 from CommonServices.Holidays import LastWorkingDay, HolidayCheck
+
+
 @app.route('/api/LastWorkingDate/')
 def LastWorkingDate():
     lastworkinDay = LastWorkingDay(datetime.utcnow().date() - timedelta(days=2))
-    return json.dumps(datetime.strftime(lastworkinDay.date(),'%Y%m%d'))
+    return json.dumps(datetime.strftime(lastworkinDay.date(), '%Y%m%d'))
+
 
 @app.route('/api/ListOfHolidays')
 def ListOfHolidays():
     mydates = pd.date_range('2020-06-05', datetime.today().date().strftime("%Y-%m-%d")).tolist()
     print(mydates)
-    MyholidayList=[date.date().strftime("%Y-%m-%d") for date in mydates if HolidayCheck(date)]
+    MyholidayList = [date.date().strftime("%Y-%m-%d") for date in mydates if HolidayCheck(date)]
     print("*******")
     print(MyholidayList)
     print("*******")
-    return jsonify({'HolidayList':MyholidayList})
-    
+    return jsonify({'HolidayList': MyholidayList})
 
 
 if __name__ == '__main__':
