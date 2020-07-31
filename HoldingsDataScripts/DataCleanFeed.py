@@ -1,4 +1,5 @@
 import os
+import pathlib
 import getpass
 import traceback
 import pandas as pd
@@ -16,7 +17,10 @@ logger = CreateLogger().createLogFile(dirName='Logs/HoldingsScraperLogs/', logFi
 class PullandCleanData:
 
     def __init__(self):
-        self.savingpath = './ETFDailyData' + '/' + datetime.now().strftime("%Y%m%d")
+        self.rootpath = pathlib.Path(os.getcwd())
+        while str(self.rootpath).split('/')[-1] != 'ETFAnalyzer':
+            self.rootpath = self.rootpath.parent
+        self.savingpath = os.path.abspath(os.path.join(self.rootpath, 'ETFDailyData' + '/' + datetime.now().strftime("%Y%m%d")))
         self.system_username = getpass.getuser()
         self.coll = etfholdings_collection
 
