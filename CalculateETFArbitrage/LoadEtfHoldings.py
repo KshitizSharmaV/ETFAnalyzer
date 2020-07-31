@@ -59,6 +59,8 @@ class LoadHoldingsdata(object):
 
     def getHoldingsDatafromDB(self, etfname, fundholdingsdate):
         try:
+            if not type(fundholdingsdate)==datetime:
+                fundholdingsdate = datetime.strptime(fundholdingsdate,'%Y-%m-%d')
             etfdata = self.conn.ETF_db.ETFHoldings.find(
                 {'ETFTicker': etfname, 'FundHoldingsDate': {'$lte': fundholdingsdate}}).sort(
                 [('FundHoldingsDate', -1)]).limit(1)
