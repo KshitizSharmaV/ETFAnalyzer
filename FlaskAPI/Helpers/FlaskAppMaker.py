@@ -11,8 +11,11 @@ class flaskAppMaker():
 
     def create_app(self):
         if sys.platform.startswith('linux') and getpass.getuser() == 'ubuntu':
-            path = pathlib.Path(os.getcwd()).parent.parent
-            path = os.path.abspath(os.path.join(path, 'ETF_Client_Hosting/build'))
+            rootpath = pathlib.Path(os.getcwd())
+            while str(rootpath).split('/')[-1] != 'ETFAnalyzer':
+                rootpath = rootpath.parent
+            rootpath = rootpath.parent
+            path = os.path.abspath(os.path.join(rootpath, 'ETF_Client_Hosting/build'))
             self.app = Flask(__name__, static_folder=path, static_url_path='/', template_folder=path)
         else:
             self.app = Flask(__name__)
