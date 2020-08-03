@@ -11,7 +11,7 @@ from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
 class authAPI():
     def __init__(self):
         cred = credentials.Certificate(
-            "/Users/piyushgarg/Downloads/etfanalyzer-firebase-adminsdk-ecv8s-91573349f7.json")
+            "/Users/adityanaik/Downloads/etfanalyzer-firebase-adminsdk-ecv8s-3e59e8a212.json")
         firebase_admin.initialize_app(cred)
 
     def authenticate_api(self, app=None, check_revoked=False):
