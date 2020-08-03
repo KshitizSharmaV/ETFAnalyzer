@@ -416,9 +416,9 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
 
 @app.route('/api/LastWorkingDate/')
 def LastWorkingDate():
-    res = api_auth_object.authenticate_api()
-    if type(res) == Response:
-        return res
+    # res = api_auth_object.authenticate_api()
+    # if type(res) == Response:
+    #     return res
 
     lastworkinDay = LastWorkingDay(
         datetime.utcnow().date() - timedelta(days=2))
@@ -427,9 +427,9 @@ def LastWorkingDate():
 
 @app.route('/api/ListOfHolidays')
 def ListOfHolidays():
-    res = api_auth_object.authenticate_api()
-    if type(res) == Response:
-        return res
+    # res = api_auth_object.authenticate_api()
+    # if type(res) == Response:
+    #     return res
 
     mydates = pd.date_range(
         '2020-06-05', datetime.today().date().strftime("%Y-%m-%d")).tolist()
