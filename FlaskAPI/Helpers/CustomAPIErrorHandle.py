@@ -22,7 +22,10 @@ class MultipleExceptionHandler():
     def __init__(self):
         pass
 
-    def handle_exception(self, exception_type, e=None):
+    def handle_exception(self, exception_type, e=None, error_type=None):
+        if error_type == 'Auth':
+            return CustomAPIErrorHandler().handle_error('Authentication failed', 401)
+
         if exception_type == ConnectionFailure:
             return CustomAPIErrorHandler().handle_error('Connection to database failed', 503)
         elif exception_type == ServerSelectionTimeoutError:
