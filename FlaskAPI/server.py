@@ -1,8 +1,6 @@
 import sys
+
 sys.path.append("..")
-import pathlib
-import os
-import getpass
 from flask import Flask, jsonify, render_template, Response, request
 from flask_cors import CORS
 from mongoengine import *
@@ -21,14 +19,10 @@ from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays, \
     OverBoughtBalancedOverSold
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChangers
-from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
-from CommonServices.ThreadingRequests import IOBoundThreading
 from MongoDB.PerMinDataOperations import PerMinDataOperations
 from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fecthArbitrageANDLivePrices, \
-    analyzeSignalPerformane, AnalyzeDaysPerformance, CategorizeSignals
+    analyzeSignalPerformane, CategorizeSignals
 from CommonServices.Holidays import LastWorkingDay, HolidayCheck
-
-
 
 connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 
@@ -234,7 +228,7 @@ def FetchPastArbitrageData(ETFName, date):
 
         allData['etfhistoricaldata'] = data.to_json()
         allData['ArbitrageCumSum'] = data[::-
-                                          1][['Arbitrage in $', 'Time']].to_dict('records')
+        1][['Arbitrage in $', 'Time']].to_dict('records')
         allData['etfPrices'] = pricedf[::-1].to_csv(sep='\t', index=False)
         allData['PNLStatementForTheDay'] = json.dumps(PNLStatementForTheDay)
         allData['scatterPlotData'] = json.dumps(scatterPlotData)
@@ -295,7 +289,8 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
         responses = list(openclosedata_cursor)
         responses = pd.DataFrame.from_records(responses)
         responses['DailyChangepct'] = (
-            (responses['Close'] - responses['Open Price']) / responses['Open Price']) * 100
+                                              (responses['Close'] - responses['Open Price']) / responses[
+                                          'Open Price']) * 100
         responses['DailyChangepct'] = responses['DailyChangepct'].round(3)
         responses.rename(columns={'Symbol': 'symbol',
                                   'Volume': 'volume'}, inplace=True)

@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/.idea
+
+Pipfile
+Pipfile.lock
+
+.DS_Store
+*.pyc
+*.log

@@ -14,20 +14,22 @@ class PerMinDataOperations():
                                                                 8) < datetime.datetime.now().date() < datetime.date(
             2020, 11, 1) else datetime.time(4, 59)
         # self.DAYendTime = datetime.time(23,59)
-        self.DAYendTimeZeroZeo = datetime.time(3, 59,59) if datetime.date(2020, 3,
-                                                                       8) < datetime.datetime.now().date() < datetime.date(
-            2020, 11, 1) else datetime.time(4, 59,59)
+        self.DAYendTimeZeroZeo = datetime.time(3, 59, 59) if datetime.date(2020, 3,
+                                                                           8) < datetime.datetime.now().date() < datetime.date(
+            2020, 11, 1) else datetime.time(4, 59, 59)
         # self.DAYendTimeZeroZeo = datetime.time(0,0)
 
         # Day Light Savings
         # Summer UTC 13 to 20
         # Winter UTC 14 to 21
-        self.daylightSavingAdjutment = 4 if datetime.date(2020,3,8)< datetime.datetime.now().date()< datetime.date(2020,11,1) else 5
-        self.StartHour = 13 if datetime.date(2020,3,8)<datetime.datetime.now().date()<datetime.date(2020,11,1) else 14
-        self.EndHour = 20 if datetime.date(2020,3,8)<datetime.datetime.now().date()<datetime.date(2020,11,1) else 21
-        self.UTCStartTime =  datetime.time(self.StartHour,30)
-        self.UTCEndTime =  datetime.time(self.EndHour,00)
-
+        self.daylightSavingAdjutment = 4 if datetime.date(2020, 3, 8) < datetime.datetime.now().date() < datetime.date(
+            2020, 11, 1) else 5
+        self.StartHour = 13 if datetime.date(2020, 3, 8) < datetime.datetime.now().date() < datetime.date(2020, 11,
+                                                                                                          1) else 14
+        self.EndHour = 20 if datetime.date(2020, 3, 8) < datetime.datetime.now().date() < datetime.date(2020, 11,
+                                                                                                        1) else 21
+        self.UTCStartTime = datetime.time(self.StartHour, 30)
+        self.UTCEndTime = datetime.time(self.EndHour, 00)
 
     # Use AsyncIOMotorCursor for inserting into TradePerMinWS Collection
     async def do_insert(self, data):
@@ -40,12 +42,14 @@ class PerMinDataOperations():
 
     # Use PyMongo Cursor for fetching from TradePerMinWS Collection
     def FetchAllTradeDataPerMin(self, startts, endts):
-        all_tickers_data = trade_per_min_WS.find({'e': {'$gt': startts, '$lte': endts}}, {'_id': 0, 'sym': 1, 'h': 1, 'l':1})
+        all_tickers_data = trade_per_min_WS.find({'e': {'$gt': startts, '$lte': endts}},
+                                                 {'_id': 0, 'sym': 1, 'o': 1, 'c': 1})
         return all_tickers_data
 
     # Fetch from QuotesLiveData Collection
     def FetchQuotesLiveDataForSpread(self, startts, endts):
-        quotes_data_for_etf = quotesWS_collection.find({'timestamp': {'$gt': startts, '$lte': endts}},{'_id':0,'symbol': 1, 'askprice': 1, 'bidprice': 1})
+        quotes_data_for_etf = quotesWS_collection.find({'timestamp': {'$gt': startts, '$lte': endts}},
+                                                       {'_id': 0, 'symbol': 1, 'askprice': 1, 'bidprice': 1})
         return quotes_data_for_etf
 
     #################################
@@ -130,7 +134,7 @@ class PerMinDataOperations():
         '''Current date only'''
         todaysDate = now.date()
         ifaholiday = HolidayCheck(todaysDate)
-        dt=None
+        dt = None
 
         ##########################################################################################
 
@@ -187,9 +191,9 @@ class PerMinDataOperations():
         dt_ts = self.getMarketConditionTime()
         print("LiveFetchETFPrice " + str(dt_ts))
         if etfname:
-            etf_live_prices_cursor = trade_per_min_WS.find({"e": {'$lte':dt_ts}, "sym": etfname},
+            etf_live_prices_cursor = trade_per_min_WS.find({"e": {'$lte': dt_ts}, "sym": etfname},
                                                            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1,
-                                                            "v": 1, "e": 1}).sort([('e',-1)]).limit(1)
+                                                            "v": 1, "e": 1}).sort([('e', -1)]).limit(1)
         else:
             etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts},
                                                            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1,

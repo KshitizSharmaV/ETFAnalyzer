@@ -1,5 +1,6 @@
 import sys
-
+import os
+import pathlib
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin.auth import verify_id_token
@@ -9,9 +10,12 @@ from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
 
 
 class authAPI():
-    def __init__(self):
-        cred = credentials.Certificate(
-            "/Users/adityanaik/Downloads/etfanalyzer-firebase-adminsdk-ecv8s-3e59e8a212.json")
+    def __init__(self, cert_filename="etfanalyzer-firebase-adminsdk-ecv8s-f06e129d8f.json"):
+        self.rootpath = pathlib.Path(os.getcwd())
+        while str(self.rootpath).split('/')[-1] != 'ETFAnalyzer':
+            self.rootpath = self.rootpath.parent
+        self.cert_path = os.path.abspath(os.path.join(self.rootpath, 'FlaskAPI/' + cert_filename))
+        cred = credentials.Certificate(self.cert_path)
         firebase_admin.initialize_app(cred)
 
     def authenticate_api(self, app=None, check_revoked=False):
