@@ -1,3 +1,4 @@
+import socket
 import sys
 
 sys.path.append('..')
@@ -21,7 +22,8 @@ class LoadHoldingsdata(object):
         self.weights = None
         self.symbols = None
         self.system_username = getpass.getuser()
-        if self.system_username == 'ubuntu':
+        sys_private_ip = socket.gethostbyname(socket.gethostname())
+        if sys_private_ip == '172.31.76.32' and self.system_username == 'ubuntu':
             self.conn = MongoDBConnectors().get_pymongo_readWrite_production_production()
         else:
             self.conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
