@@ -9,3 +9,5 @@ Pipfile.lock
 .DS_Store
 *.pyc
 *.log
+/CalculateETFArbitrage/etfwhichfailed.csv
+/FlaskAPI/etfanalyzer-firebase-adminsdk-ecv8s-f06e129d8f.json

@@ -33,7 +33,7 @@ class ArbPerMin():
         self.helperobj = LiveHelper()
 
     def calculation_for_each_etf(self, tradedf, etf):
-        # etfname = ETF Symbol, holdingdata = {Holding symbols : Weights}
+        # etf_name = ETF Symbol, holdingdata = {Holding symbols : Weights}
         # # Following for loop only has one iteration cycle
         for etfname, holdingdata in etf.items():
             try:

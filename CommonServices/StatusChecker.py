@@ -9,10 +9,11 @@ from CommonServices.EmailService import EmailSender
 from CommonServices.Holidays import HolidayCheck
 import getpass
 
+
 class AllCollectionsStatusCheck():
     def __init__(self):
         self.etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
-        if getpass.getuser()=='ubuntu':
+        if getpass.getuser() == 'ubuntu':
             self.connection = MongoDBConnectors().get_pymongo_readonly_production_production()
         else:
             self.connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
@@ -24,6 +25,8 @@ class AllCollectionsStatusCheck():
         date_to_check = datetime.strptime(date_to_check_in_string, '%Y%m%d')
         result_cursor = collection.find({'dateOfAnalysis': date_to_check}, {'_id': 0, 'ETFName': 1})
         result = [etf['ETFName'] for etf in result_cursor]
+        result = set(result)
+        result = list(result)
         print("Total {} ETFs' Historical Arbitrage was Successful for {}".format(len(result), date_to_check_in_string))
         etfwhichfailed = set(self.etflist) - set(result)
         if len(etfwhichfailed) > 0:

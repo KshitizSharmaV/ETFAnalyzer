@@ -1,3 +1,5 @@
+import datetime
+
 from pymongo import ASCENDING, DESCENDING
 import getpass, socket
 from MongoDB.MongoDBConnections import MongoDBConnectors
@@ -80,6 +82,42 @@ tradespipeline = [
 dailyopencloseCollection = db.DailyOpenCloseCollection
 if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
     dailyopencloseCollection.create_index([("dateForData", DESCENDING), ("Symbol", ASCENDING)], unique=True)
+
+
+def return_daily_open_close_pipeline(failed_tickers, date):
+    daily_open_close_pipeline_1 = [
+        {
+            '$match': {
+                'dateForData': {
+                    '$lte': datetime.datetime.strptime(date, '%Y-%m-%d')
+                },
+                'Symbol': {
+                    '$in': failed_tickers
+                }
+            }
+        }, {
+            '$group': {
+                '_id': '$Symbol',
+                'Symbol': {
+                    '$first': '$Symbol'
+                },
+                'dateForData': {
+                    '$first': '$dateForData'
+                },
+                'Open Price': {
+                    '$first': '$Open Price'
+                }
+            }
+        }, {
+            '$project': {
+                'Symbol': 1,
+                'Open Price': 1,
+                '_id': 0
+            }
+        }
+    ]
+    return daily_open_close_pipeline_1
+
 
 # Arbitrage
 arbitragecollection = db.ArbitrageCollectionNew

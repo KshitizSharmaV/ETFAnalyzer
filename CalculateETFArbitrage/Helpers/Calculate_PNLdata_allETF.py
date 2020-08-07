@@ -1,5 +1,5 @@
 import sys, traceback
-sys.path.append('..')
+sys.path.append('../..')
 from CommonServices.ImportExtensions import *
 import pandas as pd
 import getpass, datetime
@@ -29,7 +29,7 @@ class CalculateAndSavePnLData():
             date_list = self.returnres()
             date_list.sort()
             date_list = [date for date in date_list if date > datetime.datetime(2020, 6, 4)]
-            etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
+            etflist = pd.read_csv('../../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
             # final_res = []
             for date in date_list:
                 print(date)

@@ -1,7 +1,6 @@
-import json
 import traceback
 from flask import Response
-from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
+from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from MongoDB.Schemas import MongoDBConnectors
 import numpy as np
 import pandas as pd

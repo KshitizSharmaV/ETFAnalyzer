@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append("..")
-from flask import Flask, jsonify, render_template, Response, request
+from flask import jsonify, render_template, Response
 from flask_cors import CORS
 from mongoengine import *
 import json
@@ -15,7 +15,7 @@ from FlaskAPI.Helpers.FlaskAppMaker import flaskAppMaker
 from FlaskAPI.Helpers.APIAuthentication import authAPI
 from FlaskAPI.Components.ETFDescription.helper import fetchETFsWithSameIssuer, fetchETFsWithSameETFdbCategory, \
     fetchETFsWithSimilarTotAsstUndMgmt, fetchOHLCHistoricalData
-from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
+from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays, \
     OverBoughtBalancedOverSold
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChangers

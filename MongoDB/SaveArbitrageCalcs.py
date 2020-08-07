@@ -3,7 +3,7 @@ from MongoDB.Schemas import arbitragecollection, arbitrage_per_min
 
 
 class SaveCalculatedArbitrage():
-    def insertIntoCollection(self, ETFName=None, dateOfAnalysis=None, data=None, dateWhenAnalysisRan=None):
+    def insertIntoCollection(self, ETFName=None, data=None):
         print("Saving {} etf into DB...".format(ETFName))
         inserData = data
         arbitragecollection.insert(inserData)

@@ -3,12 +3,10 @@ import json
 import datetime
 import traceback
 
-
 sys.path.append("..")
-from CommonServices import ImportExtensions
+from CommonServices.MakeCSV import CSV_Maker
 import pandas as pd
-from CalculateETFArbitrage.LoadEtfHoldings import LoadHoldingsdata
-from CalculateETFArbitrage.GetRelevantHoldings import RelevantHoldings
+from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from MongoDB.Schemas import etfholdings_collection
 from CommonServices.LogCreater import CreateLogger
@@ -71,7 +69,7 @@ class ListsCreator():
             out_file.close()
 
             AllTickerSet = set(AllHoldingsList+AllEtfNames)
-            RelevantHoldings().write_to_csv(etflist=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
+            CSV_Maker().write_to_csv(data=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
             logger.debug("Tick Lists Generated Successfully")
             return True
         except Exception as e:

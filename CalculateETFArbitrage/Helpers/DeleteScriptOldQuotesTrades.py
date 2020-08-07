@@ -1,6 +1,6 @@
 import sys, traceback
 
-sys.path.append('..')
+sys.path.append('../..')
 from datetime import datetime, timedelta
 import CommonServices.ImportExtensions
 from CommonServices.EmailService import EmailSender
