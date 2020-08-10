@@ -4,6 +4,7 @@ import datetime
 import time
 import numpy as np
 import talib
+from pprint import pprint
 import getpass
 import socket
 from MongoDB.MongoDBConnections import MongoDBConnectors
@@ -139,14 +140,24 @@ def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrage
 
 # Historical arbitrage data for just 1 etf for 1 date
 def RetrieveETFArbitrageData(etfname=None, date=None, magnitudeOfArbitrageToFilterOn=0):
+    start = time.time()
+    
     s = arbitragecollection.find({'ETFName': etfname, 'dateOfAnalysis': datetime.datetime.strptime(date, '%Y%m%d')},
                                  {'_id': 0})
-    arbitrage_data = list(s)
+
+    arbitrage_data = []                             
+    for document in s:
+        arbitrage_data.append(document)                        
+    end = time.time()
+    print(end-start)
     # Iter over the collection results - It's just 1 item
     PNLStatementForTheDay = {}
     allData, pricedf, pnlstatementforday, scatterPlotData = AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=arbitrage_data,
                                                                                        magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
     PNLStatementForTheDay[str(arbitrage_data[0]['dateOfAnalysis'])] = pnlstatementforday
+    endto = time.time()
+    print(endto-end)
+
     return allData, pricedf, pnlstatementforday, scatterPlotData
 
 

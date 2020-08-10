@@ -188,6 +188,7 @@ def FetchPastArbitrageData(ETFName, date):
                              'ETFMover%1_ticker',
                              'Change%1_ticker',
                              'T', 'ETF Price']
+        print(ColumnsForDisplay)                    
         # Retreive data for Components
         data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
                                                                                          magnitudeOfArbitrageToFilterOn=0)
@@ -220,21 +221,20 @@ def FetchPastArbitrageData(ETFName, date):
         print("Historical DataFrame")
         print(data)
 
-        allData['SignalCategorization'] = json.dumps(
-            CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $', PriceColumn='T',
-                              Pct_change=False))
+        allData['SignalCategorization'] = CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $', PriceColumn='T',
+                              Pct_change=False)
 
         data = data.reset_index(drop=True)
 
-        allData['etfhistoricaldata'] = data.to_json()
+        allData['etfhistoricaldata'] = data.to_dict('records')
         allData['ArbitrageCumSum'] = data[::-
         1][['Arbitrage in $', 'Time']].to_dict('records')
         allData['etfPrices'] = pricedf[::-1].to_csv(sep='\t', index=False)
-        allData['PNLStatementForTheDay'] = json.dumps(PNLStatementForTheDay)
-        allData['scatterPlotData'] = json.dumps(scatterPlotData)
-        allData['etfmoversDictCount'] = json.dumps(etfmoversDictCount)
-        allData['highestChangeDictCount'] = json.dumps(highestChangeDictCount)
-        return json.dumps(allData)
+        allData['PNLStatementForTheDay'] = PNLStatementForTheDay
+        allData['scatterPlotData'] = scatterPlotData
+        allData['etfmoversDictCount'] = etfmoversDictCount
+        allData['highestChangeDictCount'] = highestChangeDictCount
+        return jsonify(allData)
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()

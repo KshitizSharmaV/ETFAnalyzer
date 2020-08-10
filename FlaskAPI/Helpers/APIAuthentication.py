@@ -10,7 +10,7 @@ from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
 
 
 class authAPI():
-    def __init__(self, cert_filename="etfanalyzer-firebase-adminsdk-ecv8s-f06e129d8f.json"):
+    def __init__(self, cert_filename="etfanalyzer-firebase-adminsdk.json"):
         self.rootpath = pathlib.Path(os.getcwd())
         while str(self.rootpath).split('/')[-1] != 'ETFAnalyzer':
             self.rootpath = self.rootpath.parent
