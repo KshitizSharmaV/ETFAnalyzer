@@ -61,7 +61,7 @@ class ArbPerMin():
     def TradePricesForTickers(self,start_dt_ts, end_dt_ts):
         TradesDataCursor = PerMinDataOperations().FetchAllTradeDataPerMin(start_dt_ts, end_dt_ts)
         TradePriceDf=pd.DataFrame(list(TradesDataCursor))
-        TradePriceDf = TradePriceDf.assign(price=(TradePriceDf['o'] + TradePriceDf['c']) / 2).drop(columns=['o', 'c'])
+        TradePriceDf = TradePriceDf.assign(price=(TradePriceDf['h'] + TradePriceDf['l']) / 2).drop(columns=['h', 'l'])
         TradePriceDf.set_index('sym', inplace=True)
         return TradePriceDf
 

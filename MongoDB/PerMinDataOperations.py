@@ -43,7 +43,7 @@ class PerMinDataOperations():
     # Use PyMongo Cursor for fetching from TradePerMinWS Collection
     def FetchAllTradeDataPerMin(self, startts, endts):
         all_tickers_data = trade_per_min_WS.find({'e': {'$gt': startts, '$lte': endts}},
-                                                 {'_id': 0, 'sym': 1, 'o': 1, 'c': 1})
+                                                 {'_id': 0, 'sym': 1, 'h': 1, 'l': 1})
         return all_tickers_data
 
     # Fetch from QuotesLiveData Collection

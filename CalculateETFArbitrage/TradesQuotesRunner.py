@@ -40,7 +40,7 @@ class TradesQuotesProcesses(object):
         return list(routines)
 
     def fetch_and_store_runner(self, collection_name=None, trade_data_flag=False):
-        """Combined Main for Trades and Quotes data operation for an ETF"""
+        """Combined Main for Trades and Quotes data operation for an ETF -- TradesQuotesFetchSave.py"""
         symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
                                                                          CollectionName=collection_name)
         # Trade Configuration
@@ -63,7 +63,7 @@ class TradesQuotesProcesses(object):
             fetch_polygon_data_object.quotes_data_operation_runner(url=routines[0])
 
     def get_data(self, collection_name, pipeline):
-        """Fetch Quotes/Trades Data from MongoDB"""
+        """Fetch Quotes/Trades Data from MongoDB -- Mongo Operation in MongoDB folder"""
         result_df = pd.DataFrame(self.mtqd.fetch_quotes_trades_data_from_mongo(symbolList=self.symbols, date=self.date,
                                                                                CollectionName=collection_name,
                                                                                pipeline=pipeline))

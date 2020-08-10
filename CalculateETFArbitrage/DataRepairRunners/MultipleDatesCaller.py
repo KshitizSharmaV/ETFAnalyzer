@@ -24,6 +24,7 @@ logger2 = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbErrorLo
 
 
 class HistoricalArbitrageDataRepairClass():
+    """For repair task, change Dates and ETF List in the 'all_task_runner' method"""
     def __init__(self):
         self.etflist = []
         self.etfwhichfailed = []

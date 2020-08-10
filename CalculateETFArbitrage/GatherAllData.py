@@ -32,7 +32,7 @@ class DataApi(object):
         ob = TradesQuotesProcesses(symbols=self.etfData.getSymbols(), date=self.date)
         ob.fetch_and_store_runner(collection_name=tradeCollection, trade_data_flag=True)
         self.tradesDataDf = ob.get_data(collection_name=tradeCollection, pipeline=tradespipeline)
-        self.tradesDataDf['Trade Price'] = (self.tradesDataDf['Open Price'] + self.tradesDataDf['Close Price']) / 2
+        self.tradesDataDf['Trade Price'] = (self.tradesDataDf['High Price'] + self.tradesDataDf['Low Price']) / 2
         return self.tradesDataDf
 
     def gatherQuotesData(self):
