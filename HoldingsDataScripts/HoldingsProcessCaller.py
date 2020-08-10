@@ -61,15 +61,14 @@ class holdingsProcess():
             traceback.print_exc()
             pass
 
-    @staticmethod
-    def csv_files_clean_up():
-        status = Directory_Remover(os.path.join(os.getcwd(), 'ETFDailyData')).remdir()
+    def csv_files_clean_up(self):
+        status = Directory_Remover(os.path.join(self.rootpath, 'ETFDailyData')).remdir()
         if status:
             print('Successfully deleted downloaded holdings and ticker description CSVs.')
             logger.debug('Successfully deleted downloaded holdings and ticker description CSVs.')
         else:
             print('Problem in deletion of downloaded holdings and ticker description CSVs.')
-            logger.debug('Problem in deletion of downloaded holdings and ticker description CSVs.')
+            logger.error('Problem in deletion of downloaded holdings and ticker description CSVs.')
 
     def holdings_processes_caller(self):
         self.get_etf_lists()
