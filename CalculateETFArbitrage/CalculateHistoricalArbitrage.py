@@ -14,6 +14,7 @@ from CalculateETFArbitrage.GatherAllData import DataApi
 class ArbitrageCalculation():
     def __init__(self):
         self.helper_obj = Helper()
+        self.trade_prices_df_minutes = pd.DataFrame()
 
     def fetch_all_data(self, etf_name, date):
         """Load the ETF Holding"""
@@ -26,27 +27,27 @@ class ArbitrageCalculation():
     def trades_data_formatting_cleaning(self, all_data):
         all_data.tradesDataDf['Time'] = all_data.tradesDataDf['Time'].apply(
             lambda x: self.helper_obj.getHumanTime(ts=x, divideby=1000))
-        trade_prices_df_minutes = \
+        self.trade_prices_df_minutes = \
             all_data.tradesDataDf.groupby([all_data.tradesDataDf['Time'], all_data.tradesDataDf['Symbol']])[
                 'Trade Price']
-        trade_prices_df_minutes = trade_prices_df_minutes.first().unstack(level=1)
+        self.trade_prices_df_minutes = self.trade_prices_df_minutes.first().unstack(level=1)
 
         price_for_nav_filling = all_data.openPriceData.set_index('Symbol').T.to_dict('records')[0]
 
         market_start_time = datetime.datetime.strptime('13:29:00', "%H:%M:%S").time()
         market_end_time = datetime.datetime.strptime('20:00:00', "%H:%M:%S").time()
 
-        mask = (trade_prices_df_minutes.index.time >= market_start_time) & (
-                trade_prices_df_minutes.index.time <= market_end_time)
-        trade_prices_df_minutes = trade_prices_df_minutes[mask]
-        trade_prices_df_minutes = trade_prices_df_minutes.ffill(axis=0)
-        trade_prices_df_minutes = trade_prices_df_minutes.fillna(price_for_nav_filling)
-        return trade_prices_df_minutes
+        mask = (self.trade_prices_df_minutes.index.time >= market_start_time) & (
+                self.trade_prices_df_minutes.index.time <= market_end_time)
+        self.trade_prices_df_minutes = self.trade_prices_df_minutes[mask]
+        self.trade_prices_df_minutes = self.trade_prices_df_minutes.ffill(axis=0)
+        self.trade_prices_df_minutes = self.trade_prices_df_minutes.fillna(price_for_nav_filling)
+        return self.trade_prices_df_minutes
 
-    def calculate_etf_price_change(self, trade_prices_df_minutes, etf_name):
-        etf_price = trade_prices_df_minutes[etf_name]
-        trade_prices_df_minutes = trade_prices_df_minutes.pct_change().dropna() * 100
-        etf_price_change = trade_prices_df_minutes[etf_name]
+    def calculate_etf_price_change(self, etf_name):
+        etf_price = self.trade_prices_df_minutes[etf_name]
+        self.trade_prices_df_minutes = self.trade_prices_df_minutes.pct_change().dropna() * 100
+        etf_price_change = self.trade_prices_df_minutes[etf_name]
         return etf_price, etf_price_change
 
     def calculate_etf_trading_spread(self, all_data):
@@ -71,15 +72,15 @@ class ArbitrageCalculation():
         if all_data.openPriceData is None:
             return None
         '''Trade Prices formatting between 13.29 and 20.00'''
-        trade_prices_df_minutes = self.trades_data_formatting_cleaning(all_data)
+        self.trade_prices_df_minutes = self.trades_data_formatting_cleaning(all_data)
         '''Calculate Change in ETF Trade Price'''
-        etf_price, etf_price_change = self.calculate_etf_price_change(trade_prices_df_minutes, etf_name)
-        del trade_prices_df_minutes[etf_name]
+        etf_price, etf_price_change = self.calculate_etf_price_change(etf_name)
+        del self.trade_prices_df_minutes[etf_name]
         '''Trading Spread Calculation'''
         quotes_spreads_minutes = self.calculate_etf_trading_spread(all_data)
         '''Arbitrage Calculation'''
-        net_asset_value_return = trade_prices_df_minutes.assign(**etf_data.getETFWeights()).mul(
-            trade_prices_df_minutes).sum(
+        net_asset_value_return = self.trade_prices_df_minutes.assign(**etf_data.getETFWeights()).mul(
+            self.trade_prices_df_minutes).sum(
             axis=1)
         ds = pd.concat([etf_price, etf_price_change, net_asset_value_return, quotes_spreads_minutes], axis=1).dropna()
         ds.columns = ['ETF Price', 'ETF Change Price %', 'Net Asset Value Change%', 'ETF Trading Spread in $']
@@ -89,9 +90,9 @@ class ArbitrageCalculation():
             'ETF Trading Spread in $'] != 0, 'Flag'] = 111
         ds['Flag'] = ds['Flag'] * np.sign(ds['Arbitrage in $'])
         ''' Movers and Changes '''
-        holdings_change = self.helper_obj.EtfMover(df=trade_prices_df_minutes, columnName='Change%')
+        holdings_change = self.helper_obj.EtfMover(df=self.trade_prices_df_minutes, columnName='Change%')
         etf_mover_holdings = self.helper_obj.EtfMover(
-            df=trade_prices_df_minutes.assign(**etf_data.getETFWeights()).mul(trade_prices_df_minutes).dropna(axis=1),
+            df=self.trade_prices_df_minutes.assign(**etf_data.getETFWeights()).mul(self.trade_prices_df_minutes).dropna(axis=1),
             columnName='ETFMover%')
         '''Final Calculated Result DataFrame'''
         ds = pd.concat([ds, etf_mover_holdings, holdings_change], axis=1)

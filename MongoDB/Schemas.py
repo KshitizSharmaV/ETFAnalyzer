@@ -64,7 +64,7 @@ tradespipeline = [
     {'$match': ''},
     {'$unwind': '$data'},
     {'$group': {
-        '_id': '$_id',
+        '_id': '$symbol',
         'data': {'$push': {
             'Symbol': '$data.Symbol',
             'Time': '$data.t',
