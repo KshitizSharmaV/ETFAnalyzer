@@ -28,8 +28,8 @@ class LoadHoldingsdata(object):
         if sys_private_ip == '172.31.76.32' and self.system_username == 'ubuntu':
             self.conn = MongoDBConnectors().get_pymongo_readWrite_production_production()
         else:
-            # self.conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
-            self.conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+            self.conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+            # self.conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 
     def LoadHoldingsAndClean(self, etfname, fundholdingsdate):
         try:

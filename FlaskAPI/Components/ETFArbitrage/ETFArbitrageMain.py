@@ -130,6 +130,7 @@ def AnalyzeArbitrageDataForETF(arbitrageDataFromMongo=None, magnitudeOfArbitrage
 
     df = pd.merge(etfdata, pricedf, on='Time', how='left')
     df = df.ffill(axis=0)
+    df.dropna(inplace=True)
 
     arbitrageBuySellSignals, pnlstatementforday, scatterPlotData = calculateArbitrageResults(df=df, etfname=etfname,
                                                                                              magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
