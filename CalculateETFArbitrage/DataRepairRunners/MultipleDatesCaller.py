@@ -61,20 +61,25 @@ class HistoricalArbitrageDataRepairClass():
 
     def remove_old_trades_quotes_for_the_date_etf(self):
         """REMOVE ALL QUOTES DATA AND TRADES DATA FOR THE UPDATED ETF LIST FOR THE GIVEN DATE"""
-        del_list = self.etflist.copy()
-        if getpass.getuser() == 'ubuntu':
-            rem_conn = MongoDBConnectors().get_pymongo_readWrite_production_production()
-        else:
-            rem_conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
-        quotes_del = rem_conn.ETF_db.QuotesData.delete_many(
-            {'dateForData': datetime.strptime(self.date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
-        print(quotes_del.deleted_count)
-        sym_list = [del_list.extend(
-            LoadHoldingsdata().LoadHoldingsAndClean(etf, datetime.strptime(self.date, '%Y-%m-%d')).getSymbols()) for etf
-            in self.etflist]
-        trades_del = rem_conn.ETF_db.TradesData.delete_many(
-            {'dateForData': datetime.strptime(self.date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
-        print(trades_del.deleted_count)
+        try:
+            del_list = self.etflist.copy()
+            if getpass.getuser() == 'ubuntu':
+                rem_conn = MongoDBConnectors().get_pymongo_readWrite_production_production()
+            else:
+                rem_conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+            quotes_del = rem_conn.ETF_db.QuotesData.delete_many(
+                {'dateForData': datetime.strptime(self.date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
+            print(quotes_del.deleted_count)
+            sym_list = [del_list.extend(
+                LoadHoldingsdata().LoadHoldingsAndClean(etf, datetime.strptime(self.date, '%Y-%m-%d')).getSymbols()) for etf
+                in self.etflist]
+            trades_del = rem_conn.ETF_db.TradesData.delete_many(
+                {'dateForData': datetime.strptime(self.date, '%Y-%m-%d'), 'symbol': {'$in': del_list}})
+            print(trades_del.deleted_count)
+        except Exception as e:
+            logger.exception(e)
+            logger2.exception(e)
+            pass
 
     def format_and_save_data(self, etfname, data):
         try:
@@ -122,11 +127,11 @@ class HistoricalArbitrageDataRepairClass():
             CSV_Maker().write_to_csv(self.etfwhichfailed, "etfwhichfailed.csv")
 
     def all_task_runner(self):
-        dates = ['2020-06-12']
+        dates = ['2020-08-10', '2020-08-11', '2020-08-12']
         for date_ in dates:
             self.date = date_
             self.get_updated_etf_list()
-            self.etflist = ['XLY']
+            # self.etflist = ['XLY']
             self.remove_old_trades_quotes_for_the_date_etf()
             for etf in self.etflist:
                 self.calculate_arbitrage_for_etf(etf, self.date)
