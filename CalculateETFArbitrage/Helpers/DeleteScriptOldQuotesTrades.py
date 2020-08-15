@@ -54,6 +54,6 @@ def delete_old_live_data_from_collection(collectionName):
 if __name__ == '__main__':
     logger.debug("Deleting records from QuotesData")
     delete_old_live_data_from_collection(db.QuotesData)
-    logger.debug("Deleting records from TradesData")
-    delete_old_live_data_from_collection(db.TradesData)
+    # logger.debug("Deleting records from TradesData")
+    # delete_old_live_data_from_collection(db.TradesData)
     logger.debug("Job Finished")
