@@ -8,7 +8,7 @@ class SaveCalculatedArbitrage():
         inserData = data
         arbitragecollection.insert(inserData)
 
-    def  insertIntoPerMinCollection(self, end_ts=None, ArbitrageData=None):
-        print("Saving in Arbitrage Per Min Collection for {}".format(end_ts))
+    def  insertIntoPerMinCollection(self, start_ts=None, ArbitrageData=None):
+        print("Saving in Arbitrage Per Min Collection for {}".format(start_ts))
         inserData = ArbitrageData
         arbitrage_per_min.insert_many(inserData)

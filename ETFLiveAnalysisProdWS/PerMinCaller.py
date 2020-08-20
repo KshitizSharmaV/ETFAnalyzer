@@ -81,8 +81,8 @@ class PerMinAnalysis():
             cols = list(mergeDF.columns)
             cols = [cols[0]] + [cols[-1]] + cols[1:-1]
             mergeDF = mergeDF[cols]
-            mergeDF['Timestamp'] = end_dt_ts
-            SaveCalculatedArbitrage().insertIntoPerMinCollection(end_ts=end_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
+            mergeDF['Timestamp'] = start_dt_ts
+            SaveCalculatedArbitrage().insertIntoPerMinCollection(start_ts=start_dt_ts, ArbitrageData=mergeDF.to_dict(orient='records'))
 
             logger.debug("arbDF")
             logger.debug(arbDF)

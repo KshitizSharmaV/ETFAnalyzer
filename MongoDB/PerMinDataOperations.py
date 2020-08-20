@@ -168,6 +168,7 @@ class PerMinDataOperations():
     #  Live arbitrage for 1 etf or all etf
     def LiveFetchPerMinArbitrage(self, etfname=None):
         dt_ts = self.getMarketConditionTime()
+        dt_ts = dt_ts - 60000
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
                 {"Timestamp": dt_ts, "symbol": etfname},
