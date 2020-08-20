@@ -190,6 +190,7 @@ class PerMinDataOperations():
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):
         dt_ts = self.getMarketConditionTime()
+        dt_ts = dt_ts - 60000
         print("LiveFetchETFPrice " + str(dt_ts))
         if etfname:
             etf_live_prices_cursor = trade_per_min_WS.find({"e": {'$lte': dt_ts}, "sym": etfname},
