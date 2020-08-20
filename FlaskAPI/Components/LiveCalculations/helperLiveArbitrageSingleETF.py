@@ -64,7 +64,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
             #arbitrageBuySellSignals['Price'] = np.round(arbitrageBuySellSignals['Price'],2)
             
             arbitrageBuySellSignals.Price=arbitrageBuySellSignals.Price.round(2)
-            arbitrageBuySellSignals['ETF Change Price %']=arbitrageBuySellSignals['ETF Change Price %'].round(2)
+            arbitrageBuySellSignals['ETF Change Price %']=arbitrageBuySellSignals['ETF Change Price %'].round(3)
 
             arbitrageBuySellSignals=arbitrageBuySellSignals
             
