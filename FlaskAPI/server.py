@@ -351,6 +351,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
                                           callAllDayArbitrage=True)
         if type(res) == Response:
             return res
+
         pricedf = res['Prices']
         pricedf = pricedf.reset_index(drop=True)
         pricedf['Time'] = pricedf['date']
@@ -364,7 +365,7 @@ def SendLiveArbitrageDataSingleTicker(etfname):
         res['Prices'] = res['Prices'].to_csv(sep='\t', index=False)
         res['pnlstatementforday'] = json.dumps(res['pnlstatementforday'])
         res['SignalCategorization'] = json.dumps(
-            CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $', PriceColumn='Price',
+            CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
                               Pct_change=True))
         print(res['Arbitrage'])
 

@@ -19,7 +19,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
     try:
         # Full day historical Prie for ETF
         PriceDF = FuncETFPrices(etfname)
-        PriceDF['Price'] = (PriceDF['high']+PriceDF['low'])/2
+        #PriceDF['Price'] = (PriceDF['high']+PriceDF['low'])/2
         # Full day historical Arbitrage for ETF
         ArbitrageDFSemi = FuncArbitrageData(etfname=etfname)
 
@@ -30,7 +30,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         # etmoverslist.extend(changes)
 
         ArbitrageDf = ArbitrageDFSemi.merge(PriceDF, left_on='Timestamp',right_on='date', how='left')
-        ArbitrageDf =ArbitrageDf[['symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','Price','TickVolume','Net Asset Value Change%','ETF Change Price %','ETF Price']+etmoverslist]
+        ArbitrageDf =ArbitrageDf[['symbol','Timestamp','Arbitrage in $','ETF Trading Spread in $','TickVolume','Net Asset Value Change%','ETF Change Price %','ETF Price']+etmoverslist]
         ArbitrageDf=ArbitrageDf.round(5)
         
         helperObj=Helper()
@@ -63,7 +63,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
             ##arbitrageBuySellSignals['ETF Change Price %']=np.round(arbitrageBuySellSignals['ETF Change Price %'],2)
             #arbitrageBuySellSignals['Price'] = np.round(arbitrageBuySellSignals['Price'],2)
             
-            arbitrageBuySellSignals.Price=arbitrageBuySellSignals.Price.round(2)
+            #arbitrageBuySellSignals.Price=arbitrageBuySellSignals.Price.round(2)
             arbitrageBuySellSignals['ETF Change Price %']=arbitrageBuySellSignals['ETF Change Price %'].round(3)
 
             arbitrageBuySellSignals=arbitrageBuySellSignals

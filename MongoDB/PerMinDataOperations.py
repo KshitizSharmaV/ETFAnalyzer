@@ -105,19 +105,20 @@ class PerMinDataOperations():
     # Full full  day prices for 1 etf
     def FetchFullDayPricesForETF(self, etfname):
         markettimeStatus = self.getMarketConditionsForFullDayData()
+
         if markettimeStatus['end_dt']:
             full_day_prices_etf_cursor = trade_per_min_WS.find(
-                {"e": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
-                {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "e": 1})
+                {"s": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
+                {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
         else:
             full_day_prices_etf_cursor = trade_per_min_WS.find(
-                {"e": {"$gte": markettimeStatus['start_dt']}, "sym": etfname},
-                {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "e": 1})
+                {"s": {"$gte": markettimeStatus['start_dt']}, "sym": etfname},
+                {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
         temp = []
         [temp.append(item) for item in full_day_prices_etf_cursor]
         livePrices = pd.DataFrame.from_records(temp)
         livePrices.rename(columns={'sym': 'symbol', 'vw': 'VWPrice', 'o': 'open', 'c': 'close', 'h': 'high', 'l': 'low',
-                                   'v': 'TickVolume', 'e': 'date'}, inplace=True)
+                                   'v': 'TickVolume', 's': 'date'}, inplace=True)
         livePrices.drop(columns=['symbol'], inplace=True)
         return livePrices
 
@@ -193,19 +194,19 @@ class PerMinDataOperations():
         dt_ts = dt_ts - 60000
         print("LiveFetchETFPrice " + str(dt_ts))
         if etfname:
-            etf_live_prices_cursor = trade_per_min_WS.find({"e": {'$lte': dt_ts}, "sym": etfname},
+            etf_live_prices_cursor = trade_per_min_WS.find({"s": {'$lte': dt_ts}, "sym": etfname},
                                                            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1,
-                                                            "v": 1, "e": 1}).sort([('e', -1)]).limit(1)
+                                                            "v": 1, "s": 1}).sort([('s', -1)]).limit(1)
         else:
-            etf_live_prices_cursor = trade_per_min_WS.find({"e": dt_ts},
+            etf_live_prices_cursor = trade_per_min_WS.find({"s": dt_ts},
                                                            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1,
-                                                            "v": 1, "e": 1})
+                                                            "v": 1, "s": 1})
 
         temp = []
         [temp.append(item) for item in etf_live_prices_cursor]
         livePrices = pd.DataFrame.from_records(temp)
         livePrices.rename(columns={'sym': 'symbol', 'vw': 'VWPrice', 'o': 'open', 'c': 'close', 'h': 'high', 'l': 'low',
-                                   'v': 'TickVolume', 'e': 'date'}, inplace=True)
+                                   'v': 'TickVolume', 's': 'date'}, inplace=True)
         if etfname:
             livePrices.drop(columns=['symbol'], inplace=True)
             livePrices['date'] = dt_ts
