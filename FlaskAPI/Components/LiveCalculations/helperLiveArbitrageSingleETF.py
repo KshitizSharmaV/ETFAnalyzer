@@ -44,12 +44,18 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         
         # All day analysis
         if callAllDayArbitrage:
+            PriceDFcopy = PriceDF.copy()
+            PriceDFcopy['date'] = PriceDFcopy['date'].apply(lambda x: x.strftime('%H:%M:%S'))
+            PriceDFcopy.rename(columns={'open': 'Open', 'close': 'Close', 'high': 'High', 'low': 'Low'}, inplace=True)
+            cols_to_use_right = PriceDFcopy.columns.difference(ArbitrageDf.columns)
+            ArbitrageDf = ArbitrageDf.merge(PriceDFcopy[cols_to_use_right], left_on='Time', right_on='date', how='left')
+
             arbitrageBuySellSignals, pnlstatementforday, scatterPlotData=calculateArbitrageResults(df=ArbitrageDf, 
             etfname=etfname, 
             magnitudeOfArbitrageToFilterOn=0,
             BuildMomentumSignals=False, 
-            BuildPatternSignals=False,
-            includeMovers=False,
+            BuildPatternSignals=True,
+            includeMovers=True,
             getScatterPlot=False)
             
             cols_to_use = ArbitrageDf.columns.difference(arbitrageBuySellSignals.columns)
@@ -59,7 +65,7 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
             del arbitrageBuySellSignals['ETF Change Price %']
             arbitrageBuySellSignals.rename(columns={'T':'ETF Change Price %'}, inplace=True)
             
-            
+            arbitrageBuySellSignals['ETFName'] = etfname
             ##arbitrageBuySellSignals['ETF Change Price %']=np.round(arbitrageBuySellSignals['ETF Change Price %'],2)
             #arbitrageBuySellSignals['Price'] = np.round(arbitrageBuySellSignals['Price'],2)
             

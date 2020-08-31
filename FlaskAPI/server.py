@@ -17,7 +17,7 @@ from FlaskAPI.Components.ETFDescription.helper import fetchETFsWithSameIssuer, f
     fetchETFsWithSimilarTotAsstUndMgmt, fetchOHLCHistoricalData
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import RetrieveETFArbitrageData, retrievePNLForAllDays, \
-    OverBoughtBalancedOverSold
+    OverBoughtBalancedOverSold, CandlesignalsColumns
 from FlaskAPI.Components.ETFArbitrage.helperForETFArbitrage import etfMoversChangers
 from MongoDB.PerMinDataOperations import PerMinDataOperations
 from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fecthArbitrageANDLivePrices, \
@@ -188,7 +188,7 @@ def FetchPastArbitrageData(ETFName, date):
                              'ETFMover%1_ticker',
                              'Change%1_ticker',
                              'T', 'ETF Price']
-        print(ColumnsForDisplay)                    
+        print(ColumnsForDisplay)
         # Retreive data for Components
         data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
                                                                                          magnitudeOfArbitrageToFilterOn=0)
@@ -336,7 +336,9 @@ def SendLiveArbitrageDataAllTickers():
 ############################################
 # Live Arbitrage Single ETF
 ############################################
-
+from FlaskAPI.Components.ETFArbitrage.CandleStickResults import AnalyzeCandlestickSignals
+import itertools
+analyzeSignalObj = AnalyzeCandlestickSignals()
 
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
@@ -351,6 +353,13 @@ def SendLiveArbitrageDataSingleTicker(etfname):
                                           callAllDayArbitrage=True)
         if type(res) == Response:
             return res
+        last_minute = res['Arbitrage']['Time'].tail(1).values[0]
+        signals_dict = analyzeSignalObj.analyze_etf_for_all_patterns(res['Arbitrage'])
+        list(map(lambda x: signals_dict.update({x: ('No Occurrence yet', 'No Signal')}) if x not in signals_dict else None, CandlesignalsColumns))
+        print(signals_dict)
+        signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
+        last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
+        last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
 
         pricedf = res['Prices']
         pricedf = pricedf.reset_index(drop=True)
@@ -379,6 +388,8 @@ def SendLiveArbitrageDataSingleTicker(etfname):
         res['ArbitrageLineChart'] = res['Arbitrage'][[
             'Arbitrage in $', 'Time']].to_dict('records')
         res['Arbitrage'] = res['Arbitrage'].to_json()
+        res['CandlestickSignals'] = signals_dict
+        res['last_minute_signal'] = last_minute_signal
         return json.dumps(res)
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()

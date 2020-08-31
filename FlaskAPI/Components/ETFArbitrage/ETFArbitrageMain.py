@@ -27,11 +27,7 @@ MomentumsignalsColumns = ['ADX Trend', 'AROONOSC Trend', 'Momentum Indicator', '
                           'MFI Indicator']
 
 CandlesignalsColumns = ['Hammer Pat', 'InvertedHammer Pat', 'DragonFlyDoji Pat', 'PiercingLine Pat', 'MorningStar Pat',
-                        'MorningStarDoji Pat', '3WhiteSoldiers Pat',
-                        'HanginMan Pat', 'Shooting Pat', 'GraveStone Pat', 'DarkCloud Pat', 'EveningStar Pat',
-                        'EveningDoji Pat', '3BlackCrows Pat', 'AbandonedBaby Pat',
-                        'Engulfing Pat', 'Harami Pat', 'IndecisionSpinningTop Pat', 'IndecisionDoji Pat',
-                        '3LineStrike Pat']
+                        '3WhiteSoldiers Pat', 'HanginMan Pat', 'Shooting Pat']
 
 MajorUnderlyingMovers = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMover%5', 'ETFMover%6',
                          'ETFMover%7', 'ETFMover%8', 'ETFMover%9', 'ETFMover%10',
@@ -74,6 +70,7 @@ def calculateArbitrageResults(df=None, etfname=None, magnitudeOfArbitrageToFilte
                      'ETF Price']
     # columnsneeded=columnsneeded+MomentumsignalsColumns+CandlesignalsColumns+MajorUnderlyingMovers
     columnsneeded = columnsneeded + MajorUnderlyingMovers if includeMovers else columnsneeded
+    columnsneeded = columnsneeded + CandlesignalsColumns if BuildPatternSignals else columnsneeded
 
     allSignalsProcessing = pd.DataFrame()
     allSignalsProcessingTemp = analysePerformance(df=df, BuySellIndex=df)

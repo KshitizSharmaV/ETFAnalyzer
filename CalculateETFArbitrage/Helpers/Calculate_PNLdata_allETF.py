@@ -60,6 +60,8 @@ class CalculateAndSavePnLData():
                     # Iter over the collection results
                     for etf_arblist in all_etf_arb:
                         # if etf_arb['ETFName'] in etf_to_be_done:
+                        if len(etf_arblist)<1:
+                            continue
                         try:
                             print(etf_arblist[0]['ETFName'])
                             logger.debug(etf_arblist[0]['ETFName'])
@@ -76,8 +78,13 @@ class CalculateAndSavePnLData():
                             pass
                     PNLOverDates = pd.DataFrame(PNLOverDates).T
                     # del PNLOverDates['Magnitue Of Arbitrage']
-                    PNLOverDates.columns = ['Sell Return%', 'Buy Return%', 'Magnitue Of Arbitrage', '# T_Buy',
-                                            '# R_Buy', '# T_Sell', '# R_Sell']
+                    PNLOverDates.rename(columns={'PNL% Sell Pos. (T+1)': 'Sell Return%',
+                                                 'PNL% Buy Pos. (T+1)': 'Buy Return%',
+                                                 'Magnitue Of Arbitrage': 'Magnitue Of Arbitrage',
+                                                 '# of Buy Signal': '# T_Buy',
+                                                 '# of Right Buy Signal': '# R_Buy',
+                                                 '# of Sell Signal': '# T_Sell',
+                                                 '# of Right Sell Signal': '# R_Sell'}, inplace=True)
                     PNLOverDates['% R_Buy'] = round(PNLOverDates['# R_Buy'] / PNLOverDates['# T_Buy'], 2)
                     PNLOverDates['% R_Sell'] = round(PNLOverDates['# R_Sell'] / PNLOverDates['# T_Sell'], 2)
                     PNLOverDates['Date'] = date
@@ -117,9 +124,15 @@ class CalculateAndSavePnLData():
                 arbitrageDataFromMongo=data_to_be_passed, magnitudeOfArbitrageToFilterOn=magnitudeOfArbitrageToFilterOn)
             PNLOverDates[str(data_to_be_passed[0]['ETFName'])] = pnlstatementforday
         PNLOverDates = pd.DataFrame(PNLOverDates).T
+        PNLOverDates.rename(columns={'PNL% Sell Pos. (T+1)':'Sell Return%',
+                                     'PNL% Buy Pos. (T+1)': 'Buy Return%',
+                                     'Magnitue Of Arbitrage': 'Magnitue Of Arbitrage',
+                                     '# of Buy Signal': '# T_Buy',
+                                     '# of Right Buy Signal': '# R_Buy',
+                                     '# of Sell Signal': '# T_Sell',
+                                     '# of Right Sell Signal': '# R_Sell'}, inplace=True)
         # del PNLOverDates['Magnitue Of Arbitrage']
-        PNLOverDates.columns = ['Sell Return%', 'Buy Return%', 'Magnitue Of Arbitrage', '# T_Buy', '# R_Buy',
-                                '# T_Sell', '# R_Sell']
+
         PNLOverDates['% R_Buy'] = round(PNLOverDates['# R_Buy'] / PNLOverDates['# T_Buy'], 2)
         PNLOverDates['% R_Sell'] = round(PNLOverDates['# R_Sell'] / PNLOverDates['# T_Sell'], 2)
         PNLOverDates['Date'] = last_date

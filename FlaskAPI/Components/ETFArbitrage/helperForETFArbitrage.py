@@ -44,25 +44,19 @@ def LoadETFArbitrageData(etfdata,dateOfAnalysis,year):
 # We are gathering the etf prices for T-5 and T+5 minutes
 # This data will be used for anlayzing signal strength
 def analysePerformance(df=None, BuySellIndex=None):
-    singalDf={}
+    singalDf = {}
     for dateindex in BuySellIndex.index:
         idx = df.index.get_loc(dateindex)
-        resforward=df.iloc[(idx) : (idx + 6)]['ETF Change Price %']
+        resforward = df.iloc[(idx): (idx + 2)]['ETF Change Price %']
         tempforward = list(resforward.values)
 
-        resbackward=df.iloc[(idx-6) : (idx -1)]['ETF Change Price %']
-        tempbackward = list(resbackward.values)
-        
-        if len(resforward.values)<6:
-            [tempforward.append(np.nan) for i in range(5-len(resforward.values))]    
-        
-        if len(resbackward.values)<5:
-            [tempbackward.append(np.nan) for i in range(5-len(resbackward.values))]    
-        singalDf[dateindex] = tempbackward[::-1]+tempforward
-    
-    singalDf=pd.DataFrame.from_dict(singalDf, orient='index')
-    singalDf.columns=['T-5','T-4','T-3','T-2','T-1','T','T+1','T+2','T+3','T+4','T+5']
-    singalDf.loc['Total Return',:]=singalDf.sum(axis=0)
+        if len(resforward.values) < 2:
+            [tempforward.append(np.nan) for i in range(1 - len(resforward.values))]
+        singalDf[dateindex] = tempforward
+
+    singalDf = pd.DataFrame.from_dict(singalDf, orient='index')
+    singalDf.columns = ['T', 'T+1']
+    singalDf.loc['Total Return', :] = singalDf.sum(axis=0)
     return singalDf
 
 
