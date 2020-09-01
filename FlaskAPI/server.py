@@ -221,8 +221,9 @@ def FetchPastArbitrageData(ETFName, date):
         print("Historical DataFrame")
         print(data)
 
-        allData['SignalCategorization'] = CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $', PriceColumn='T',
-                              Pct_change=False)
+        allData['SignalCategorization'] = CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $',
+                                                            PriceColumn='T',
+                                                            Pct_change=False)
 
         data = data.reset_index(drop=True)
 
@@ -338,7 +339,9 @@ def SendLiveArbitrageDataAllTickers():
 ############################################
 from FlaskAPI.Components.ETFArbitrage.CandleStickResults import AnalyzeCandlestickSignals
 import itertools
+
 analyzeSignalObj = AnalyzeCandlestickSignals()
+
 
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname):
@@ -346,7 +349,6 @@ def SendLiveArbitrageDataSingleTicker(etfname):
     if type(res) == Response:
         return res
     try:
-
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
                                           FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage,
@@ -355,42 +357,38 @@ def SendLiveArbitrageDataSingleTicker(etfname):
             return res
         last_minute = res['Arbitrage']['Time'].tail(1).values[0]
         signals_dict = analyzeSignalObj.analyze_etf_for_all_patterns(res['Arbitrage'])
-        list(map(lambda x: signals_dict.update({x: ('No Occurrence yet', 'No Signal')}) if x not in signals_dict else None, CandlesignalsColumns))
-        print(signals_dict)
+        list(map(
+            lambda x: signals_dict.update({x: ('No Occurrence yet', 'No Signal')}) if x not in signals_dict else None,
+            CandlesignalsColumns))
         signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
         last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
         last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
-
         pricedf = res['Prices']
         pricedf = pricedf.reset_index(drop=True)
         pricedf['Time'] = pricedf['date']
         pricedf['Time'] = pricedf['Time'].apply(lambda x: str(x.time()))
-        pricedf = pd.merge(
-            res['Arbitrage'][['Time', 'Over Bought/Sold']], pricedf, on='Time', how='right')
+        pricedf = pd.merge(res['Arbitrage'][['Time', 'Over Bought/Sold']], pricedf, on='Time', how='right')
         pricedf = pricedf[pricedf['Over Bought/Sold'].notna()]
         del pricedf['Time']
         res['Prices'] = pricedf
-
         res['Prices'] = res['Prices'].to_csv(sep='\t', index=False)
-        res['pnlstatementforday'] = json.dumps(res['pnlstatementforday'])
-        res['SignalCategorization'] = json.dumps(
-            CategorizeSignals(ArbitrageDf=res['Arbitrage'], ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
-                              Pct_change=True))
-        print(res['Arbitrage'])
-
-        etfmoversDictCount, highestChangeDictCount = etfMoversChangers(
-            res['Arbitrage'])
-        res['etfmoversDictCount'] = json.dumps(etfmoversDictCount)
-        res['highestChangeDictCount'] = json.dumps(highestChangeDictCount)
-
-        res['scatterPlotData'] = json.dumps(
-            res['Arbitrage'][['ETF Change Price %', 'Net Asset Value Change%']].to_dict(orient='records'))
-        res['ArbitrageLineChart'] = res['Arbitrage'][[
-            'Arbitrage in $', 'Time']].to_dict('records')
-        res['Arbitrage'] = res['Arbitrage'].to_json()
+        res['pnlstatementforday'] = res['pnlstatementforday']
+        res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'],
+                                                        ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
+                                                        Pct_change=True)
+        etfmoversDictCount, highestChangeDictCount = etfMoversChangers(res['Arbitrage'])
+        res['etfmoversDictCount'] = etfmoversDictCount
+        res['highestChangeDictCount'] = highestChangeDictCount
+        res['scatterPlotData'] = res['Arbitrage'][['ETF Change Price %', 'Net Asset Value Change%']].to_dict(
+            orient='records')
+        res['ArbitrageLineChart'] = res['Arbitrage'][['Arbitrage in $', 'Time']].to_dict('records')
+        arbitrage_columns = list(res['Arbitrage'].columns)
+        res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns}, inplace=True)
+        res['Arbitrage'] = res['Arbitrage'].fillna(0)
+        res['Arbitrage'] = res['Arbitrage'].to_dict(orient='records')
         res['CandlestickSignals'] = signals_dict
         res['last_minute_signal'] = last_minute_signal
-        return json.dumps(res)
+        return jsonify(res)
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()

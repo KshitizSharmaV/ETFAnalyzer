@@ -174,8 +174,8 @@ def CategorizeSignals(ArbitrageDf=None, ArbitrageColumnName=None, PriceColumn=No
                 SignalCategorization[groupType]['# Sell Sign'] = SignalCategorization[groupType]['# Sell Sign'] + 1
                 SignalCategorization[groupType]['Sell Ret'] = SignalCategorization[groupType]['Sell Ret'] + ArbitrageDf.loc[idx+1,'ETF Change Price %']
 
-    SignalCategorization=pd.DataFrame(SignalCategorization).fillna(0).round(3).to_dict()
-    SignalCategorization = {k: SignalCategorization[k] for k in names}
+    SignalCategorization=pd.DataFrame(SignalCategorization).fillna(0).round(3).T.reset_index().rename(columns={'index': 'Magnitude'})
+    SignalCategorization = SignalCategorization.to_dict(orient='records')
     return SignalCategorization
 
         
