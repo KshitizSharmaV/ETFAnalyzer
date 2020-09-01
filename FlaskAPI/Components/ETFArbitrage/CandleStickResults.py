@@ -48,7 +48,7 @@ class AnalyzeCandlestickSignals():
         signal_dfs = {}
         for PatternName in self.all_patterns:
             valueForField = list(set(etfdata[PatternName]))[-1]
-            print(f"value for {PatternName} is {valueForField} for {etfdata['ETFName'][0]}")
+            # print(f"value for {PatternName} is {valueForField} for {etfdata['ETFName'][0]}")
             if valueForField == 0:
                 continue
             pattern_signal = self.AnalyzeKindOfSignal(etfdata, PatternName=PatternName, valueForField=valueForField)

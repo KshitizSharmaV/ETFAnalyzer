@@ -408,10 +408,14 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
                                           callAllDayArbitrage=False)
         if type(res) == Response:
             return res
+        etfMoversChangers(res['Arbitrage'])
+        arbitrage_columns = list(res['Arbitrage'].columns)
+        res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns if ' ' in x}, inplace=True)
         res['Prices'] = res['Prices'].to_dict()
-        res['Arbitrage'] = res['Arbitrage'].to_dict()
+        res['Arbitrage'] = res['Arbitrage'].to_dict(orient='records')[0]
+        print(res['Arbitrage'])
         res['SignalInfo'] = analyzeSignalPerformane(
-            res['Arbitrage']['Arbitrage in $'][0])
+            res['Arbitrage']['Arbitrage_in_$'])
         return res
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
