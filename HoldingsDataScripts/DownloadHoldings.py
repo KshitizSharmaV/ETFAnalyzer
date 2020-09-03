@@ -35,13 +35,10 @@ class PullHoldingsListClass(object):
 
     def checkFundHoldingsDate(self, checkDate, etfname):
         try:
-            if len(list(self.conn.ETF_db.ETFHoldings.find(
+            return len(list(self.conn.ETF_db.ETFHoldings.find(
                     {'FundHoldingsDate': datetime.strptime(checkDate, "%Y-%m-%d"), 'ETFTicker': etfname}).limit(
-                1))) > 0:
-                return True
-            else:
-                return False
-        except:
+                1))) > 0
+        except Exception as e:
             return False
 
 
@@ -64,7 +61,7 @@ class DownloadsEtfHoldingsData():
             logger.exception(e)
             traceback.print_exc()
 
-    @retry(Exception, total_tries=2, initial_wait=3, backoff_factor=2)
+    @retry(Exception, total_tries=4, initial_wait=5, backoff_factor=2)
     def open_etf_holding_webpage(self, etfname):
         try:
             # get the etf name and request ETFdb page for the same
@@ -81,7 +78,7 @@ class DownloadsEtfHoldingsData():
             print(e)
             logger.exception(e)
 
-    @retry(Exception, total_tries=2, initial_wait=2, backoff_factor=2)
+    @retry(Exception, total_tries=4, initial_wait=5, backoff_factor=2)
     def check_etf_presence(self, etfname):
         try:
             '''

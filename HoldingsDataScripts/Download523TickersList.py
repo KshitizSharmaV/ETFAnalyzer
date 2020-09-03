@@ -66,3 +66,5 @@ class Download523TickersList():
                                        traceback.format_exc()))
             emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             pass
+        finally:
+            self.driver.quit()

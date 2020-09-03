@@ -31,7 +31,13 @@ class holdingsProcess():
         self.ticker_description_path = os.path.abspath(os.path.join(self.rootpath,
                                                                     'ETFDailyData/ETFTickersDescription/' + datetime.now().strftime(
                                                                         "%Y%m%d") + '/etfs_details_type_fund_flow.csv'))
-        self.url_list = ['https://etfdb.com/etfs/sector/', 'https://etfdb.com/etfs/country/us/']
+        self.url_list = ['https://etfdb.com/etfs/sector/technology/', 'https://etfdb.com/etfs/sector/healthcare/',
+                         'https://etfdb.com/etfs/sector/real-estate/', 'https://etfdb.com/etfs/sector/materials/',
+                         'https://etfdb.com/etfs/sector/financials/',
+                         'https://etfdb.com/etfs/sector/consumer-discretionaries/',
+                         'https://etfdb.com/etfs/sector/energy/', 'https://etfdb.com/etfs/sector/telecom/',
+                         'https://etfdb.com/etfs/sector/consumer-staples/', 'https://etfdb.com/etfs/sector/utilities/',
+                         'https://etfdb.com/etfs/sector/industrials/', 'https://etfdb.com/etfs/country/us/']
         self.list_of_ETFs = pd.read_csv(self.csv_file_path).columns.to_list()
         self.final_ETF_list_DF = pd.DataFrame()
 
@@ -45,6 +51,7 @@ class holdingsProcess():
             print("old file removed")
             self.final_ETF_list_DF = pd.concat([self.final_ETF_list_DF, df], ignore_index=True).drop_duplicates(
                 subset='Symbol')
+        print(self.final_ETF_list_DF)
 
     def download_and_store_etfs(self, etf):
         print("Processing for {} etf".format(etf))
