@@ -495,6 +495,7 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
         etfmoversDictCount, highestChangeDictCount = etfMoversChangers(res['Arbitrage'])
         res['etfmoversDictCount'] = etfmoversDictCount
         res['highestChangeDictCount'] = highestChangeDictCount
+        res['Arbitrage'] = OverBoughtBalancedOverSold(df=res['Arbitrage'])
         arbitrage_columns = list(res['Arbitrage'].columns)
         res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns if ' ' in x}, inplace=True)
         res['Prices'] = res['Prices'].to_dict(orient='records')[0]
