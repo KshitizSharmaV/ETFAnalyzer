@@ -408,10 +408,12 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname):
                                           callAllDayArbitrage=False)
         if type(res) == Response:
             return res
-        etfMoversChangers(res['Arbitrage'])
+        etfmoversDictCount, highestChangeDictCount = etfMoversChangers(res['Arbitrage'])
+        res['etfmoversDictCount'] = etfmoversDictCount
+        res['highestChangeDictCount'] = highestChangeDictCount
         arbitrage_columns = list(res['Arbitrage'].columns)
         res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns if ' ' in x}, inplace=True)
-        res['Prices'] = res['Prices'].to_dict()
+        res['Prices'] = res['Prices'].to_dict(orient='records')[0]
         res['Arbitrage'] = res['Arbitrage'].to_dict(orient='records')[0]
         print(res['Arbitrage'])
         res['SignalInfo'] = analyzeSignalPerformane(
