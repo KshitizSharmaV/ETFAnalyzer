@@ -342,12 +342,49 @@ import itertools
 import functools
 
 analyzeSignalObj = AnalyzeCandlestickSignals()
+
+'''Static unauthorised APIs for XLK Live'''
+@functools.lru_cache(maxsize=512)
+@app.route('/api/ETfLiveArbitrage/SingleXLKdefault')
+def send_live_arbitrage_data_xlk_only():
+    try:
+        return SendLiveArbitrageDataSingleTicker(etfname='XLK', bypass_auth=True)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+
+
+@app.route('/api/ETfLiveArbitrage/Single/UpdateTableXLKdefault')
+def update_live_arbitrage_data_tables_and_prices_xlk_only():
+    try:
+        return UpdateLiveArbitrageDataTablesAndPrices(etfname='XLK', bypass_auth=True)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+
+
+@app.route('/api/ETfLiveArbitrage/Single/SignalAndCandleXLKdefault')
+def live_arb_candlestick_and_signal_categorization_xlk_only():
+    try:
+        return live_arb_candlestick_and_signal_categorization(etfname='XLK', bypass_auth=True)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+
+
+'''Dynamic APIs for Live Arbitrage'''
 '''API for Alpha Candle Stick Pattern Signals Table and Arbitrage Spread Table'''
 @app.route('/api/ETfLiveArbitrage/Single/SignalAndCandle/<etfname>')
-def live_arb_candlestick_and_signal_categorization(etfname):
-    res = api_auth_object.authenticate_api()
-    if type(res) == Response:
-        return res
+def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
+    if not bypass_auth:
+        res = api_auth_object.authenticate_api()
+        if type(res) == Response:
+            return res
+    else:
+        pass
     try:
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
@@ -377,61 +414,15 @@ def live_arb_candlestick_and_signal_categorization(etfname):
         traceback.print_exc()
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
-'''Static unauthorised API for XLK Live'''
-@functools.lru_cache(maxsize=512)
-@app.route('/api/ETfLiveArbitrage/SingleXLKdefault')
-def send_live_arbitrage_data_xlk_only():
-    try:
-        PerMinObj = PerMinDataOperations()
-        res = fecthArbitrageANDLivePrices(etfname='XLK', FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
-                                          FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage,
-                                          callAllDayArbitrage=True)
-        if type(res) == Response:
-            return res
-        last_minute = res['Arbitrage']['Time'].tail(1).values[0]
-        signals_dict = analyzeSignalObj.analyze_etf_for_all_patterns(res['Arbitrage'])
-        list(map(
-            lambda x: signals_dict.update({x: ('No Occurrence yet', 'No Signal')}) if x not in signals_dict else None,
-            CandlesignalsColumns))
-        signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
-        last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
-        last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
-        pricedf = res['Prices']
-        pricedf = pricedf.reset_index(drop=True)
-        pricedf['Time'] = pricedf['date']
-        pricedf['Time'] = pricedf['Time'].apply(lambda x: str(x.time()))
-        pricedf = pd.merge(res['Arbitrage'][['Time', 'Over Bought/Sold']], pricedf, on='Time', how='right')
-        pricedf = pricedf[pricedf['Over Bought/Sold'].notna()]
-        del pricedf['Time']
-        res['Prices'] = pricedf
-        res['Prices'] = res['Prices'].to_csv(sep='\t', index=False)
-        res['pnlstatementforday'] = res['pnlstatementforday']
-        res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'],
-                                                        ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
-                                                        Pct_change=True)
-        etfmoversDictCount, highestChangeDictCount = etfMoversChangers(res['Arbitrage'])
-        res['etfmoversDictCount'] = etfmoversDictCount
-        res['highestChangeDictCount'] = highestChangeDictCount
-        res['scatterPlotData'] = res['Arbitrage'][['ETF Change Price %', 'Net Asset Value Change%']].to_dict(
-            orient='records')
-        res['ArbitrageLineChart'] = res['Arbitrage'][['Arbitrage in $', 'Time']].to_dict('records')
-        arbitrage_columns = list(res['Arbitrage'].columns)
-        res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns}, inplace=True)
-        res['Arbitrage'] = res['Arbitrage'].fillna(0)
-        res['Arbitrage'] = res['Arbitrage'].to_dict(orient='records')
-        res['CandlestickSignals'] = signals_dict
-        res['last_minute_signal'] = last_minute_signal
-        return jsonify(res)
-    except Exception as e:
-        exc_type, exc_value, exc_tb = sys.exc_info()
-        traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
 
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
-def SendLiveArbitrageDataSingleTicker(etfname):
-    res = api_auth_object.authenticate_api()
-    if type(res) == Response:
-        return res
+def SendLiveArbitrageDataSingleTicker(etfname, bypass_auth=False):
+    if not bypass_auth:
+        res = api_auth_object.authenticate_api()
+        if type(res) == Response:
+            return res
+    else:
+        pass
     try:
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
@@ -480,10 +471,13 @@ def SendLiveArbitrageDataSingleTicker(etfname):
 
 
 @app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
-def UpdateLiveArbitrageDataTablesAndPrices(etfname):
-    res = api_auth_object.authenticate_api()
-    if type(res) == Response:
-        return res
+def UpdateLiveArbitrageDataTablesAndPrices(etfname, bypass_auth=False):
+    if not bypass_auth:
+        res = api_auth_object.authenticate_api()
+        if type(res) == Response:
+            return res
+    else:
+        pass
     try:
 
         PerMinObj = PerMinDataOperations()
