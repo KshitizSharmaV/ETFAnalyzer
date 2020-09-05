@@ -457,6 +457,7 @@ def SendLiveArbitrageDataSingleTicker(etfname, bypass_auth=False):
         res['scatterPlotData'] = res['Arbitrage'][['ETF Change Price %', 'Net Asset Value Change%']].to_dict(
             orient='records')
         res['ArbitrageLineChart'] = res['Arbitrage'][['Arbitrage in $', 'Time']].to_dict('records')
+        res['SignalInfo'] = analyzeSignalPerformane(res['Arbitrage'].tail(1).to_dict('records')[0]['Arbitrage in $'])
         arbitrage_columns = list(res['Arbitrage'].columns)
         res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns}, inplace=True)
         res['Arbitrage'] = res['Arbitrage'].fillna(0)
