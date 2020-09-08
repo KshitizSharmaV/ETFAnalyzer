@@ -400,13 +400,20 @@ def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
         signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
         last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
         last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
-
+        pricedf = res['Prices']
+        pricedf = pricedf.reset_index(drop=True)
+        pricedf['Time'] = pricedf['date']
+        pricedf['Time'] = pricedf['Time'].apply(lambda x: str(x.time()))
+        pricedf = pd.merge(res['Arbitrage'][['Time', 'Over Bought/Sold']], pricedf, on='Time', how='right')
+        pricedf = pricedf[pricedf['Over Bought/Sold'].notna()]
+        del pricedf['Time']
+        res['Prices'] = pricedf
+        res['Prices'] = res['Prices'].to_csv(sep='\t', index=False)
         res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'],
                                                         ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
                                                         Pct_change=True)
         res['CandlestickSignals'] = signals_dict
         res['last_minute_signal'] = last_minute_signal
-        res.pop('Prices')
         res.pop('Arbitrage')
         return jsonify(res)
     except Exception as e:
