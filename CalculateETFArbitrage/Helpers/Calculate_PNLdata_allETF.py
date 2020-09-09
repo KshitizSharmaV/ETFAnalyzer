@@ -8,7 +8,7 @@ from MongoDB.MongoDBConnections import MongoDBConnectors
 from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import AnalyzeArbitrageDataForETF
 from CommonServices.LogCreater import CreateLogger
 
-logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-PNLLog.log', loggerName='PNLLogger')
+logger = CreateLogger().createLogFile(dirName='HistoricalArbitrage/', logFileName='-PNLLog.log', loggerName='PNLLogger')
 
 
 class CalculateAndSavePnLData():

@@ -7,7 +7,7 @@ import getpass
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.LogCreater import  CreateLogger
 logObj = CreateLogger()
-logger = logObj.createLogFile(dirName='Logs/', logFileName='-DeleteScriptLog.log', loggerName='DeleteScriptLogger')
+logger = logObj.createLogFile(dirName='ETFLiveAnalysis/', logFileName='-DeleteScriptLog.log', loggerName='DeleteScriptLogger')
 sys_username = getpass.getuser()
 if sys_username == 'ubuntu':
     readWriteConnection = MongoDBConnectors().get_pymongo_readWrite_production_production()

@@ -10,7 +10,7 @@ from PolygonTickData.Helper import Helper
 
 from CommonServices.LogCreater import CreateLogger
 
-logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-ArbEventLog.log', loggerName='HistArbEventLogger')
+logger = CreateLogger().createLogFile(dirName='HistoricalArbitrage/', logFileName='-ArbEventLog.log', loggerName='TradesQuotesEventLogger')
 
 
 class FetchPolygonData(object):

@@ -13,7 +13,7 @@ from CommonServices.LogCreater import CreateLogger
 
 
 logObj = CreateLogger()
-logger = logObj.createLogFile(dirName="Logs/",logFileName="-TickListGenerator.log",loggerName="TickListGenerator")
+logger = logObj.createLogFile(dirName="ETFLiveAnalysis/",logFileName="-TickListGenerator.log",loggerName="TickListGenerator")
 
 
 class ListsCreator():

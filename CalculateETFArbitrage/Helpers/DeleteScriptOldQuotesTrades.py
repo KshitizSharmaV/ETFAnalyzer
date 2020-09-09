@@ -9,7 +9,7 @@ from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.LogCreater import CreateLogger
 
 logObj = CreateLogger()
-logger = logObj.createLogFile(dirName='Logs/', logFileName='-HistoricDeleteScriptLog.log',
+logger = logObj.createLogFile(dirName='HistoricalArbitrage/', logFileName='-HistoricDeleteScriptLog.log',
                               loggerName='HistoricDeleteScriptLogger')
 sys_username = getpass.getuser()
 if sys_username == 'ubuntu':

@@ -5,7 +5,7 @@ import pandas as pd
 from CommonServices.MultiProcessingTasks import CPUBonundThreading
 from CommonServices.ThreadingRequests import IOBoundThreading
 from CommonServices.LogCreater import  CreateLogger
-logger = CreateLogger().createLogFile(dirName='Logs/', logFileName='-QuotesLiveFetchLog.log', loggerName='QuotesLiveFetch')
+logger = CreateLogger().createLogFile(dirName='ETFLiveAnalysis/', logFileName='-QuotesLiveFetchLog.log', loggerName='QuotesLiveFetch')
 
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from MongoDB.PerMinDataOperations import PerMinDataOperations

@@ -16,8 +16,8 @@ from CommonServices.RetryDecor import retry
 from CommonServices.WebdriverServices import masterclass
 from MongoDB.MongoDBConnections import MongoDBConnectors
 
-logger = CreateLogger().createLogFile(dirName='Logs/HoldingsScraperLogs/', logFileName="-HoldingsDataLogs.log",
-                                      loggerName='HoldingsLogger')
+logger = CreateLogger().createLogFile(dirName='HoldingsScraperLogs/', logFileName="-HoldingsDataLogs.log",
+                                      loggerName='DownloadHoldingsLogger')
 
 
 class PullHoldingsListClass(object):

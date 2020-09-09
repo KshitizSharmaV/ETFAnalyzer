@@ -19,7 +19,7 @@ from functools import partial
 
 
 logObj = CreateLogger()
-logger = logObj.createLogFile(dirName="Logs/",logFileName="-CalculateArbPerMinLog.log",loggerName="CalculateArbPerMinLog")
+logger = logObj.createLogFile(dirName="ETFLiveAnalysis/",logFileName="-CalculateArbPerMinLog.log",loggerName="CalculateArbPerMinLog")
 
 class ArbPerMin():
 
