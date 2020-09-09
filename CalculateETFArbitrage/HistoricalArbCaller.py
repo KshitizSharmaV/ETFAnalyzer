@@ -2,8 +2,8 @@ import os
 import pathlib
 import sys  # Remove in production - KTZ
 import traceback
-
 sys.path.append("..")  # Remove in production - KTZ
+from CommonServices.Holidays import HolidayCheck
 from CommonServices.EmailService import EmailSender
 from CommonServices.MakeCSV import CSV_Maker
 import pandas as pd
@@ -14,10 +14,10 @@ from MongoDB.SaveArbitrageCalcs import SaveCalculatedArbitrage
 from MongoDB.FetchArbitrage import FetchArbitrage
 from CommonServices.LogCreater import CreateLogger
 
-logger = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbEventLog.log", loggerName="ArbEventLogger",
-                                      filemode='w')
-logger2 = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbErrorLog.log", loggerName="ArbErrorLogger",
-                                       filemode='w')
+logger = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbEventLog.log", loggerName="ArbEventLogger",
+                                      filemode='a')
+logger2 = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbErrorLog.log", loggerName="ArbErrorLogger",
+                                       filemode='a')
 
 
 class HistoricalArbitrageRunnerClass():
@@ -101,6 +101,9 @@ class HistoricalArbitrageRunnerClass():
             CSV_Maker().write_to_csv(self.etfwhichfailed, "etfwhichfailed.csv")
 
     def all_task_runner(self):
+        if HolidayCheck(datetime.strptime(self.date, '%Y-%m-%d').date()):
+            logger.info("Holiday. Exiting...")
+            sys.exit(0)
         self.get_updated_etf_list()
         for etf in self.etflist:
             self.calculate_arbitrage_for_etf(etf, self.date)
