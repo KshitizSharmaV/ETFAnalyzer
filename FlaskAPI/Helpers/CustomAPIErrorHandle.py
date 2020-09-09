@@ -22,7 +22,9 @@ class MultipleExceptionHandler():
     def __init__(self):
         pass
 
-    def handle_exception(self, exception_type, e=None, error_type=None):
+    def handle_exception(self, exception_type, e=None, error_type=None, custom_logger=None):
+        if custom_logger:
+            custom_logger.exception(e)
         if error_type == 'Auth':
             return CustomAPIErrorHandler().handle_error('Authentication failed', 401)
 

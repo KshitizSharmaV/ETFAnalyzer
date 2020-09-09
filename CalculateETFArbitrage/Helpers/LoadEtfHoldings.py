@@ -10,12 +10,13 @@ import getpass
 from CommonServices.LogCreater import CreateLogger
 from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
 
-logger = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbEventLog.log", loggerName="ArbEventLogger",
-                                      filemode='w')
-logger2 = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbErrorLog.log", loggerName="ArbErrorLogger",
-                                       filemode='w')
+logger = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbEventLog.log", loggerName="ETFHoldingsAPILogger",
+                                      filemode='a')
+logger2 = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbErrorLog.log", loggerName="ETFHoldingsAPIErrorLogger",
+                                       filemode='a')
 
 from MongoDB.MongoDBConnections import MongoDBConnectors
+from FlaskAPI.Helpers.ServerLogHelper import custom_server_logger
 
 
 class LoadHoldingsdata(object):
@@ -53,7 +54,7 @@ class LoadHoldingsdata(object):
             except:
                 pass
             self.symbols = symbols
-            logger.debug("Data Successfully Loaded")
+            logger.debug(f"Data Successfully Loaded for {etfname}")
             return self
         except Exception as e:
             logger.error("Holdings Data Not Loaded for etf : {}", format(etfname))
@@ -99,7 +100,7 @@ class LoadHoldingsdata(object):
             logger.exception(e)
             logger2.exception(e)
             exc_type, exc_value, exc_tb = sys.exc_info()
-            return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+            return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=custom_server_logger)
 
     def getHoldingsDataForAllETFfromDB(self, etfname):
         try:
