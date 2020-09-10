@@ -38,11 +38,11 @@ class PullandCleanData:
                                                  names=['Key', 'Value'], engine='python')
 
                 # Read the holdings data from the CSV into DataFrame and Clean the data
-                self.holdingsdata = pd.read_csv(self.savingpath + '/' + x[etfname], header=12,
-                                                names=['Holdings', 'Symbol', 'Weights'])
-                self.holdingsdata['Symbol'] = self.holdingsdata['Symbol'].apply(lambda x: x.split(' ')[0])
-                self.holdingsdata['Weights'] = list(map(lambda x: x[:-1], self.holdingsdata['Weights'].values))
-                self.holdingsdata['Weights'] = [float(x) for x in self.holdingsdata['Weights'].values]
+                holdingsdata = pd.read_csv(self.savingpath + '/' + x[etfname], skiprows=14,
+                                           names=['Holdings', 'Symbol', 'Weights'])
+                holdingsdata['Symbol'] = holdingsdata['Symbol'].apply(lambda x: x.split(' ')[0])
+                holdingsdata['Weights'] = list(map(lambda x: x[:-1], holdingsdata['Weights'].values))
+                holdingsdata['Weights'] = [float(x) for x in holdingsdata['Weights'].values]
 
                 ########################################################################################################
 
@@ -88,10 +88,10 @@ class PullandCleanData:
                 for col in ['CommissionFree', 'PERatio', 'Beta']:
                     additional_details_df[col] = str(additional_details_df[col])
 
-                self.holdingsdata.rename(
+                holdingsdata.rename(
                     columns={'Holdings': 'TickerName', 'Symbol': 'TickerSymbol', 'Weights': 'TickerWeight'},
                     inplace=True)
-                holdings_data = self.holdingsdata.to_dict(orient='records')
+                holdings_data = holdingsdata.to_dict(orient='records')
 
                 all_data = {'DateOfScraping': datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)}
                 for item in [primary_details_df.to_dict(orient='records')[0],
