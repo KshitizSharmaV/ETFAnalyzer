@@ -10,8 +10,8 @@ from CommonServices.LogCreater import CreateLogger
 from CommonServices.EmailService import EmailSender
 from MongoDB.Schemas import etfholdings_collection
 
-logger = CreateLogger().createLogFile(dirName='Logs/HoldingsScraperLogs/', logFileName="-HoldingsDataLogs.log",
-                                      loggerName='HoldingsLogger')
+logger = CreateLogger().createLogFile(dirName='HoldingsScraperLogs/', logFileName="-HoldingsDataLogs.log",
+                                      loggerName='DataCleanFeed')
 
 
 class PullandCleanData:

@@ -17,7 +17,7 @@ from CommonServices.DirectoryRemover import Directory_Remover
 from CommonServices.MultiProcessingTasks import multi_processing_method
 
 t1_start = perf_counter()
-logger = CreateLogger().createLogFile(dirName='Logs/HoldingsScraperLogs/', logFileName="-HoldingsDataLogs.log",
+logger = CreateLogger().createLogFile(dirName='HoldingsScraperLogs/', logFileName="-HoldingsDataLogs.log",
                                       loggerName='HoldingsLogger')
 
 

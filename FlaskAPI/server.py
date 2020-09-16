@@ -1,7 +1,9 @@
 import sys
+import time
 
 sys.path.append("..")
-from flask import jsonify, render_template, Response
+
+from flask import jsonify, render_template, Response, g
 from flask_cors import CORS
 from mongoengine import *
 import json
@@ -23,6 +25,10 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fecthArbitrageANDLivePrices, \
     analyzeSignalPerformane, CategorizeSignals
 from CommonServices.Holidays import LastWorkingDay, HolidayCheck
+from FlaskAPI.Helpers.ServerLogHelper import custom_server_logger
+
+
+server_logger = custom_server_logger
 
 connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
 
@@ -32,6 +38,9 @@ CORS(app)
 
 api_auth_object = authAPI()
 
+@app.before_request
+def before_request():
+    g.start = time.time()
 
 # if sys.platform.startswith('linux') and getpass.getuser() == 'ubuntu':
 #     flaskAppMaker().get_index_page()
@@ -51,7 +60,6 @@ def getETFWithSameIssuer(IssuerName):
     if type(res) == Response:
         return res
     try:
-
         etfswithsameIssuer = fetchETFsWithSameIssuer(
             connection, Issuer=IssuerName)
         if len(etfswithsameIssuer) == 0:
@@ -61,7 +69,7 @@ def getETFWithSameIssuer(IssuerName):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/ETfDescription/getETFsWithSameETFdbCategory/<ETFdbCategory>')
@@ -80,7 +88,7 @@ def getETFsWithSameETFdbCategory(ETFdbCategory):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/ETfDescription/getOHLCDailyData/<ETFName>/<StartDate>')
@@ -98,7 +106,7 @@ def fetchOHLCDailyData(ETFName, StartDate):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/ETfDescription/getHoldingsData/<ETFName>/<StartDate>')
@@ -107,8 +115,6 @@ def fetchHoldingsData(ETFName, StartDate):
     if type(res) == Response:
         return res
     try:
-        api_auth_object.authenticate_api()
-        print("StartDate:{}".format(StartDate))
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, StartDate)
         if type(etfdata) == Response:
             return etfdata
@@ -119,7 +125,7 @@ def fetchHoldingsData(ETFName, StartDate):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/ETfDescription/EtfData/<ETFName>/<date>')
@@ -128,7 +134,6 @@ def SendETFHoldingsData(ETFName, date):
     if type(res) == Response:
         return res
     try:
-        api_auth_object.authenticate_api()
         allData = {}
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         if type(etfdata) == Response:
@@ -150,13 +155,12 @@ def SendETFHoldingsData(ETFName, date):
         ETFDataObject = pd.DataFrame(ETFDataObject, index=[0])
         ETFDataObject = ETFDataObject.replace(np.nan, 'nan', regex=True)
         ETFDataObject = ETFDataObject.loc[0].to_dict()
-
         allData['ETFDataObject'] = ETFDataObject
         return json.dumps(allData)
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 ############################################
@@ -181,14 +185,11 @@ def FetchPastArbitrageData(ETFName, date):
         return CustomAPIErrorHandler().handle_error(
             'Data not available before June 5th 2020, please choose a date after 5th June', 500)
     try:
-
-        print("Historical Data For %s & date %s" % (ETFName, str(date)))
         ColumnsForDisplay = ['Time', '$Spread', 'Arbitrage in $', 'Absolute Arbitrage',
                              'Over Bought/Sold',
                              'ETFMover%1_ticker',
                              'Change%1_ticker',
                              'T', 'ETF Price']
-        print(ColumnsForDisplay)
         # Retreive data for Components
         data, pricedf, PNLStatementForTheDay, scatterPlotData = RetrieveETFArbitrageData(etfname=ETFName, date=date,
                                                                                          magnitudeOfArbitrageToFilterOn=0)
@@ -218,8 +219,6 @@ def FetchPastArbitrageData(ETFName, date):
         allData = {}
         data['Time'] = data.index
         data = data[ColumnsForDisplay]
-        print("Historical DataFrame")
-        print(data)
 
         allData['SignalCategorization'] = CategorizeSignals(ArbitrageDf=data, ArbitrageColumnName='Arbitrage in $',
                                                             PriceColumn='T',
@@ -239,7 +238,7 @@ def FetchPastArbitrageData(ETFName, date):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/PastArbitrageData/CommonDataAcrossEtf/<ETFName>')
@@ -249,8 +248,6 @@ def fetchPNLForETFForALlDays(ETFName):
         return res
 
     try:
-
-        print("All ETF PNL Statement is called")
         PNLOverDates = retrievePNLForAllDays(
             etfname=ETFName, magnitudeOfArbitrageToFilterOn=0)
         PNLOverDates = pd.DataFrame(PNLOverDates).T
@@ -260,12 +257,11 @@ def fetchPNLForETFForALlDays(ETFName):
                                 'Magnitue Of Arbitrage', 'Date']
         PNLOverDates = PNLOverDates.dropna()
         PNLOverDates = PNLOverDates.to_dict(orient='records')
-        print("PNLOverDates: " + str(PNLOverDates))
         return jsonify(PNLOverDates)
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/PastArbitrageData/DailyChange/<ETFName>/<date>')
@@ -299,7 +295,7 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 ############################################
@@ -313,8 +309,6 @@ def SendLiveArbitrageDataAllTickers():
     if type(res) == Response:
         return res
     try:
-
-        print("All Etfs Live Arbitrage is called")
         live_data = PerMinDataOperations().LiveFetchPerMinArbitrage()
         live_data = live_data[['symbol', 'Arbitrage in $', 'ETF Trading Spread in $', 'ETF Price', 'ETF Change Price %',
                                'Net Asset Value Change%', 'ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4',
@@ -325,13 +319,11 @@ def SendLiveArbitrageDataAllTickers():
 
         live_data = live_data.round(3)
         live_data = live_data.fillna(0)
-        print(live_data)
-        print(live_data.columns)
         return jsonify(live_data.to_dict(orient='records'))
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 ############################################
@@ -342,6 +334,77 @@ import itertools
 import functools
 
 analyzeSignalObj = AnalyzeCandlestickSignals()
+
+'''Static unauthorised APIs for XLK Live'''
+@functools.lru_cache(maxsize=512)
+@app.route('/api/ETfLiveArbitrage/SingleXLKdefault')
+def send_live_arbitrage_data_xlk_only():
+    try:
+        return SendLiveArbitrageDataSingleTicker(etfname='XLK', bypass_auth=True)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+
+
+@app.route('/api/ETfLiveArbitrage/Single/UpdateTableXLKdefault')
+def update_live_arbitrage_data_tables_and_prices_xlk_only():
+    try:
+        return UpdateLiveArbitrageDataTablesAndPrices(etfname='XLK', bypass_auth=True)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+
+
+@app.route('/api/ETfLiveArbitrage/Single/SignalAndCandleXLKdefault')
+def live_arb_candlestick_and_signal_categorization_xlk_only():
+    try:
+        return live_arb_candlestick_and_signal_categorization(etfname='XLK', bypass_auth=True)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+
+
+'''Dynamic APIs for Live Arbitrage'''
+'''API for Alpha Candle Stick Pattern Signals Table and Arbitrage Spread Table'''
+@app.route('/api/ETfLiveArbitrage/Single/SignalAndCandle/<etfname>')
+def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
+    if not bypass_auth:
+        res = api_auth_object.authenticate_api()
+        if type(res) == Response:
+            return res
+    else:
+        pass
+    try:
+        PerMinObj = PerMinDataOperations()
+        res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
+                                          FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage,
+                                          callAllDayArbitrage=True)
+        if type(res) == Response:
+            return res
+        last_minute = res['Arbitrage']['Time'].tail(1).values[0]
+        signals_dict = analyzeSignalObj.analyze_etf_for_all_patterns(res['Arbitrage'])
+        list(map(
+            lambda x: signals_dict.update({x: ('No Occurrence yet', 'No Signal')}) if x not in signals_dict else None,
+            CandlesignalsColumns))
+        signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
+        last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
+        last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
+
+        res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'],
+                                                        ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
+                                                        Pct_change=True)
+        res['CandlestickSignals'] = signals_dict
+        res['last_minute_signal'] = last_minute_signal
+        res.pop('Prices')
+        res.pop('Arbitrage')
+        return jsonify(res)
+    except Exception as e:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        traceback.print_exc()
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 '''Static unauthorised APIs for XLK Live'''
 @functools.lru_cache(maxsize=512)
@@ -475,7 +538,7 @@ def SendLiveArbitrageDataSingleTicker(etfname, bypass_auth=False):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
@@ -487,7 +550,6 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname, bypass_auth=False):
     else:
         pass
     try:
-
         PerMinObj = PerMinDataOperations()
         res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.LiveFetchETFPrice,
                                           FuncArbitrageData=PerMinObj.LiveFetchPerMinArbitrage,
@@ -502,14 +564,13 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname, bypass_auth=False):
         res['Arbitrage'].rename(columns={x: x.replace(' ', '_') for x in arbitrage_columns if ' ' in x}, inplace=True)
         res['Prices'] = res['Prices'].to_dict(orient='records')[0]
         res['Arbitrage'] = res['Arbitrage'].to_dict(orient='records')[0]
-        print(res['Arbitrage'])
         res['SignalInfo'] = analyzeSignalPerformane(
             res['Arbitrage']['Arbitrage_in_$'])
         return res
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 ############################################
@@ -519,10 +580,6 @@ def UpdateLiveArbitrageDataTablesAndPrices(etfname, bypass_auth=False):
 
 @app.route('/api/LastWorkingDate/')
 def LastWorkingDate():
-    # res = api_auth_object.authenticate_api()
-    # if type(res) == Response:
-    #     return res
-
     lastworkinDay = LastWorkingDay(
         datetime.utcnow().date() - timedelta(days=2))
     return json.dumps(datetime.strftime(lastworkinDay.date(), '%Y%m%d'))
@@ -530,19 +587,18 @@ def LastWorkingDate():
 
 @app.route('/api/ListOfHolidays')
 def ListOfHolidays():
-    # res = api_auth_object.authenticate_api()
-    # if type(res) == Response:
-    #     return res
-
     mydates = pd.date_range(
         '2020-06-05', datetime.today().date().strftime("%Y-%m-%d")).tolist()
-    print(mydates)
     MyholidayList = [date.date().strftime("%Y-%m-%d")
                      for date in mydates if HolidayCheck(date)]
-    print("*******")
-    print(MyholidayList)
-    print("*******")
+
     return jsonify({'HolidayList': MyholidayList})
+
+@app.after_request
+def after_request(response):
+    diff = time.time() - g.start
+    server_logger.debug(f"Total server side exec time: {diff}")
+    return response
 
 
 if __name__ == '__main__':

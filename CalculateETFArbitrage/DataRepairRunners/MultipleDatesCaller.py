@@ -5,7 +5,7 @@ import traceback
 import sys  # Remove in production - KTZ
 
 sys.path.append("../..")  # Remove in production - KTZ
-
+from CommonServices.Holidays import HolidayCheck
 import pandas as pd
 from datetime import datetime, timedelta
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
@@ -17,10 +17,10 @@ from CommonServices.EmailService import EmailSender
 from CommonServices.LogCreater import CreateLogger
 from CommonServices.MakeCSV import CSV_Maker
 
-logger = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbEventLog.log", loggerName="ArbEventLogger",
-                                      filemode='w')
-logger2 = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbErrorLog.log", loggerName="ArbErrorLogger",
-                                       filemode='w')
+logger = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbEventLog.log", loggerName="RepairHistArbEventLogger",
+                                      filemode='a')
+logger2 = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbErrorLog.log", loggerName="RepairHistArbErrorLogger",
+                                       filemode='a')
 
 
 class HistoricalArbitrageDataRepairClass():
@@ -129,6 +129,9 @@ class HistoricalArbitrageDataRepairClass():
     def all_task_runner(self):
         dates = ['2020-08-10', '2020-08-11', '2020-08-12']
         for date_ in dates:
+            if HolidayCheck(datetime.strptime(date_, '%Y-%m-%d').date()):
+                logger.info("Holiday. Moving to next date...")
+                continue
             self.date = date_
             self.get_updated_etf_list()
             # self.etflist = ['XLY']

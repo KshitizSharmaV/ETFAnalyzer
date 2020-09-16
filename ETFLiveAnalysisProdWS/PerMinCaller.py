@@ -18,7 +18,7 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 from MongoDB.SaveArbitrageCalcs import SaveCalculatedArbitrage
 
 logObj = CreateLogger()
-logger = logObj.createLogFile(dirName="Logs/",logFileName="-PerMinCaller.log",loggerName="PerMinCallerLogs")
+logger = logObj.createLogFile(dirName="ETFLiveAnalysis/",logFileName="-PerMinCaller.log",loggerName="PerMinCallerLogs")
 
 class PerMinAnalysis():
     def __init__(self):

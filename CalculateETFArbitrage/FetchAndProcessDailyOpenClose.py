@@ -16,10 +16,10 @@ from MongoDB.SaveFetchQuotesData import MongoDailyOpenCloseData
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CommonServices.LogCreater import CreateLogger
 
-logger = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbEventLog.log", loggerName="ArbEventLogger",
-                                      filemode='w')
-logger2 = CreateLogger().createLogFile(dirName="Logs/", logFileName="-ArbErrorLog.log", loggerName="ArbErrorLogger",
-                                       filemode='w')
+logger = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbEventLog.log", loggerName="DailyOCEventLogger",
+                                      filemode='a')
+logger2 = CreateLogger().createLogFile(dirName="HistoricalArbitrage/", logFileName="-ArbErrorLog.log", loggerName="DailyOCErrorLogger",
+                                       filemode='a')
 
 
 class DailyOpenCloseData(object):
