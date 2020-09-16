@@ -392,77 +392,6 @@ def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
         signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
         last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
         last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
-
-        res['SignalCategorization'] = CategorizeSignals(ArbitrageDf=res['Arbitrage'],
-                                                        ArbitrageColumnName='Arbitrage in $', PriceColumn='ETF Price',
-                                                        Pct_change=True)
-        res['CandlestickSignals'] = signals_dict
-        res['last_minute_signal'] = last_minute_signal
-        res.pop('Prices')
-        res.pop('Arbitrage')
-        return jsonify(res)
-    except Exception as e:
-        exc_type, exc_value, exc_tb = sys.exc_info()
-        traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
-
-'''Static unauthorised APIs for XLK Live'''
-@functools.lru_cache(maxsize=512)
-@app.route('/api/ETfLiveArbitrage/SingleXLKdefault')
-def send_live_arbitrage_data_xlk_only():
-    try:
-        return SendLiveArbitrageDataSingleTicker(etfname='XLK', bypass_auth=True)
-    except Exception as e:
-        exc_type, exc_value, exc_tb = sys.exc_info()
-        traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
-
-
-@app.route('/api/ETfLiveArbitrage/Single/UpdateTableXLKdefault')
-def update_live_arbitrage_data_tables_and_prices_xlk_only():
-    try:
-        return UpdateLiveArbitrageDataTablesAndPrices(etfname='XLK', bypass_auth=True)
-    except Exception as e:
-        exc_type, exc_value, exc_tb = sys.exc_info()
-        traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
-
-
-@app.route('/api/ETfLiveArbitrage/Single/SignalAndCandleXLKdefault')
-def live_arb_candlestick_and_signal_categorization_xlk_only():
-    try:
-        return live_arb_candlestick_and_signal_categorization(etfname='XLK', bypass_auth=True)
-    except Exception as e:
-        exc_type, exc_value, exc_tb = sys.exc_info()
-        traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
-
-
-'''Dynamic APIs for Live Arbitrage'''
-'''API for Alpha Candle Stick Pattern Signals Table and Arbitrage Spread Table'''
-@app.route('/api/ETfLiveArbitrage/Single/SignalAndCandle/<etfname>')
-def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
-    if not bypass_auth:
-        res = api_auth_object.authenticate_api()
-        if type(res) == Response:
-            return res
-    else:
-        pass
-    try:
-        PerMinObj = PerMinDataOperations()
-        res = fecthArbitrageANDLivePrices(etfname=etfname, FuncETFPrices=PerMinObj.FetchFullDayPricesForETF,
-                                          FuncArbitrageData=PerMinObj.FetchFullDayPerMinArbitrage,
-                                          callAllDayArbitrage=True)
-        if type(res) == Response:
-            return res
-        last_minute = res['Arbitrage']['Time'].tail(1).values[0]
-        signals_dict = analyzeSignalObj.analyze_etf_for_all_patterns(res['Arbitrage'])
-        list(map(
-            lambda x: signals_dict.update({x: ('No Occurrence yet', 'No Signal')}) if x not in signals_dict else None,
-            CandlesignalsColumns))
-        signals_dict = [[x.replace(' ', ''), *v] for x, v in signals_dict.items()]
-        last_minute_signal = list(itertools.filterfalse(lambda x: last_minute not in x, signals_dict))
-        last_minute_signal = " ".join(last_minute_signal[0]) if len(last_minute_signal) > 0 else "No Pattern"
         pricedf = res['Prices']
         pricedf = pricedf.reset_index(drop=True)
         pricedf['Time'] = pricedf['date']
@@ -482,7 +411,7 @@ def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
     except Exception as e:
         exc_type, exc_value, exc_tb = sys.exc_info()
         traceback.print_exc()
-        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e)
+        return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
