@@ -20,7 +20,7 @@ class PolgonDataCreateURLS(object):
             print("First Request For = " + symbol)
         return requesturl
 
-    def PolygonHistoricTrades(self, date=None, symbol=None, startTS=None, endTS=None, limitresult=str(10)):
+    def PolygonHistoricTrades(self, symbol=None, date=None, startTS=None, endTS=None, limitresult=str(10)):
         if startTS:
             # For Getting Paginated Request
             requesturl = 'https://api.polygon.io/v2/ticks/stocks/trades/' + symbol + '/' + date + '?timestamp=' + startTS + '&timestampLimit=' + endTS + '&limit=' + limitresult + '&apiKey=qOKbrjPAxnTvs4_hwPi GoFzgHgxgmyafq'
