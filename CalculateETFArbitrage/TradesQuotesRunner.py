@@ -61,14 +61,18 @@ class TradesQuotesProcesses(object):
                 routines, symbol_status = trades_per_sec_create_url_func(symbols=symbols_to_be_downloaded,
                                                                          date=self.date,
                                                                          endTs=self.endTs)
+                fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
+                                                             symbol_status=symbol_status,
+                                                             collection_name=collection_name)
+                list(map(fetch_polygon_data_object.quotes_data_operation_runner, routines))
             else:
                 print("PROCESSING FOR HISTORIC QUOTES")
                 create_url = PolgonDataCreateURLS().PolygonHistoricQuotes
                 routines, symbol_status = self.create_urls_for_quotes(symbols=symbols_to_be_downloaded, date=self.date,
                                                                       endTs=self.endTs)
-            fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
-                                                         symbol_status=symbol_status, collection_name=collection_name)
-            fetch_polygon_data_object.quotes_data_operation_runner(url=routines[0])
+                fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
+                                                             symbol_status=symbol_status, collection_name=collection_name)
+                fetch_polygon_data_object.quotes_data_operation_runner(url=routines[0])
 
     def get_data(self, collection_name, pipeline):
         """Fetch Quotes/Trades Data from MongoDB -- Mongo Operation in MongoDB folder"""
