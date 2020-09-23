@@ -31,13 +31,11 @@ class FetchPolygonData(object):
         """Main for running Quotes data fetching operations"""
         pagination = url
         while pagination:
-            retry_counter = 2
             response = self.get_quotes_response_from_api(pagination)
-            while response['success'] == False and retry_counter > 0:
+            while response['success'] == False:
                 print("Response failure from polygon")
                 logger.error("Response failure from polygon")
                 response = self.get_quotes_response_from_api(pagination)
-                retry_counter -= 1
             pagination = self.extract_quotes_data_from_response_and_store(response)
 
     def get_quotes_response_from_api(self, url):
