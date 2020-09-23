@@ -1,4 +1,5 @@
 import sys  # Remove in production - KTZ
+
 sys.path.append("..")  # Remove in production - KTZ
 import json
 import asyncio
@@ -10,11 +11,13 @@ from PolygonTickData.Helper import Helper
 
 from CommonServices.LogCreater import CreateLogger
 
-logger = CreateLogger().createLogFile(dirName='HistoricalArbitrage/', logFileName='-ArbEventLog.log', loggerName='TradesQuotesEventLogger')
+logger = CreateLogger().createLogFile(dirName='HistoricalArbitrage/', logFileName='-ArbEventLog.log',
+                                      loggerName='TradesQuotesEventLogger')
 
 
 class FetchPolygonData(object):
     """Fetch and Store Methods for Trades/Quotes Data from Polygon.io"""
+
     def __init__(self, date=None, end_time='21:00:00', end_time_loop='20:00:00', polygon_method=None,
                  symbol_status=None, collection_name=None):
         self.helperObj = Helper()
@@ -27,12 +30,15 @@ class FetchPolygonData(object):
         self.symbol_status = symbol_status
 
     """Quotes Get Operations"""
+
     def quotes_data_operation_runner(self, url):
         """Main for running Quotes data fetching operations"""
         pagination = url
+        retry_counter = 2
         while pagination:
             response = self.get_quotes_response_from_api(pagination)
-            while response['success'] == False:
+            while retry_counter > 0 and response['success'] == False:
+                retry_counter -= 1
                 print("Response failure from polygon")
                 logger.error("Response failure from polygon")
                 response = self.get_quotes_response_from_api(pagination)
@@ -75,6 +81,7 @@ class FetchPolygonData(object):
             return None
 
     """Trades Get Operations"""
+
     async def get_trade_data_and_save(self, url, session):
         """Get Trades data from API URL Asynchronously"""
         async with session.get(url) as response:
