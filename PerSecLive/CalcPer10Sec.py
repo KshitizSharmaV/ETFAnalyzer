@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+
 import time
 import traceback
 
@@ -177,6 +180,6 @@ def calculate_arbitrage_for_etf_and_date(etf_name, ticker_list, start_ts, end_ts
 #     # GetDataFromDB().get_timestamp_ranges_1sec(date_)
 #     # GetDataFromDB().calculate_arbitrage_for_etf_and_date('VO', date_)
 
-date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=5))
+date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2))
 arb = calculation_maintainer('VO', date_)
 print(arb)
