@@ -39,14 +39,33 @@ class TradesQuotesProcesses(object):
                                startDate=start_date, endDate=start_date), symbols)
         return list(routines)
 
-    def fetch_and_store_runner(self, collection_name=None, trade_data_flag=False, trades_per_sec_create_url_func=None):
+    def trades_fetch_and_store_runner_live(self, collection_name=None, trade_data_flag=False, trades_per_sec_create_url_func=None):
+        print("PROCESSING FOR HISTORIC TRADES")
+        symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
+                                                                         CollectionName=collection_name)
+        create_url = PolgonDataCreateURLS().PolygonHistoricTrades
+        
+        routines, symbol_status = trades_per_sec_create_url_func(symbols=symbols_to_be_downloaded,
+                                                                 date=self.date,
+                                                                 endTs=self.endTs)
+        
+        fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
+                                                     symbol_status=symbol_status,
+                                                     collection_name=collection_name,
+                                                     insert_into_collection=MongoTradesQuotesData().insert_trades_into_collection)
+
+        list(map(fetch_polygon_data_object.data_operation_runner, routines))        
+
+    def fetch_and_store_runner(self, collection_name=None, trade_data_flag=False):
         """Combined Main for Trades and Quotes data operation for an ETF -- TradesQuotesFetchSave.py"""
         symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
                                                                          CollectionName=collection_name)
         # Trade Configuration
         if symbols_to_be_downloaded and trade_data_flag:
             routines = self.create_urls_for_trade(symbols=symbols_to_be_downloaded, start_date=self.date)
-            fetch_polygon_data_object = FetchPolygonData(date=self.date, collection_name=collection_name)
+            fetch_polygon_data_object = FetchPolygonData(date=self.date, 
+                collection_name=collection_name, 
+                insert_into_collection=MongoTradesQuotesData().insert_into_collection)
             loop = asyncio.get_event_loop()
             future = asyncio.ensure_future(
                 fetch_polygon_data_object.task_creator_and_gatherer(fetch_polygon_data_object.get_trade_data_and_save,
@@ -55,24 +74,15 @@ class TradesQuotesProcesses(object):
 
         # Quotes Configuration
         elif symbols_to_be_downloaded:
-            if trades_per_sec_create_url_func:
-                print("PROCESSING FOR HISTORIC TRADES")
-                create_url = PolgonDataCreateURLS().PolygonHistoricTrades
-                routines, symbol_status = trades_per_sec_create_url_func(symbols=symbols_to_be_downloaded,
-                                                                         date=self.date,
-                                                                         endTs=self.endTs)
-                fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
-                                                             symbol_status=symbol_status,
-                                                             collection_name=collection_name)
-                list(map(fetch_polygon_data_object.quotes_data_operation_runner, routines))
-            else:
-                print("PROCESSING FOR HISTORIC QUOTES")
-                create_url = PolgonDataCreateURLS().PolygonHistoricQuotes
-                routines, symbol_status = self.create_urls_for_quotes(symbols=symbols_to_be_downloaded, date=self.date,
-                                                                      endTs=self.endTs)
-                fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
-                                                             symbol_status=symbol_status, collection_name=collection_name)
-                fetch_polygon_data_object.quotes_data_operation_runner(url=routines[0])
+            print("PROCESSING FOR HISTORIC QUOTES")
+            create_url = PolgonDataCreateURLS().PolygonHistoricQuotes
+            routines, symbol_status = self.create_urls_for_quotes(symbols=symbols_to_be_downloaded, date=self.date,
+                                                                  endTs=self.endTs)
+            fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
+                                                         symbol_status=symbol_status, 
+                                                         collection_name=collection_name,
+                                                         insert_into_collection=MongoTradesQuotesData().insert_into_collection)
+            fetch_polygon_data_object.data_operation_runner(url=routines[0])
 
     def get_data(self, collection_name, pipeline):
         """Fetch Quotes/Trades Data from MongoDB -- Mongo Operation in MongoDB folder"""

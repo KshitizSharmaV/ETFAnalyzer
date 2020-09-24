@@ -16,29 +16,28 @@ logger = CreateLogger().createLogFile(dirName='HistoricalArbitrage/', logFileNam
 class FetchPolygonData(object):
     """Fetch and Store Methods for Trades/Quotes Data from Polygon.io"""
     def __init__(self, date=None, end_time='21:00:00', end_time_loop='20:00:00', polygon_method=None,
-                 symbol_status=None, collection_name=None):
+                 symbol_status=None, collection_name=None, insert_into_collection=None):
         self.helperObj = Helper()
         self.date = date
         self.extract_data_till_time = self.helperObj.stringTimeToDatetime(date=date, time=end_time_loop)
         self.end_ts = self.helperObj.convertHumanTimeToUnixTimeStamp(date=date, time=end_time)
         self.polygon_method = polygon_method
-        self.insert_into_collection = MongoTradesQuotesData().insert_into_collection
+        self.insert_into_collection = insert_into_collection
         self.collection_name = collection_name
         self.symbol_status = symbol_status
 
-    """Quotes Get Operations"""
-    def quotes_data_operation_runner(self, url):
+    def data_operation_runner(self, url):
         """Main for running Quotes data fetching operations"""
         pagination = url
         while pagination:
-            response = self.get_quotes_response_from_api(pagination)
+            response = self.response_from_api(pagination)
             while response['success'] == False:
                 print("Response failure from polygon")
                 logger.error("Response failure from polygon")
-                response = self.get_quotes_response_from_api(pagination)
-            pagination = self.extract_quotes_data_from_response_and_store(response)
+                response = self.response_from_api(pagination)
+            pagination = self.extract_data_from_response_and_store(response)
 
-    def get_quotes_response_from_api(self, url):
+    def response_from_api(self, url):
         """Get Quotes data from API URL"""
         response = requests.get(url)
         delay = response.headers.get("DELAY")
@@ -47,7 +46,8 @@ class FetchPolygonData(object):
         json_data = json.loads(response.text)
         return json_data
 
-    def extract_quotes_data_from_response_and_store(self, response):
+    
+    def extract_data_from_response_and_store(self, response):
         """Extract data from response, check for pagination, store the data"""
         pagination_request = None
         symbol = response['ticker']
@@ -74,6 +74,7 @@ class FetchPolygonData(object):
             logger.debug("No Pagination Required for = {}".format(symbol))
             return None
 
+    
     """Trades Get Operations"""
     async def get_trade_data_and_save(self, url, session):
         """Get Trades data from API URL Asynchronously"""
