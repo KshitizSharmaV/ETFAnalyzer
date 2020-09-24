@@ -42,7 +42,8 @@ class FetchPolygonData(object):
                 print("Response failure from polygon")
                 logger.error("Response failure from polygon")
                 response = self.get_quotes_response_from_api(pagination)
-            pagination = self.extract_quotes_data_from_response_and_store(response)
+            pagination_ = self.extract_quotes_data_from_response_and_store(response)
+            pagination = pagination_ if pagination_ != pagination else None
 
     def get_quotes_response_from_api(self, url):
         """Get Quotes data from API URL"""

@@ -127,7 +127,7 @@ class HistoricalArbitrageDataRepairClass():
             CSV_Maker().write_to_csv(self.etfwhichfailed, "etfwhichfailed.csv")
 
     def all_task_runner(self):
-        dates = ['2020-08-10', '2020-08-11', '2020-08-12']
+        dates = ['2020-09-23']
         for date_ in dates:
             if HolidayCheck(datetime.strptime(date_, '%Y-%m-%d').date()):
                 logger.info("Holiday. Moving to next date...")
