@@ -39,15 +39,15 @@ class TradesQuotesProcesses(object):
                                startDate=start_date, endDate=start_date), symbols)
         return list(routines)
 
-    def trades_fetch_and_store_runner_live(self, collection_name=None, trade_data_flag=False, trades_per_sec_create_url_func=None):
+    def trades_fetch_and_store_runner_live(self, collection_name=None, trade_data_flag=True, per_sec_create_url_func=None):
         print("PROCESSING FOR HISTORIC TRADES")
         symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
                                                                          CollectionName=collection_name)
-        create_url = PolgonDataCreateURLS().PolygonHistoricTrades
+        create_url = PolgonDataCreateURLS().PolygonHistoricTrades if trade_data_flag else PolgonDataCreateURLS().PolygonHistoricQuotes
         
-        routines, symbol_status = trades_per_sec_create_url_func(symbols=symbols_to_be_downloaded,
-                                                                 date=self.date,
-                                                                 endTs=self.endTs)
+        routines, symbol_status = per_sec_create_url_func(symbols=symbols_to_be_downloaded,
+                                                          date=self.date,
+                                                          endTs=self.endTs)
         
         fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
                                                      symbol_status=symbol_status,
