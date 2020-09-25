@@ -3,21 +3,21 @@ sys.path.append("../")
 
 import time
 import traceback
-
+from pymongo import ASCENDING, DESCENDING
 import pandas as pd
 import numpy as np
 from dateutil import tz
 from datetime import datetime, timedelta, date
 from MongoDB.MongoDBConnections import MongoDBConnectors
-from MongoDB.SaveFetchQuotesData import MongoTradesQuotesData
-from MongoDB.Schemas import quotespipeline
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from CommonServices.Holidays import LastWorkingDay
 from PolygonTickData.Helper import Helper
 
 connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 per_sec_trades_db = connection.ETF_db.PerSecLiveTrades
+per_sec_trades_db.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
 per_sec_quotes_db = connection.ETF_db.PerSecLiveQuotes
+per_sec_quotes_db.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
 
 
 class TradeStruct():  # For Trade Objects, containing current minute and last minute price for Tickers
@@ -187,7 +187,7 @@ def calculate_arbitrage_for_etf_and_date(etf_name, ticker_list, start_ts, end_ts
         pass
 
 
-date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2))
+date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=4))
 checkpoint4 = time.time()
 arb = calculation_maintainer('VO', date_)
 checkpoint5 = time.time()
