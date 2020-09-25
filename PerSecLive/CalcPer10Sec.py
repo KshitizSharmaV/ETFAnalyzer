@@ -72,21 +72,16 @@ def get_ticker_list_for_trades(etf_name, date):
 
 def calculate_spread(etf_name, start_ts, end_ts):
     spread_df = get_quotes_data(etf_name=etf_name, start_ts=start_ts, end_ts=end_ts)
-    try:
-        if (spread_df.shape[0]!=0):
-            spread_df = spread_df[['Symbol', 'bidprice', 'askprice', 'bidsize', 'asksize']]
-            spread_df['Spread'] = spread_df['askprice'] - spread_df['bidprice']
-            #print("Spread is = "+str(spread_df['Spread'].mean()))
-            return spread_df['Spread'].mean()
-        else:
-            return 0
-    except Exception as e:
-        traceback.print_exc()
+    if (spread_df.shape[0]!=0) and(set(['Symbol', 'bidprice', 'askprice', 'bidsize', 'asksize']).issubset(spread_df.columns)):
+        spread_df = spread_df[['Symbol', 'bidprice', 'askprice', 'bidsize', 'asksize']]
+        spread_df['Spread'] = spread_df['askprice'] - spread_df['bidprice']
+        return spread_df['Spread'].mean()
+    else:
         return 0
-    
+
 def get_timestamp_ranges_1sec(date: datetime):
     start = date.replace(hour=9, minute=30, second=0, microsecond=0)
-    end =   date.replace(hour=16, minute=1, second=0, microsecond=0)
+    end =   date.replace(hour=16, minute=0, second=0, microsecond=0)
 
     date_range = pd.date_range(start, end, freq='1S')
     date_range = date_range.to_pydatetime()
@@ -130,6 +125,7 @@ def calculation_maintainer(etf_name, date):
                                                                       holdings_dict=holdings_dict,
                                                                       trades_dict=trades_dict))
     result = pd.DataFrame.from_records(arbitrage_records)
+    result.to_csv("ArbitrageData.csv", header=False, sep=",", index=False)
     return result
 
 
@@ -178,7 +174,5 @@ def calculate_arbitrage_for_etf_and_date(etf_name, ticker_list, start_ts, end_ts
 date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2))
 checkpoint4 = time.time()
 arb = calculation_maintainer('VO', date_)
-arb.to_csv("PerSecArb2.csv", header=True, sep=",", index=False)
-print(arb)
 checkpoint5 = time.time()
 print(f"Total Time taken for all processes for ETF is: {checkpoint5 - checkpoint4} seconds")
