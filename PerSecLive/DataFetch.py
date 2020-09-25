@@ -43,5 +43,5 @@ class FetchAndSaveHistoricalPerSecData():
 if __name__ == '__main__':
     obj = FetchAndSaveHistoricalPerSecData(
         date=(datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d"), etf_name='VO')
-    # obj.all_process_runner_trades()
+    #obj.all_process_runner_trades()
     obj.all_process_runner_quotes()
