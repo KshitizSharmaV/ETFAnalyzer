@@ -37,11 +37,14 @@ class FetchAndSaveHistoricalPerSecData():
         trades_quotes_proc_obj = TradesQuotesProcesses(symbols=[self.etf_name], date=self.date)
         trades_quotes_proc_obj.trades_fetch_and_store_runner_live(
             collection_name=self.connection.ETF_db.PerSecLiveQuotes,
+            trade_data_flag=False,
             per_sec_create_url_func=trades_quotes_proc_obj.create_urls_for_quotes)
 
 
 if __name__ == '__main__':
-    obj = FetchAndSaveHistoricalPerSecData(
-        date=(datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d"), etf_name='VO')
-    #obj.all_process_runner_trades()
-    obj.all_process_runner_quotes()
+    for date_ in [(datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d"),
+                  (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")]:
+        obj = FetchAndSaveHistoricalPerSecData(
+            date=date_, etf_name='VO')
+        obj.all_process_runner_trades()
+        obj.all_process_runner_quotes()

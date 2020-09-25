@@ -41,8 +41,9 @@ class TradesQuotesProcesses(object):
 
     def trades_fetch_and_store_runner_live(self, collection_name=None, trade_data_flag=True, per_sec_create_url_func=None):
         print("PROCESSING FOR HISTORIC TRADES")
-        symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
-                                                                         CollectionName=collection_name)
+        # symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
+        #                                                                  CollectionName=collection_name)
+        symbols_to_be_downloaded = self.symbols
         create_url = PolgonDataCreateURLS().PolygonHistoricTrades if trade_data_flag else PolgonDataCreateURLS().PolygonHistoricQuotes
         
         routines, symbol_status = per_sec_create_url_func(symbols=symbols_to_be_downloaded,

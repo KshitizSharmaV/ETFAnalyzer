@@ -1,5 +1,4 @@
 import sys
-
 sys.path.append("../")
 
 import time
@@ -7,11 +6,13 @@ import traceback
 
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from dateutil import tz
+from datetime import datetime, timedelta, date
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from MongoDB.SaveFetchQuotesData import MongoTradesQuotesData
 from MongoDB.Schemas import quotespipeline
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
+from CommonServices.Holidays import LastWorkingDay
 from PolygonTickData.Helper import Helper
 
 connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
@@ -52,7 +53,7 @@ def get_trades_data(ticker_list, start_ts, end_ts) -> pd.DataFrame:
 
 def get_quotes_data(etf_name, start_ts, end_ts) -> pd.DataFrame:
     query = {
-    'Symbol': etf_name,
+        'Symbol': etf_name,
         't': {
             '$lte': end_ts,
             '$gte': start_ts
@@ -72,17 +73,28 @@ def get_ticker_list_for_trades(etf_name, date):
 
 def calculate_spread(etf_name, start_ts, end_ts):
     spread_df = get_quotes_data(etf_name=etf_name, start_ts=start_ts, end_ts=end_ts)
-    if (spread_df.shape[0]!=0) and(set(['Symbol', 'bidprice', 'askprice', 'bidsize', 'asksize']).issubset(spread_df.columns)):
+    if (spread_df.shape[0] != 0) and (
+            {'Symbol', 'bidprice', 'askprice', 'bidsize', 'asksize'}.issubset(spread_df.columns)):
         spread_df = spread_df[['Symbol', 'bidprice', 'askprice', 'bidsize', 'asksize']]
         spread_df['Spread'] = spread_df['askprice'] - spread_df['bidprice']
         return spread_df['Spread'].mean()
     else:
         return 0
 
-def get_timestamp_ranges_1sec(date: datetime):
-    start = date.replace(hour=9, minute=30, second=0, microsecond=0)
-    end =   date.replace(hour=16, minute=0, second=0, microsecond=0)
 
+def get_local_time_for_date(date_for: datetime):
+    start_hour = 13 if date(2020, 3, 8) < datetime.now().date() < date(2020, 11, 1) else 14
+    end_hour = 20 if date(2020, 3, 8) < datetime.now().date() < date(2020, 11, 1) else 21
+    last_working_day = LastWorkingDay(date_for)
+    start = end = last_working_day
+    start = start.replace(hour=start_hour, minute=30, second=0, microsecond=0, tzinfo=tz.gettz('UTC'))
+    start = start.astimezone(tz.tzlocal())
+    end = end.replace(hour=end_hour, minute=00, second=0, microsecond=0, tzinfo=tz.gettz('UTC'))
+    end = end.astimezone(tz.tzlocal())
+    return start, end
+
+
+def get_timestamp_ranges_1sec(start, end):
     date_range = pd.date_range(start, end, freq='1S')
     date_range = date_range.to_pydatetime()
     to_ts = np.vectorize(lambda x: int(x.timestamp() * 1000000000))
@@ -99,15 +111,16 @@ def update_trade_dict(trade_dict, symbol, price):
     return trade_dict
 
 
-def calculation_maintainer(etf_name, date):
-    ts_ranges = get_timestamp_ranges_1sec(date)
-    ticker_list = get_ticker_list_for_trades(etf_name=etf_name, date=date)
+def calculation_maintainer(etf_name, _date):
+    start, end = get_local_time_for_date(date_for=_date)
+    ts_ranges = get_timestamp_ranges_1sec(start=start, end=end)
+    ticker_list = get_ticker_list_for_trades(etf_name=etf_name, date=_date)
     if etf_name not in set(ticker_list):
         ticker_list.append(etf_name)
     """Get Holdings and Weights of ETF"""
     load_holdings_obj = LoadHoldingsdata()
     holdings_dict = load_holdings_obj.LoadHoldingsAndClean(etfname=etf_name,
-                                                           fundholdingsdate=date).getETFWeights()
+                                                           fundholdingsdate=_date).getETFWeights()
     # """Get CASH value"""
     # cash = load_holdings_obj.cashvalueweight / 100
     # taum = load_holdings_obj.get_total_asset_under_mgmt(etf_name=etf_name, fund_holdings_date=date) * 1000
@@ -125,7 +138,7 @@ def calculation_maintainer(etf_name, date):
                                                                       holdings_dict=holdings_dict,
                                                                       trades_dict=trades_dict))
     result = pd.DataFrame.from_records(arbitrage_records)
-    result.to_csv("ArbitrageData.csv", header=False, sep=",", index=False)
+    result.to_csv("ArbitrageData"+_date.strftime("%Y%m%d")+".csv", header=False, sep=",", index=False)
     return result
 
 
@@ -135,10 +148,10 @@ hobj = Helper()
 def calculate_arbitrage_for_etf_and_date(etf_name, ticker_list, start_ts, end_ts, holdings_dict, trades_dict):
     try:
         """Get Trade Prices of ETF and Holdings"""
-        #checkpoint1 = time.time()
+        checkpoint1 = time.time()
         trades_df = get_trades_data(ticker_list=ticker_list, start_ts=int(start_ts), end_ts=int(end_ts))
-        #checkpoint2 = time.time()
-        #print(f"Data Fetch Time: {checkpoint2 - checkpoint1}")
+        checkpoint2 = time.time()
+        print(f"Data Fetch Time: {checkpoint2 - checkpoint1}")
         trades_df = trades_df.groupby('Symbol').mean()
         trades_df.reset_index(inplace=True)
 
@@ -156,16 +169,19 @@ def calculate_arbitrage_for_etf_and_date(etf_name, ticker_list, start_ts, end_ts
         """Arbitrage = ( (Price Change % of ETF - NAV calculated above) * Current Price for ETF ) / 100"""
         etf_price = trades_dict[etf_name].priceT
         arbitrage = ((trades_dict[etf_name].price_pct_chg - nav) * etf_price) / 100
-        #checkpoint3 = time.time()
-        #print(f"Calculation Time: {checkpoint3 - checkpoint2}")
-        #print(f"Overall Time: {checkpoint3 - checkpoint1}")
+        checkpoint3 = time.time()
+        print(f"Calculation Time: {checkpoint3 - checkpoint2}")
 
         """Quotes Data"""
         spreadforsec = calculate_spread(etf_name=etf_name, start_ts=int(start_ts), end_ts=int(end_ts))
-        
-        print(f"{start_ts} - {end_ts} : Arbitrage for {etf_name} : {round(arbitrage, 8)} || ETF Price : {etf_price} || Spread : {spreadforsec}")
+        checkpoint6 = time.time()
+        print(f"spread calculation time : {checkpoint6-checkpoint3}")
+        print(f"Overall Time: {checkpoint6 - checkpoint1}")
+        print(
+            f"{start_ts} - {end_ts} : Arbitrage for {etf_name} : {round(arbitrage, 8)} || ETF Price : {etf_price} || Spread : {spreadforsec}")
 
-        return {'End Time': hobj.getHumanTime(end_ts), 'Arbitrage': arbitrage, 'ETFPrice': etf_price, 'Spread':spreadforsec}
+        return {'End Time': hobj.getHumanTime(end_ts), 'Arbitrage': arbitrage, 'ETFPrice': etf_price,
+                'Spread': spreadforsec}
     except Exception as e:
         traceback.print_exc()
         pass
