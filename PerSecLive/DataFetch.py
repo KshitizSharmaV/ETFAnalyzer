@@ -2,17 +2,47 @@ import sys
 
 sys.path.append('..')
 
+import pandas as pd
+import numpy as np
 from functools import partial
-from datetime import datetime, timedelta
+from dateutil import tz
+from datetime import datetime, timedelta, date
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CalculateETFArbitrage.TradesQuotesRunner import TradesQuotesProcesses
+from CommonServices.MultiProcessingTasks import multi_processing_method
+from CommonServices.Holidays import LastWorkingDay
+from pymongo import ASCENDING, DESCENDING
+
+
+def get_local_time_for_date(date_for: datetime):
+    start_hour = 13 if date(2020, 3, 8) < datetime.now().date() < date(2020, 11, 1) else 14
+    end_hour = 20 if date(2020, 3, 8) < datetime.now().date() < date(2020, 11, 1) else 21
+    last_working_day = LastWorkingDay(date_for)
+    start = end = last_working_day
+    start = start.replace(hour=start_hour, minute=30, second=0, microsecond=0, tzinfo=tz.gettz('UTC'))
+    start = start.astimezone(tz.tzlocal())
+    end = end.replace(hour=end_hour, minute=00, second=0, microsecond=0, tzinfo=tz.gettz('UTC'))
+    end = end.astimezone(tz.tzlocal())
+    return start, end
+
+
+def get_timestamp_ranges_1sec(start, end):
+    date_range = pd.date_range(start, end, freq='1S')
+    date_range = date_range.to_pydatetime()
+    to_ts = np.vectorize(lambda x: int(x.timestamp() * 1000000000))
+    ts_range = to_ts(date_range)
+    return ts_range
 
 
 class FetchAndSaveHistoricalPerSecData():
-    def __init__(self, date=None, etf_name=None):
+    def __init__(self, etf_name=None, date=None):
         self.connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+        self.per_sec_live_trades = self.connection.ETF_db.PerSecLiveTrades
+        self.per_sec_live_trades.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
+        self.per_sec_live_quotes = self.connection.ETF_db.PerSecLiveQuotes
+        self.per_sec_live_quotes.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
         self.date = date
         self.etf_name = etf_name
 
@@ -24,9 +54,19 @@ class FetchAndSaveHistoricalPerSecData():
         routines = list(routines)
         return routines, symbol_status
 
+    def symbol_check_trades(self, symbol, collection):
+        ts_range = get_timestamp_ranges_1sec(*get_local_time_for_date(datetime.strptime(self.date, '%Y-%m-%d')))
+        res = collection.find(
+            {'Symbol': symbol, 't': {'$gte': int(ts_range[0]), '$lte': int(ts_range[len(ts_range) - 1])}})
+        return True if len(list(res)) > 0 else False
+
     def all_process_runner_trades(self):
-        etf_data = LoadHoldingsdata().LoadHoldingsAndClean(etfname=self.etf_name, fundholdingsdate=self.date)
-        trades_quotes_proc_obj = TradesQuotesProcesses(symbols=etf_data.getSymbols(), date=self.date)
+        etf_data = LoadHoldingsdata().LoadHoldingsAndClean(etfname=self.etf_name,
+                                                           fundholdingsdate=self.date)
+        symbols = etf_data.getSymbols()
+        # symbols_to_download = [symbol for symbol in symbols if
+        #                        not self.symbol_check_trades(symbol=symbol, collection=self.per_sec_live_trades)]
+        trades_quotes_proc_obj = TradesQuotesProcesses(symbols=symbols, date=self.date)
         print("Processing historic trade data")
         trades_quotes_proc_obj.trades_fetch_and_store_runner_live(
             collection_name=self.connection.ETF_db.PerSecLiveTrades,
@@ -34,6 +74,8 @@ class FetchAndSaveHistoricalPerSecData():
 
     def all_process_runner_quotes(self):
         print("Processing historic quotes data")
+        # symbol = self.etf_name if not self.symbol_check_trades(symbol=self.etf_name,
+        #                                                        collection=self.per_sec_live_quotes) else None
         trades_quotes_proc_obj = TradesQuotesProcesses(symbols=[self.etf_name], date=self.date)
         trades_quotes_proc_obj.trades_fetch_and_store_runner_live(
             collection_name=self.connection.ETF_db.PerSecLiveQuotes,
@@ -41,10 +83,20 @@ class FetchAndSaveHistoricalPerSecData():
             per_sec_create_url_func=trades_quotes_proc_obj.create_urls_for_quotes)
 
 
+def runner_for_etf(etf_name, date_for):
+    obj = FetchAndSaveHistoricalPerSecData(
+        date=date_for, etf_name=etf_name)
+    obj.all_process_runner_trades()
+    obj.all_process_runner_quotes()
+
+
 if __name__ == '__main__':
-    for date_ in [(datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d"),
-                  (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")]:
-        obj = FetchAndSaveHistoricalPerSecData(
-            date=date_, etf_name='VO')
-        obj.all_process_runner_trades()
-        obj.all_process_runner_quotes()
+    # date_list = [(datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d"),
+    #              (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d"),
+    #              (datetime.now() - timedelta(days=10)).strftime("%Y-%m-%d"),
+    #              (datetime.now() - timedelta(days=19)).strftime("%Y-%m-%d"),
+    #              (datetime.now() - timedelta(days=20)).strftime("%Y-%m-%d")]
+    # # date_ = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    # multi_processing_method(partial(runner_for_etf, 'SPY'), date_list, max_workers=6)
+    # # FetchAndSaveHistoricalPerSecData().runner_for_etf(date_for=date_, etf_name='VO')
+    runner_for_etf('VOO', (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d"))
