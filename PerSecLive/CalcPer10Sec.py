@@ -8,15 +8,25 @@ from functools import partial
 from itertools import chain
 from CommonServices.MultiProcessingTasks import multi_processing_method, CPUBonundThreading
 from PerSecLive.Helpers import *
+from MongoDB.MongoDBConnections import MongoDBConnectors
+from pymongo import ASCENDING, DESCENDING
+from CommonServices.LogCreater import CreateLogger
+
+logObj = CreateLogger()
+logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveCalcLog.log",
+                              loggerName="PerSecLiveCalcLog")
+collection = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PerSecLiveAtbitrage
+collection.create_index([("ETFName", ASCENDING), ("End_Time", DESCENDING)])
 
 
-def main_runner(etf_list, _date):
+def main_runner(etf_list, _date, ticker_list=None):
     ####################################################################################################################
     # CONSTANT TIME BLOCK
     ####################################################################################################################
     """Ticker list with ETF names included"""
-    ticker_list = list(map(partial(get_ticker_list_for_etf, _date), etf_list))
-    ticker_list = list(set(list(chain.from_iterable(ticker_list))))
+    if not ticker_list:
+        ticker_list = list(map(partial(get_ticker_list_for_etf, _date), etf_list))
+        ticker_list = list(set(list(chain.from_iterable(ticker_list))))
     """Day Start and End time"""
     start, end = get_local_time_for_date(date_for=_date)
     """Per second Timestamps from Day Start to Day End"""
@@ -76,19 +86,13 @@ def calculate_arbitrage_for_etf_and_date(etf_name, tick_list, start_ts, end_ts, 
             f"Spread : {spreadforsec}")
         checkpoint2 = time.time()
         print(f"calculation time: {checkpoint2 - checkpoint1}seconds")
-
-        return {'End Time': helper_object.getHumanTime(end_ts), 'ETFName': etf_name, 'Arbitrage': arbitrage,
-                'ETFPrice': etf_price, 'Spread': spreadforsec}
+        arbitrage_result = {'End_Time': helper_object.getHumanTime(end_ts), 'ETFName': etf_name, 'Arbitrage': arbitrage,
+                            'ETFPrice': etf_price, 'Spread': spreadforsec}
+        collection.insert(arbitrage_result)
+        return arbitrage_result
     except Exception as e:
+        print(f"Arbitrage not saved for {etf_name}")
+        logger.error(f"Arbitrage not saved for {etf_name}")
         traceback.print_exc()
+        logger.exception(e)
         pass
-
-
-if __name__ == '__main__':
-    date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=11))
-    checkpoint4 = time.time()
-    # arb = calculation_maintainer('VOO', date_)
-    all_arb_final = main_runner(['VOO', 'SPY'], date_)
-    print(all_arb_final)
-    checkpoint5 = time.time()
-    print(f"Total Time taken for all processes for ETF is: {checkpoint5 - checkpoint4} seconds")

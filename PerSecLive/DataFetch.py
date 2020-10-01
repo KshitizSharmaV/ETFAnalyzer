@@ -5,15 +5,20 @@ sys.path.append('..')
 import pandas as pd
 import numpy as np
 from functools import partial
+from itertools import chain
 from dateutil import tz
 from datetime import datetime, timedelta, date
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CalculateETFArbitrage.TradesQuotesRunner import TradesQuotesProcesses
-from CommonServices.MultiProcessingTasks import multi_processing_method
 from CommonServices.Holidays import LastWorkingDay
 from pymongo import ASCENDING, DESCENDING
+from CommonServices.LogCreater import CreateLogger
+
+logObj = CreateLogger()
+logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveDataFetchLog.log",
+                              loggerName="PerSecLiveDataFetchLog")
 
 
 def get_local_time_for_date(date_for: datetime):
@@ -37,13 +42,13 @@ def get_timestamp_ranges_1sec(start, end):
 
 
 class FetchAndSaveHistoricalPerSecData():
-    def __init__(self, etf_name=None, date=None):
+    def __init__(self, etf_name=None, date_=None):
         self.connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
         self.per_sec_live_trades = self.connection.ETF_db.PerSecLiveTrades
         self.per_sec_live_trades.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
         self.per_sec_live_quotes = self.connection.ETF_db.PerSecLiveQuotes
         self.per_sec_live_quotes.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
-        self.date = date
+        self.date = date_
         self.etf_name = etf_name
 
     def create_urls_for_trades(self, symbols=None, date=None, endTs=None):
@@ -54,19 +59,20 @@ class FetchAndSaveHistoricalPerSecData():
         routines = list(routines)
         return routines, symbol_status
 
-    def symbol_check_trades(self, symbol, collection):
-        ts_range = get_timestamp_ranges_1sec(*get_local_time_for_date(datetime.strptime(self.date, '%Y-%m-%d')))
-        res = collection.find(
-            {'Symbol': symbol, 't': {'$gte': int(ts_range[0]), '$lte': int(ts_range[len(ts_range) - 1])}})
-        return True if len(list(res)) > 0 else False
+    # def symbol_check_trades(self, symbol, collection):
+    #     ts_range = get_timestamp_ranges_1sec(*get_local_time_for_date(datetime.strptime(self.date, '%Y-%m-%d')))
+    #     res = collection.find(
+    #         {'Symbol': symbol, 't': {'$gte': int(ts_range[0]), '$lte': int(ts_range[len(ts_range) - 1])}})
+    #     return True if len(list(res)) > 0 else False
 
-    def all_process_runner_trades(self):
-        etf_data = LoadHoldingsdata().LoadHoldingsAndClean(etfname=self.etf_name,
-                                                           fundholdingsdate=self.date)
-        symbols = etf_data.getSymbols()
+    def all_process_runner_trades(self, symbols=None, date_for=None):
+        if not symbols:
+            etf_data = LoadHoldingsdata().LoadHoldingsAndClean(etfname=self.etf_name,
+                                                               fundholdingsdate=self.date)
+            symbols = etf_data.getSymbols()
         # symbols_to_download = [symbol for symbol in symbols if
         #                        not self.symbol_check_trades(symbol=symbol, collection=self.per_sec_live_trades)]
-        trades_quotes_proc_obj = TradesQuotesProcesses(symbols=symbols, date=self.date)
+        trades_quotes_proc_obj = TradesQuotesProcesses(symbols=symbols, date=date_for)
         print("Processing historic trade data")
         trades_quotes_proc_obj.trades_fetch_and_store_runner_live(
             collection_name=self.connection.ETF_db.PerSecLiveTrades,
@@ -85,18 +91,6 @@ class FetchAndSaveHistoricalPerSecData():
 
 def runner_for_etf(etf_name, date_for):
     obj = FetchAndSaveHistoricalPerSecData(
-        date=date_for, etf_name=etf_name)
-    obj.all_process_runner_trades()
+        date_=date_for, etf_name=etf_name)
     obj.all_process_runner_quotes()
 
-
-if __name__ == '__main__':
-    # date_list = [(datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d"),
-    #              (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d"),
-    #              (datetime.now() - timedelta(days=10)).strftime("%Y-%m-%d"),
-    #              (datetime.now() - timedelta(days=19)).strftime("%Y-%m-%d"),
-    #              (datetime.now() - timedelta(days=20)).strftime("%Y-%m-%d")]
-    # # date_ = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-    # multi_processing_method(partial(runner_for_etf, 'SPY'), date_list, max_workers=6)
-    # # FetchAndSaveHistoricalPerSecData().runner_for_etf(date_for=date_, etf_name='VO')
-    runner_for_etf('VOO', (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d"))
