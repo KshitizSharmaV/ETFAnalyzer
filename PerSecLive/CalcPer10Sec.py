@@ -1,3 +1,4 @@
+import socket
 import sys
 
 sys.path.append("../")
@@ -15,7 +16,13 @@ from CommonServices.LogCreater import CreateLogger
 logObj = CreateLogger()
 logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveCalcLog.log",
                               loggerName="PerSecLiveCalcLog")
-collection = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PerSecLiveArbitrage
+
+sys_private_ip = socket.gethostbyname(socket.gethostname())
+if sys_private_ip == '172.31.76.32':
+    connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
+else:
+    connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+collection = connection.ETF_db.PerSecLiveArbitrage
 collection.create_index([("ETFName", ASCENDING), ("End_Time", DESCENDING)])
 
 

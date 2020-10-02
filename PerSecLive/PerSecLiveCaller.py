@@ -1,3 +1,4 @@
+import socket
 import sys
 
 sys.path.append('..')
@@ -18,7 +19,11 @@ logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveCal
 
 
 def collections_dropper():
-    connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+    sys_private_ip = socket.gethostbyname(socket.gethostname())
+    if sys_private_ip == '172.31.76.32':
+        connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
+    else:
+        connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
     per_sec_trades_db = connection.ETF_db.PerSecLiveTrades
     per_sec_quotes_db = connection.ETF_db.PerSecLiveQuotes
     connection.ETF_db.drop_collection(per_sec_trades_db)

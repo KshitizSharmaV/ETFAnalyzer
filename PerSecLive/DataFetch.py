@@ -1,3 +1,4 @@
+import socket
 import sys
 
 sys.path.append('..')
@@ -43,7 +44,11 @@ def get_timestamp_ranges_1sec(start, end):
 
 class FetchAndSaveHistoricalPerSecData():
     def __init__(self, etf_name=None, date_=None):
-        self.connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+        sys_private_ip = socket.gethostbyname(socket.gethostname())
+        if sys_private_ip == '172.31.76.32':
+            self.connection = MongoDBConnectors().get_pymongo_readWrite_production_production()
+        else:
+            self.connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
         self.per_sec_live_trades = self.connection.ETF_db.PerSecLiveTrades
         self.per_sec_live_trades.create_index([("Symbol", ASCENDING), ("t", DESCENDING)])
         self.per_sec_live_quotes = self.connection.ETF_db.PerSecLiveQuotes
