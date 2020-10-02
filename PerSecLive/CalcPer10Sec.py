@@ -15,7 +15,7 @@ from CommonServices.LogCreater import CreateLogger
 logObj = CreateLogger()
 logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveCalcLog.log",
                               loggerName="PerSecLiveCalcLog")
-collection = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PerSecLiveAtbitrage
+collection = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PerSecLiveArbitrage
 collection.create_index([("ETFName", ASCENDING), ("End_Time", DESCENDING)])
 
 

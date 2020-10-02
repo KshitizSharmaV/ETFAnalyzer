@@ -10,6 +10,7 @@ from PolygonTickData.Helper import Helper
 from MongoDB.SaveFetchQuotesData import MongoTradesQuotesData
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from functools import partial
+from CommonServices.MultiProcessingTasks import CPUBonundThreading
 
 
 class TradesQuotesProcesses(object):
@@ -39,23 +40,25 @@ class TradesQuotesProcesses(object):
                                startDate=start_date, endDate=start_date), symbols)
         return list(routines)
 
-    def trades_fetch_and_store_runner_live(self, collection_name=None, trade_data_flag=True, per_sec_create_url_func=None):
+    def trades_fetch_and_store_runner_live(self, collection_name=None, trade_data_flag=True,
+                                           per_sec_create_url_func=None):
         print("PROCESSING FOR HISTORIC TRADES")
         # symbols_to_be_downloaded = self.check_if_data_exists_in_mongo_db(symbols=self.symbols, date=self.date,
         #                                                                  CollectionName=collection_name)
         symbols_to_be_downloaded = self.symbols
         create_url = PolgonDataCreateURLS().PolygonHistoricTrades if trade_data_flag else PolgonDataCreateURLS().PolygonHistoricQuotes
-        
+
         routines, symbol_status = per_sec_create_url_func(symbols=symbols_to_be_downloaded,
                                                           date=self.date,
                                                           endTs=self.endTs)
-        
+
         fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
                                                      symbol_status=symbol_status,
                                                      collection_name=collection_name,
                                                      insert_into_collection=MongoTradesQuotesData().insert_trades_into_collection)
 
-        list(map(fetch_polygon_data_object.data_operation_runner, routines))        
+        # list(map(fetch_polygon_data_object.data_operation_runner, routines))
+        CPUBonundThreading(fetch_polygon_data_object.data_operation_runner, routines)
 
     def fetch_and_store_runner(self, collection_name=None, trade_data_flag=False):
         """Combined Main for Trades and Quotes data operation for an ETF -- TradesQuotesFetchSave.py"""
@@ -64,9 +67,9 @@ class TradesQuotesProcesses(object):
         # Trade Configuration
         if symbols_to_be_downloaded and trade_data_flag:
             routines = self.create_urls_for_trade(symbols=symbols_to_be_downloaded, start_date=self.date)
-            fetch_polygon_data_object = FetchPolygonData(date=self.date, 
-                collection_name=collection_name, 
-                insert_into_collection=MongoTradesQuotesData().insert_into_collection)
+            fetch_polygon_data_object = FetchPolygonData(date=self.date,
+                                                         collection_name=collection_name,
+                                                         insert_into_collection=MongoTradesQuotesData().insert_into_collection)
             loop = asyncio.get_event_loop()
             future = asyncio.ensure_future(
                 fetch_polygon_data_object.task_creator_and_gatherer(fetch_polygon_data_object.get_trade_data_and_save,
@@ -80,7 +83,7 @@ class TradesQuotesProcesses(object):
             routines, symbol_status = self.create_urls_for_quotes(symbols=symbols_to_be_downloaded, date=self.date,
                                                                   endTs=self.endTs)
             fetch_polygon_data_object = FetchPolygonData(date=self.date, polygon_method=create_url,
-                                                         symbol_status=symbol_status, 
+                                                         symbol_status=symbol_status,
                                                          collection_name=collection_name,
                                                          insert_into_collection=MongoTradesQuotesData().insert_into_collection)
             fetch_polygon_data_object.data_operation_runner(url=routines[0])
