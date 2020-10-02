@@ -17,6 +17,10 @@ class MongoTradesQuotesData(object):
                      'batchSize': batchSize}
         CollectionName.insert_one(insert_data)
 
+    def insert_trades_into_collection(self, symbol=None, datetosave=None, savedata=None, CollectionName=None, batchSize=None):
+        CollectionName.insert(savedata)
+
+
     def fetch_quotes_trades_data_from_mongo(self, symbolList=None, date=None, CollectionName=None, pipeline=None):
         """Fetch Trades/Quotes Data from MongoDB"""
         query = {'dateForData': datetime.datetime.strptime(date, '%Y-%m-%d'), 'symbol': {'$in': symbolList}}

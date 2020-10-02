@@ -1,81 +1,98 @@
-import pandas as pd
-import numpy as np
+import sys
+
+sys.path.append("../")
+
+import time
+import traceback
+from functools import partial
 from itertools import chain
-from datetime import datetime, timedelta
+from CommonServices.MultiProcessingTasks import multi_processing_method, CPUBonundThreading
+from PerSecLive.Helpers import *
 from MongoDB.MongoDBConnections import MongoDBConnectors
-from MongoDB.SaveFetchQuotesData import MongoTradesQuotesData
-from MongoDB.Schemas import quotespipeline
-from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
-from PolygonTickData.Helper import Helper
+from pymongo import ASCENDING, DESCENDING
+from CommonServices.LogCreater import CreateLogger
+
+logObj = CreateLogger()
+logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveCalcLog.log",
+                              loggerName="PerSecLiveCalcLog")
+collection = MongoDBConnectors().get_pymongo_devlocal_devlocal().ETF_db.PerSecLiveArbitrage
+collection.create_index([("ETFName", ASCENDING), ("End_Time", DESCENDING)])
 
 
-class GetDataFromDB():
-    def __init__(self):
-        self.connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
-        self.per_sec_trades_db = self.connection.ETF_db.PerSecLiveTrades
-        self.per_sec_quotes_db = self.connection.ETF_db.PerSecLiveQuotes
-
-    def get_trades_data(self, ticker_list, date):
-        data_cursor = self.per_sec_trades_db.find(
-            {'symbol': {'$in': ticker_list},
-             'dateForData': date},
-            {'_id': 0, 'data': 1})
-        trades_df = pd.DataFrame(list(chain(*[item['data'] for item in data_cursor])))
-        trades_df.rename(columns={'t': 'Time', 'p': 'Price'}, inplace=True)
-        trades_df = trades_df[['Symbol', 'Time', 'Price']]
-        return trades_df
-
-    def get_quotes_data(self, etf_name, date):
-        data_list = MongoTradesQuotesData().fetch_quotes_trades_data_from_mongo(symbolList=[etf_name], date=date,
-                                                                                CollectionName=self.per_sec_quotes_db,
-                                                                                pipeline=quotespipeline)
-        quotes_df = pd.DataFrame(data_list)
-        return quotes_df
-
-    def get_all_trades_data(self, etf_name, date):
-        ticker_list = LoadHoldingsdata().LoadHoldingsAndClean(etfname=etf_name, fundholdingsdate=date).getSymbols()
-        trades_df = self.get_trades_data(ticker_list=ticker_list, date=date)
-        return trades_df
-
-    def calculate_spread(self, etf_name, date):
-        spread_df = self.get_quotes_data(etf_name=etf_name, date=date)
-        spread_df['Spread'] = spread_df['askprice'] - spread_df['bidprice']
-        return spread_df
-
-    def get_timestamp_ranges_1sec(self, date: datetime):
-        start = date.replace(hour=9, minute=30, second=0, microsecond=0)
-        end = date.replace(hour=16, minute=0, second=0, microsecond=0)
-        date_range = pd.date_range(start, end, freq='1S')
-        date_range = date_range.to_pydatetime()
-        to_ts = np.vectorize(lambda x: int(x.timestamp() * 1000000000))
-        ts_range = to_ts(date_range)
-        return ts_range
-
-    def calculate_arbitrage_for_etf_and_date(self, etf_name, date):
-        try:
-            """Get Trade Prices of ETF and Holdings"""
-            trades_df = self.get_all_trades_data(etf_name=etf_name, date=date)
-            ts_ranges = self.get_timestamp_ranges_1sec(date)
-            """Get Holdings and Weights of ETF"""
-            holdings_dict = LoadHoldingsdata().LoadHoldingsAndClean(etfname=etf_name,
-                                                                    fundholdingsdate=date).getETFWeights()
-            holdings_dict.pop(etf_name, 0)
-            etf_df = trades_df[trades_df['Symbol'] == etf_name]
-            etf_df['Price_Change_%'] = etf_df['Price'].pct_change(fill_method='ffill') * 100
-            all_holdings_df = pd.DataFrame()
-            for holding, weight in holdings_dict.items():
-                holding_df = trades_df[trades_df['Symbol'] == holding]
-                holding_df['Price_Change_%'] = holding_df['Price'].pct_change(fill_method='ffill') * 100
-                holding_df['Weight'] = weight / 100
-                holding_df.groupby(ts_ranges)
-                all_holdings_df.append(holding_df, ignore_index=True)
-        except Exception as e:
-            print(e)
-            pass
+def main_runner(etf_list, _date, ticker_list=None):
+    ####################################################################################################################
+    # CONSTANT TIME BLOCK
+    ####################################################################################################################
+    """Ticker list with ETF names included"""
+    if not ticker_list:
+        ticker_list = list(map(partial(get_ticker_list_for_etf, _date), etf_list))
+        ticker_list = list(set(list(chain.from_iterable(ticker_list))))
+    """Day Start and End time"""
+    start, end = get_local_time_for_date(date_for=_date)
+    """Per second Timestamps from Day Start to Day End"""
+    ts_ranges = get_timestamp_ranges_1sec(start=start, end=end)
+    """Trades Dict initialization"""
+    trades_dict = {ticker: TradeStruct(symbol=ticker, priceT=0) for ticker in ticker_list}
+    """Make ETF objects for all ETFs"""
+    etf_object_list = list(map(partial(make_etf_objects, _date), etf_list))
+    ####################################################################################################################
+    all_arb = []
+    for idx in range(1, len(ts_ranges)):
+        checkpoint6 = time.time()
+        start_ts = ts_ranges[idx - 1]
+        end_ts = ts_ranges[idx]
+        """ Every second update trades_dict with current prices """
+        fetch_timer1 = time.time()
+        trade_dict_operation(ticker_list=ticker_list, start_ts=start_ts, end_ts=end_ts, trades_dict=trades_dict)
+        fetch_timer2 = time.time()
+        calc_maintainer_partial_func = partial(calculation_maintainer, trades_dict, start_ts, end_ts)
+        # futures = multi_processing_method(calc_maintainer_partial_func, etf_object_list, max_workers=None)
+        futures = CPUBonundThreading(calc_maintainer_partial_func, etf_object_list)
+        checkpoint8 = time.time()
+        all_arb.append(list(futures))
+        checkpoint7 = time.time()
+        print(f"Data Fetch time: {fetch_timer2 - fetch_timer1} seconds")
+        print(f"Multiprocessing time: {checkpoint8 - fetch_timer2}")
+        print(f"Collating all futures time: {checkpoint7 - checkpoint8}")
+        print(f"Data Fetch + Calculation time: {checkpoint7 - checkpoint6} seconds")
+    return all_arb
 
 
-if __name__ == '__main__':
-    date_ = (datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=4))
-    # GetDataFromDB().get_trades_data(ticker_list=['VEEV', 'DLR'], date=date_)
-    GetDataFromDB().get_timestamp_ranges_1sec(date_)
-    # GetDataFromDB().calculate_arbitrage_for_etf_and_date('VO', date_)
+def calculation_maintainer(trades_dict, start_ts, end_ts, etf_object):
+    holdings_dict, etf_name = etf_object.holdings_dict, etf_object.etf_name
+    ticker_list_without_etf = filter(lambda x: x != 'CASH', list(holdings_dict.keys()))
+    arbitrage = calculate_arbitrage_for_etf_and_date(etf_name=etf_name,
+                                                     tick_list=ticker_list_without_etf,
+                                                     start_ts=start_ts,
+                                                     end_ts=end_ts,
+                                                     holdings_dict=holdings_dict,
+                                                     trades_dict=trades_dict)
+    return arbitrage
+
+
+def calculate_arbitrage_for_etf_and_date(etf_name, tick_list, start_ts, end_ts, holdings_dict, trades_dict):
+    try:
+        checkpoint1 = time.time()
+        mapper = map(lambda x: trades_dict[x].price_pct_chg * (holdings_dict[x] / 100), tick_list)
+        nav = sum(list(mapper))
+
+        etf_price = trades_dict[etf_name].priceT
+        arbitrage = ((trades_dict[etf_name].price_pct_chg - nav) * etf_price) / 100
+
+        spreadforsec = calculate_spread(etf_name=etf_name, start_ts=int(start_ts), end_ts=int(end_ts))
+
+        print(
+            f"{start_ts} - {end_ts} : Arbitrage for {etf_name} : {round(arbitrage, 8)} || ETF Price : {etf_price} || "
+            f"Spread : {spreadforsec}")
+        checkpoint2 = time.time()
+        print(f"calculation time: {checkpoint2 - checkpoint1}seconds")
+        arbitrage_result = {'End_Time': helper_object.getHumanTime(end_ts), 'ETFName': etf_name, 'Arbitrage': arbitrage,
+                            'ETFPrice': etf_price, 'Spread': spreadforsec}
+        collection.insert(arbitrage_result)
+        return arbitrage_result
+    except Exception as e:
+        print(f"Arbitrage not saved for {etf_name}")
+        logger.error(f"Arbitrage not saved for {etf_name}")
+        traceback.print_exc()
+        logger.exception(e)
+        pass
