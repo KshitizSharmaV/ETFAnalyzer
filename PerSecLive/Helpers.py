@@ -76,7 +76,7 @@ def get_trades_data(ticker_list, start_ts, end_ts) -> pd.DataFrame:
             '$gte': start_ts
         }
     }
-    data_cursor = per_sec_trades_db.find(query)
+    data_cursor = per_sec_trades_db.find(query, {'_id': 0, 'Symbol': 1, 't': 1, 'p': 1})
     trades_df = pd.DataFrame(list(data_cursor))
     trades_df.rename(columns={'t': 'Time', 'p': 'Price'}, inplace=True)
     trades_df = trades_df[['Symbol', 'Time', 'Price']]
