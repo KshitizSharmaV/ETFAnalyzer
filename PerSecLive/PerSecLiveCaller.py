@@ -30,6 +30,17 @@ def collections_dropper():
     connection.ETF_db.drop_collection(per_sec_quotes_db)
 
 
+def get_unique_ticker_list_for_trades(top_10_etf_list):
+    load_holdings_object = LoadHoldingsdata()
+    unique_ticker_list = [
+        load_holdings_object.LoadHoldingsAndClean(etfname=etf, fundholdingsdate=_date).getSymbols()
+        for etf in top_10_etf_list]
+    unique_ticker_list = list(chain.from_iterable(unique_ticker_list))
+    unique_ticker_list = [ticker.split(' ')[0] for ticker in unique_ticker_list]
+    unique_ticker_list = list(set(unique_ticker_list))
+    return unique_ticker_list
+
+
 def runner(_date):
     try:
         """Date for PerSecLive Operation -- (MODIFY BEFORE USE) in string format"""
@@ -39,19 +50,11 @@ def runner(_date):
         top_10_etf_list = ['SPY', 'IVV', 'VOO', 'QQQ', 'VUG', 'VTV', 'IJH', 'IJR', 'VGT', 'VO']
 
         """Get Unique tickers from all ETFs"""
-        load_holdings_object = LoadHoldingsdata()
-        unique_ticker_list = [
-            load_holdings_object.LoadHoldingsAndClean(etfname=etf, fundholdingsdate=_date).getSymbols()
-            for etf in top_10_etf_list]
-        unique_ticker_list = list(chain.from_iterable(unique_ticker_list))
-        unique_ticker_list = [ticker.split(' ')[0] for ticker in unique_ticker_list]
-        unique_ticker_list = list(set(unique_ticker_list))
+        unique_ticker_list = get_unique_ticker_list_for_trades(top_10_etf_list)
 
         """Data Fetch from Polygon API"""
         checkpoint = time.time()
         FetchAndSaveHistoricalPerSecData().all_process_runner_trades(symbols=unique_ticker_list, date_for=_date)
-        # for etf in top_10_etf_list:
-        #     runner_for_etf(etf_name=etf, date_for=_date)
         quotes_func_cover = lambda x: runner_for_etf(etf_name=x, date_for=_date)
         CPUBonundThreading(quotes_func_cover, top_10_etf_list)
         logger.debug(f"Total data fetch time : {time.time() - checkpoint} seconds")
@@ -75,6 +78,6 @@ def runner(_date):
 
 
 if __name__ == "__main__":
-    date_list = ['2020-08-31', '2020-08-28', '2020-08-27', '2020-08-26', '2020-08-25', '2020-08-24']
+    date_list = ['2020-08-31']
     for _date in date_list:
         runner(_date=_date)

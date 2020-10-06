@@ -3,43 +3,19 @@ import sys
 
 sys.path.append('..')
 
-import pandas as pd
-import numpy as np
+
 from functools import partial
-from itertools import chain
-from dateutil import tz
-from datetime import datetime, timedelta, date
 from CalculateETFArbitrage.Helpers.LoadEtfHoldings import LoadHoldingsdata
 from PolygonTickData.PolygonCreateURLS import PolgonDataCreateURLS
 from MongoDB.MongoDBConnections import MongoDBConnectors
 from CalculateETFArbitrage.TradesQuotesRunner import TradesQuotesProcesses
-from CommonServices.Holidays import LastWorkingDay
 from pymongo import ASCENDING, DESCENDING
 from CommonServices.LogCreater import CreateLogger
+from PerSecLive.Helpers import get_timestamp_ranges_1sec, get_local_time_for_date
 
 logObj = CreateLogger()
 logger = logObj.createLogFile(dirName="PerSecLive/", logFileName="-PerSecLiveDataFetchLog.log",
                               loggerName="PerSecLiveDataFetchLog")
-
-
-def get_local_time_for_date(date_for: datetime):
-    start_hour = 13 if date(2020, 3, 8) < datetime.now().date() < date(2020, 11, 1) else 14
-    end_hour = 20 if date(2020, 3, 8) < datetime.now().date() < date(2020, 11, 1) else 21
-    last_working_day = LastWorkingDay(date_for)
-    start = end = last_working_day
-    start = start.replace(hour=start_hour, minute=30, second=0, microsecond=0, tzinfo=tz.gettz('UTC'))
-    start = start.astimezone(tz.tzlocal())
-    end = end.replace(hour=end_hour, minute=00, second=0, microsecond=0, tzinfo=tz.gettz('UTC'))
-    end = end.astimezone(tz.tzlocal())
-    return start, end
-
-
-def get_timestamp_ranges_1sec(start, end):
-    date_range = pd.date_range(start, end, freq='1S')
-    date_range = date_range.to_pydatetime()
-    to_ts = np.vectorize(lambda x: int(x.timestamp() * 1000000000))
-    ts_range = to_ts(date_range)
-    return ts_range
 
 
 class FetchAndSaveHistoricalPerSecData():
@@ -98,4 +74,3 @@ def runner_for_etf(etf_name, date_for):
     obj = FetchAndSaveHistoricalPerSecData(
         date_=date_for, etf_name=etf_name)
     obj.all_process_runner_quotes()
-
