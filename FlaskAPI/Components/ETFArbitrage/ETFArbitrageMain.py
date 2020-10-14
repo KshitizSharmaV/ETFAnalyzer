@@ -145,6 +145,7 @@ def RetrieveETFArbitrageData(etfname=None, date=None, magnitudeOfArbitrageToFilt
 
     arbitrage_data = []                             
     for document in s:
+        document['Time'] = document['Time']+datetime.timedelta(minutes=1)  # Time converted to end time.
         arbitrage_data.append(document)                        
     end = time.time()
     print(end-start)

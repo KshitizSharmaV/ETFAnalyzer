@@ -227,8 +227,7 @@ def FetchPastArbitrageData(ETFName, date):
         data = data.reset_index(drop=True)
 
         allData['etfhistoricaldata'] = data.to_dict('records')
-        allData['ArbitrageCumSum'] = data[::-
-        1][['Arbitrage in $', 'Time']].to_dict('records')
+        allData['ArbitrageCumSum'] = data[::-1][['Arbitrage in $', 'Time']].to_dict('records')
         allData['etfPrices'] = pricedf[::-1].to_csv(sep='\t', index=False)
         allData['PNLStatementForTheDay'] = PNLStatementForTheDay
         allData['scatterPlotData'] = scatterPlotData

@@ -37,7 +37,11 @@ def fecthArbitrageANDLivePrices(etfname=None, FuncETFPrices=None, FuncArbitrageD
         helperObj=Helper()
         PriceDF['date'] = PriceDF['date'].apply(lambda x: helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment))
         ArbitrageDf['Timestamp'] = ArbitrageDf['Timestamp'].apply(lambda x: str((helperObj.getHumanTime(ts=x, divideby=1000)-timedelta(hours=daylightSavingAdjutment)).time()))
-        
+
+        """Add one minute to each to make end timestamp from start timestamp"""
+        PriceDF['date'] = PriceDF['date'] + timedelta(minutes=1)
+        ArbitrageDf['Timestamp'] = ArbitrageDf['Timestamp'].apply(lambda x: str((datetime.strptime(x, '%H:%M:%S')+timedelta(minutes=1)).time()))
+
         ArbitrageDf.rename(columns={'Timestamp':'Time'}, inplace=True)
 
         res={}
