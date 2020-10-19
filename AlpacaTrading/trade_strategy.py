@@ -81,19 +81,22 @@ def strategy_for_position(position_for='VO'):
     pprint.pprint(position_dict)
     arbitrage_rec = fetch_arbitrage(etf_name=position_for)
     print(f"Arbitrage Record: \n{arbitrage_rec}")
-    abs_arbitrage = abs(arbitrage_rec['Arbitrage in $'][0]) - arbitrage_rec['ETF Trading Spread in $'][0]
+    arbitrage = arbitrage_rec['Arbitrage in $'][0]
+    spread = arbitrage_rec['ETF Trading Spread in $'][0]
+    abs_arbitrage = abs(arbitrage) - spread if (arbitrage < 0 and abs(arbitrage) > spread) else 0
+    print(f"Abs_Arbitrage: {abs_arbitrage}")
     if get_position_status(position_dict):
         close_position(position_dict, position_for=position_for,
                        position_close_time=datetime.datetime.now().replace(second=0, microsecond=0),
-                       position_close_price=arbitrage_rec['ETF Price'],
-                       position_close_arbitrage=arbitrage_rec['Arbitrage in $'],
+                       position_close_price=arbitrage_rec['ETF Price'][0],
+                       position_close_arbitrage=arbitrage_rec['Arbitrage in $'][0],
                        position_close_abs_arbitrage=abs_arbitrage)
         return
-    if abs_arbitrage > 0.10:
+    if abs_arbitrage > 0.05:
         open_position(position_dict, position_for=position_for, position_type="long", position_size=5,
                       position_open_time=datetime.datetime.now().replace(second=0, microsecond=0),
-                      position_open_price=arbitrage_rec['ETF Price'],
-                      position_open_arbitrage=arbitrage_rec['Arbitrage in $'],
+                      position_open_price=arbitrage_rec['ETF Price'][0],
+                      position_open_arbitrage=arbitrage_rec['Arbitrage in $'][0],
                       position_open_abs_arbitrage=abs_arbitrage)
     print("Positions after strategy execution:")
     pprint.pprint(position_dict)
