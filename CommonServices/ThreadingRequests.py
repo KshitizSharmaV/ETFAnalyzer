@@ -18,7 +18,7 @@ async def fetch(url, session):
             delay = response.headers.get("DELAY")
             date = response.headers.get("DATE")
             print("{}:{} with delay {}".format(date, response.url, delay))
-            return json.loads(await response.json(content_type='application/json'))
+            return json.loads(await response.text())
         except json.decoder.JSONDecodeError as jsone:
             traceback.print_exc()
             logger.exception(jsone)
