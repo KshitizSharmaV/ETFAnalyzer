@@ -1,5 +1,6 @@
 #
 import sys
+import time
 
 sys.path.append("..")
 #
@@ -60,9 +61,10 @@ def cancel_all_unfilled_orders_threaded(_position_dicts_all_etf: dict):
 
 
 def cancel_all_unfilled_orders(_position_dicts_all_etf: dict):
+    print(f"Cancelling all open orders at {datetime.datetime.now().strftime('%H:%M:%S')}")
     cancel_all_open_orders()
     for k, v in _position_dicts_all_etf.items():
-        if v['position_status'] == 'open':
+        if v['position_status'] == 'open' and not check_order_filled(v['last_order_id']):
             v['position_status'] = 'cancelled'
             v['last_order_id'] = ''
 
