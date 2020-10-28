@@ -26,6 +26,7 @@ from FlaskAPI.Components.LiveCalculations.helperLiveArbitrageSingleETF import fe
     analyzeSignalPerformane, CategorizeSignals
 from CommonServices.Holidays import LastWorkingDay, HolidayCheck
 from FlaskAPI.Helpers.ServerLogHelper import custom_server_logger
+from functools import lru_cache
 
 
 server_logger = custom_server_logger
@@ -301,7 +302,7 @@ def getDailyChangeUnderlyingStocks(ETFName, date):
 # Live Arbitrage All ETFs
 ############################################
 
-
+@lru_cache(maxsize=512)
 @app.route('/api/ETfLiveArbitrage/AllTickers')
 def SendLiveArbitrageDataAllTickers():
     res = api_auth_object.authenticate_api()
@@ -330,12 +331,11 @@ def SendLiveArbitrageDataAllTickers():
 ############################################
 from FlaskAPI.Components.ETFArbitrage.CandleStickResults import AnalyzeCandlestickSignals
 import itertools
-import functools
 
 analyzeSignalObj = AnalyzeCandlestickSignals()
 
 '''Static unauthorised APIs for XLK Live'''
-@functools.lru_cache(maxsize=512)
+@lru_cache(maxsize=512)
 @app.route('/api/ETfLiveArbitrage/SingleXLKdefault')
 def send_live_arbitrage_data_xlk_only():
     try:
@@ -368,6 +368,7 @@ def live_arb_candlestick_and_signal_categorization_xlk_only():
 
 '''Dynamic APIs for Live Arbitrage'''
 '''API for Alpha Candle Stick Pattern Signals Table and Arbitrage Spread Table'''
+@lru_cache(maxsize=512)
 @app.route('/api/ETfLiveArbitrage/Single/SignalAndCandle/<etfname>')
 def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
     if not bypass_auth:
@@ -412,7 +413,7 @@ def live_arb_candlestick_and_signal_categorization(etfname, bypass_auth=False):
         traceback.print_exc()
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
-
+@lru_cache(maxsize=512)
 @app.route('/api/ETfLiveArbitrage/Single/<etfname>')
 def SendLiveArbitrageDataSingleTicker(etfname, bypass_auth=False):
     if not bypass_auth:
@@ -469,6 +470,7 @@ def SendLiveArbitrageDataSingleTicker(etfname, bypass_auth=False):
         return MultipleExceptionHandler().handle_exception(exception_type=exc_type, e=e, custom_logger=server_logger)
 
 
+@lru_cache(maxsize=512)
 @app.route('/api/ETfLiveArbitrage/Single/UpdateTable/<etfname>')
 def UpdateLiveArbitrageDataTablesAndPrices(etfname, bypass_auth=False):
     if not bypass_auth:

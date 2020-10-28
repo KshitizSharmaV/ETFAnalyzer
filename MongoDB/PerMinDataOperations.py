@@ -88,7 +88,9 @@ class PerMinDataOperations():
     # Fetch full day arbitrage for 1 etf
     def FetchFullDayPerMinArbitrage(self, etfname):
         markettimeStatus = self.getMarketConditionsForFullDayData()
+        markettimeStatus['start_dt'] = 1603805400000
         if markettimeStatus['end_dt']:
+            markettimeStatus['end_dt'] = 1603828800000
             full_day_data_cursor = arbitrage_per_min.find(
                 {"Timestamp": {"$gte": markettimeStatus['start_dt'], "$lte": markettimeStatus['end_dt']},
                  "symbol": etfname},
@@ -105,8 +107,9 @@ class PerMinDataOperations():
     # Full full  day prices for 1 etf
     def FetchFullDayPricesForETF(self, etfname):
         markettimeStatus = self.getMarketConditionsForFullDayData()
-
+        markettimeStatus['start_dt'] = 1603805400000
         if markettimeStatus['end_dt']:
+            markettimeStatus['end_dt'] = 1603828800000
             full_day_prices_etf_cursor = trade_per_min_WS.find(
                 {"s": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
                 {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
@@ -169,6 +172,7 @@ class PerMinDataOperations():
     #  Live arbitrage for 1 etf or all etf
     def LiveFetchPerMinArbitrage(self, etfname=None):
         dt_ts = self.getMarketConditionTime()
+        dt_ts = 1603828800000
         dt_ts = dt_ts - 60000
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
@@ -191,6 +195,7 @@ class PerMinDataOperations():
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):
         dt_ts = self.getMarketConditionTime()
+        dt_ts = 1603828800000
         dt_ts = dt_ts - 60000
         print("LiveFetchETFPrice " + str(dt_ts))
         if etfname:
