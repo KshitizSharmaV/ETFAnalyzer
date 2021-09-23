@@ -10,23 +10,23 @@ class PerMinDataOperations():
 
     def __init__(self):
         ''' Day End Times in UTC'''
-        self.DAYendTime = datetime.time(3, 59) if datetime.date(2020, 3,
+        self.DAYendTime = datetime.time(3, 59) if datetime.date(2021, 3,
                                                                 8) < datetime.datetime.now().date() < datetime.date(
-            2020, 11, 1) else datetime.time(4, 59)
+            2021, 11, 1) else datetime.time(4, 59)
         # self.DAYendTime = datetime.time(23,59)
-        self.DAYendTimeZeroZeo = datetime.time(3, 59, 59) if datetime.date(2020, 3,
+        self.DAYendTimeZeroZeo = datetime.time(3, 59, 59) if datetime.date(2021, 3,
                                                                            8) < datetime.datetime.now().date() < datetime.date(
-            2020, 11, 1) else datetime.time(4, 59, 59)
+            2021, 11, 1) else datetime.time(4, 59, 59)
         # self.DAYendTimeZeroZeo = datetime.time(0,0)
 
         # Day Light Savings
         # Summer UTC 13 to 20
         # Winter UTC 14 to 21
-        self.daylightSavingAdjutment = 4 if datetime.date(2020, 3, 8) < datetime.datetime.now().date() < datetime.date(
-            2020, 11, 1) else 5
-        self.StartHour = 13 if datetime.date(2020, 3, 8) < datetime.datetime.now().date() < datetime.date(2020, 11,
+        self.daylightSavingAdjutment = 4 if datetime.date(2021, 3, 8) < datetime.datetime.now().date() < datetime.date(
+            2021, 11, 1) else 5
+        self.StartHour = 13 if datetime.date(2021, 3, 8) < datetime.datetime.now().date() < datetime.date(2021, 11,
                                                                                                           1) else 14
-        self.EndHour = 20 if datetime.date(2020, 3, 8) < datetime.datetime.now().date() < datetime.date(2020, 11,
+        self.EndHour = 20 if datetime.date(2021, 3, 8) < datetime.datetime.now().date() < datetime.date(2021, 11,
                                                                                                         1) else 21
         self.UTCStartTime = datetime.time(self.StartHour, 30)
         self.UTCEndTime = datetime.time(self.EndHour, 00)
@@ -55,8 +55,9 @@ class PerMinDataOperations():
     #################################
     # Hostorical Arbitrage & Price for a day
     #################################
-    def getMarketConditionsForFullDayData(self):
-        now = datetime.datetime.utcnow()
+    def getMarketConditionsForFullDayData(self, now=None):
+        if not now:
+            now = datetime.datetime.utcnow()
         currentTime = now.time()
         todaysDate = now.date()
         ifaholiday = HolidayCheck(todaysDate)
@@ -79,6 +80,18 @@ class PerMinDataOperations():
             end_dt = end_dt.replace(tzinfo=tz.gettz('UTC'))
             end_dt = end_dt.astimezone(tz.tzlocal())
 
+        '''Custom Condition for Older Date Data Display'''
+        if now:
+            start_dt = now
+            start_dt = start_dt.replace(hour=self.StartHour, minute=30, second=0, microsecond=0)
+            # start_dt=start_dt - datetime.timedelta(hours=self.daylightSavingAdjutment)
+            start_dt = start_dt.replace(tzinfo=tz.gettz('UTC'))
+            start_dt = start_dt.astimezone(tz.tzlocal())
+            end_dt = now
+            end_dt = end_dt.replace(year=now.year, month=now.month, day=now.day, second=0, microsecond=0)
+            end_dt = end_dt.replace(tzinfo=tz.gettz('UTC'))
+            end_dt = end_dt.astimezone(tz.tzlocal())
+
         FetchDataForTimeObject = {}
         FetchDataForTimeObject['start_dt'] = int(start_dt.timestamp() * 1000)
         FetchDataForTimeObject['end_dt'] = int(end_dt.timestamp() * 1000) if end_dt else end_dt
@@ -87,25 +100,27 @@ class PerMinDataOperations():
 
     # Fetch full day arbitrage for 1 etf
     def FetchFullDayPerMinArbitrage(self, etfname):
+        markettimeStatus = self.getMarketConditionsForFullDayData(now=datetime.datetime.utcnow().replace(year=2021, month=9, day=20))
         # markettimeStatus = self.getMarketConditionsForFullDayData()
+        print(f"MarketTimeStatus : {markettimeStatus}")
         # markettimeStatus['start_dt'] = 1603805400000
-        # if markettimeStatus['end_dt']:
-        #     markettimeStatus['end_dt'] = 1603828800000
-        #     full_day_data_cursor = arbitrage_per_min.find(
-        #         {"Timestamp": {"$gte": markettimeStatus['start_dt'], "$lte": markettimeStatus['end_dt']},
-        #          "symbol": etfname},
-        #         {"_id": 0})
-        # else:
-        #     full_day_data_cursor = arbitrage_per_min.find(
-        #         {"Timestamp": {"$gte": markettimeStatus['start_dt']}, "symbol": etfname},
-        #         {"_id": 0})
-        markettimeStatus = {}
-        markettimeStatus['start_dt'] = 1603805400000
-        markettimeStatus['end_dt'] = 1603828800000
-        full_day_data_cursor = arbitrage_per_min.find(
-            {"Timestamp": {"$gte": markettimeStatus['start_dt'], "$lte": markettimeStatus['end_dt']},
-             "symbol": etfname},
-            {"_id": 0})
+        if markettimeStatus['end_dt']:
+            # markettimeStatus['end_dt'] = 1603828800000
+            full_day_data_cursor = arbitrage_per_min.find(
+                {"Timestamp": {"$gte": markettimeStatus['start_dt'], "$lte": markettimeStatus['end_dt']},
+                 "symbol": etfname},
+                {"_id": 0})
+        else:
+            full_day_data_cursor = arbitrage_per_min.find(
+                {"Timestamp": {"$gte": markettimeStatus['start_dt']}, "symbol": etfname},
+                {"_id": 0})
+        # markettimeStatus = {}
+        # markettimeStatus['start_dt'] = 1603805400000
+        # markettimeStatus['end_dt'] = 1603828800000
+        # full_day_data_cursor = arbitrage_per_min.find(
+        #     {"Timestamp": {"$gte": markettimeStatus['start_dt'], "$lte": markettimeStatus['end_dt']},
+        #      "symbol": etfname},
+        #     {"_id": 0})
 
         full_day_data_list = list(full_day_data_cursor)
         full_day_data_df = pd.DataFrame.from_records(full_day_data_list)
@@ -113,24 +128,25 @@ class PerMinDataOperations():
 
     # Full full  day prices for 1 etf
     def FetchFullDayPricesForETF(self, etfname):
+        markettimeStatus = self.getMarketConditionsForFullDayData(now=datetime.datetime.utcnow().replace(year=2021, month=9, day=20))
         # markettimeStatus = self.getMarketConditionsForFullDayData()
         # markettimeStatus['start_dt'] = 1603805400000
-        # if markettimeStatus['end_dt']:
-        #     markettimeStatus['end_dt'] = 1603828800000
-        #     full_day_prices_etf_cursor = trade_per_min_WS.find(
-        #         {"s": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
-        #         {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
-        # else:
-        #     full_day_prices_etf_cursor = trade_per_min_WS.find(
-        #         {"s": {"$gte": markettimeStatus['start_dt']}, "sym": etfname},
-        #         {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
+        if markettimeStatus['end_dt']:
+            # markettimeStatus['end_dt'] = 1603828800000
+            full_day_prices_etf_cursor = trade_per_min_WS.find(
+                {"s": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
+                {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
+        else:
+            full_day_prices_etf_cursor = trade_per_min_WS.find(
+                {"s": {"$gte": markettimeStatus['start_dt']}, "sym": etfname},
+                {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
 
-        markettimeStatus = {}
-        markettimeStatus['start_dt'] = 1603805400000
-        markettimeStatus['end_dt'] = 1603828800000
-        full_day_prices_etf_cursor = trade_per_min_WS.find(
-            {"s": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
-            {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
+        # markettimeStatus = {}
+        # markettimeStatus['start_dt'] = 1603805400000
+        # markettimeStatus['end_dt'] = 1603828800000
+        # full_day_prices_etf_cursor = trade_per_min_WS.find(
+        #     {"s": {"$gte": markettimeStatus['start_dt'], '$lte': markettimeStatus['end_dt']}, "sym": etfname},
+        #     {"_id": 0, "sym": 1, "vw": 1, "o": 1, "c": 1, "h": 1, "l": 1, "v": 1, "s": 1})
 
         temp = []
         [temp.append(item) for item in full_day_prices_etf_cursor]
@@ -144,14 +160,15 @@ class PerMinDataOperations():
     # Live Arbitrage & Price for 1 or all ETF
     #################################
 
-    def getMarketConditionTime(self):
+    def getMarketConditionTime(self, todaysDate=None):
         ''''''
         '''Current UTC datetime'''
         now = datetime.datetime.utcnow()
         '''Current time only'''
         currentTime = now.time()
         '''Current date only'''
-        todaysDate = now.date()
+        if not todaysDate:
+            todaysDate = now.date()
         ifaholiday = HolidayCheck(todaysDate)
         dt = None
 
@@ -161,6 +178,8 @@ class PerMinDataOperations():
         '''Market operating time on a Non-Holiday UTC 13:30:00 (self.UTCStartTime) to 20:00:00 (self.UTCEndTime)'''
         if (currentTime >= self.UTCStartTime) and (currentTime < self.UTCEndTime) and (not ifaholiday):
             dt = datetime.datetime.now().replace(second=0, microsecond=0)
+            if todaysDate:
+                dt = datetime.datetime.now().replace(year=todaysDate.year, month=todaysDate.month, day=todaysDate.day, second=0, microsecond=0)
 
         '''Before Market opens same day UTC 4:00:00 (self.DAYendTimeZeroZeo) to 13:30:00 (self.UTCStartTime) OR if it's a holiday'''
         if currentTime > self.DAYendTimeZeroZeo and currentTime < self.UTCStartTime or ifaholiday:
@@ -186,8 +205,9 @@ class PerMinDataOperations():
 
     #  Live arbitrage for 1 etf or all etf
     def LiveFetchPerMinArbitrage(self, etfname=None):
+        dt_ts = self.getMarketConditionTime(todaysDate=datetime.datetime(2021, 9, 20))
         # dt_ts = self.getMarketConditionTime()
-        dt_ts = 1603828800000
+        # dt_ts = 1603828800000
         dt_ts = dt_ts - 60000
         if etfname:
             live_per_min_cursor = arbitrage_per_min.find(
@@ -209,8 +229,9 @@ class PerMinDataOperations():
 
     # LIVE 1 Min prices for 1 or all etf
     def LiveFetchETFPrice(self, etfname=None):
+        dt_ts = self.getMarketConditionTime(todaysDate=datetime.datetime(2021, 9, 20))
         # dt_ts = self.getMarketConditionTime()
-        dt_ts = 1603828800000
+        # dt_ts = 1603828800000
         dt_ts = dt_ts - 60000
         print("LiveFetchETFPrice " + str(dt_ts))
         if etfname:
