@@ -32,7 +32,7 @@ async def bound_fetch(sem, url, session):
 async def run(getUrls):
     tasks = []
     # create instance of Semaphore
-    sem = asyncio.Semaphore(1000)
+    sem = asyncio.Semaphore(100)
 
     # Create client session that will ensure we dont open new connection
     # per each request.
