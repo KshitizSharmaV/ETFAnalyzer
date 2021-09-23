@@ -121,11 +121,11 @@ class DownloadsEtfHoldingsData():
             logger.exception(e)
             self.driver.quit()
             traceback.print_exc()
-            email_obj = EmailSender()
-            msg = email_obj.message(subject=e,
-                                    text="Exception Caught in ETFAnalysis/HoldingsDataScripts/DownloadHoldings.py {}".format(
-                                        traceback.format_exc()))
-            email_obj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # email_obj = EmailSender()
+            # msg = email_obj.message(subject=e,
+            #                         text="Exception Caught in ETFAnalysis/HoldingsDataScripts/DownloadHoldings.py {}".format(
+            #                             traceback.format_exc()))
+            # email_obj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             pass
         finally:
             self.driver.quit()

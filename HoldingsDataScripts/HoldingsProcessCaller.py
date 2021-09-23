@@ -96,8 +96,8 @@ if __name__ == '__main__':
         logger.debug("Execution Time (E) {} seconds".format(t1_stop - t1_start))
         print("Execution Time (NE) {} seconds".format(t1_stop - t1_start))
         traceback.print_exc()
-        email_obj = EmailSender()
-        msg = email_obj.message(subject=e, text="Exception Caught in ETFAnalysis/HoldingsProcessCaller.py {}".format(
-            traceback.format_exc()))
-        email_obj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+        # email_obj = EmailSender()
+        # msg = email_obj.message(subject=e, text="Exception Caught in ETFAnalysis/HoldingsProcessCaller.py {}".format(
+        #     traceback.format_exc()))
+        # email_obj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
         pass

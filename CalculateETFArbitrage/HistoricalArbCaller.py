@@ -88,12 +88,12 @@ class HistoricalArbitrageRunnerClass():
             logger.exception(e)
             logger2.warning("exception in {} etf, not crawled".format(etfname))
             logger2.exception(e)
-            emailobj = EmailSender()
-            msg = emailobj.message(subject=e,
-                                   text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/HistoricalArbCaller.py for etf: {} \n {}".format(
-                                       etfname,
-                                       traceback.format_exc()))
-            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # emailobj = EmailSender()
+            # msg = emailobj.message(subject=e,
+            #                        text="Exception Caught in ETFAnalysis/CalculateETFArbitrage/HistoricalArbCaller.py for etf: {} \n {}".format(
+            #                            etfname,
+            #                            traceback.format_exc()))
+            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             return
 
     def write_etfwhichfailed_tocsv(self):

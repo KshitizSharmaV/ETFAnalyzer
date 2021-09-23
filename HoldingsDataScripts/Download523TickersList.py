@@ -60,11 +60,11 @@ class Download523TickersList():
             logger.exception(f"{e} - fetchTickerDataDescription()")
             traceback.print_exc()
             self.driver.quit()
-            emailobj = EmailSender()
-            msg = emailobj.message(subject=e,
-                                   text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
-                                       traceback.format_exc()))
-            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # emailobj = EmailSender()
+            # msg = emailobj.message(subject=e,
+            #                        text="Exception Caught in ETFAnalysis/ETFsList_Scripts/Download523TickersList.py {}".format(
+            #                            traceback.format_exc()))
+            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             pass
         finally:
             self.driver.quit()

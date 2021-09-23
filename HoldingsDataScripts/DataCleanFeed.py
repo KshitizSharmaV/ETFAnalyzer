@@ -88,6 +88,8 @@ class PullandCleanData:
                 for col in ['CommissionFree', 'PERatio', 'Beta']:
                     additional_details_df[col] = str(additional_details_df[col])
 
+                additional_details_df['NumberOfHolding'] = float(additional_details_df['NumberOfHolding'])
+
                 holdingsdata.rename(
                     columns={'Holdings': 'TickerName', 'Symbol': 'TickerSymbol', 'Weights': 'TickerWeight'},
                     inplace=True)
@@ -114,8 +116,8 @@ class PullandCleanData:
             logger.exception(e)
             logger.critical("Exception occurred in DataCleanFeed.py")
             traceback.print_exc()
-            emailobj = EmailSender()
-            msg = emailobj.message(subject=e,
-                                   text="Exception Caught in ETFAnalysis/HoldingsDataScripts/DataCleanFeed.py {}".format(
-                                       traceback.format_exc()))
-            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # emailobj = EmailSender()
+            # msg = emailobj.message(subject=e,
+            #                        text="Exception Caught in ETFAnalysis/HoldingsDataScripts/DataCleanFeed.py {}".format(
+            #                            traceback.format_exc()))
+            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])

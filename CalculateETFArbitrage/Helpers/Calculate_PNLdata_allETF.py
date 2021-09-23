@@ -18,6 +18,7 @@ class CalculateAndSavePnLData():
             self.connforthis = MongoDBConnectors().get_pymongo_readWrite_production_production()
         else:
             self.connforthis = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+        self.connforthis = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 
         self.arbitragecollection = self.connforthis.ETF_db.ArbitrageCollectionNew
 
