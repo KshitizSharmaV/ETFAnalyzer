@@ -41,7 +41,8 @@ class ArbPerMin():
                 holdingsdf = pd.DataFrame(*[holdings for holdings in holdingdata])
                 holdingsdf.set_index('symbol', inplace=True)
                 holdingsdf['weight'] = holdingsdf['weight'] / 100
-                navdf = tradedf.mul(holdingsdf['weight'], axis=0)['price_pct_chg'].dropna()
+                # navdf = tradedf.mul(holdingsdf['weight'], axis=0)['price_pct_chg'].dropna()
+                navdf = tradedf['price_pct_chg'].mul(holdingsdf['weight'], axis=0).dropna()
                 nav = navdf.sum()
                 moverdictlist, changedictlist = self.helperobj.get_top_movers_and_changes(tradedf, navdf, holdingsdf)
                 etfprice = tradedf.loc[etfname, 'priceT']
@@ -99,7 +100,7 @@ class ArbPerMin():
             partial_arbitrtage_func = partial(self.calculation_for_each_etf, PriceChange)
             arbitrage_threadingresults = CPUBonundThreading(partial_arbitrtage_func, self.etfdict)
             arbdict={}
-            [arbdict.update(item) for item in arbitrage_threadingresults]
+            [arbdict.update(item) for item in arbitrage_threadingresults if item]
             arbdict=pd.DataFrame.from_dict(arbdict, orient='index')
             arbdict.index.name  = 'symbol'
             self.TradesDataDfPreviousMin=self.TradesDataDfCurrentMin
@@ -107,11 +108,11 @@ class ArbPerMin():
             traceback.print_exc()
             logger.exception(traceback.print_exc())
             # send email on every failure
-            emailobj = EmailSender()
-            msg = emailobj.message(subject=e,
-                                   text="Exception Caught in ETFLiveAnalysisProdWS/CalculatePerMinArb.py {}".format(
-                                       traceback.format_exc()))
-            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # emailobj = EmailSender()
+            # msg = emailobj.message(subject=e,
+            #                        text="Exception Caught in ETFLiveAnalysisProdWS/CalculatePerMinArb.py {}".format(
+            #                            traceback.format_exc()))
+            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
         
         return arbdict
         

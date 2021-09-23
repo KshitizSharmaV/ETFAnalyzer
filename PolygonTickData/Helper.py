@@ -54,13 +54,20 @@ class Helper(object):
         return self.unix_time_millis(datetime.strptime(datetimeobject, '%Y-%m-%d %H:%M:%S'))
 
     def getHumanTime(self, ts=None, divideby=1000000000):
+        if not ts:
+            return None
         s, ms = divmod(ts, divideby)
         return datetime(*time.gmtime(s)[:6])
 
     def getLastTimeStamp(self, data):
-        return data['results'][-1]['t']
+        if data['results']:
+            return data['results'][-1]['t']
+        else:
+            return None
 
     def checkTimeStampForPagination(self, checkTime, extractDataTillTime):
+        if not checkTime:
+            return False
         return True if self.getHumanTime(ts=checkTime, divideby=1000000000) < extractDataTillTime else False
 
     # vwap : Volume Weighted Average Price

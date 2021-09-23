@@ -63,10 +63,16 @@ class DailyOpenCloseData(object):
             try:
                 response = json.loads(requests.get(url=URL).text)
                 symbol = response['ticker']
-                response_data = [dict(item, **{'Symbol': symbol}) for item in response['results']]
+                if 'results' not in response:
+                    continue
+                response_data = [dict(item, **{'Symbol': symbol}) for item in response['results'] if 'results' in response]
                 self.daily_open_close_object.insert_into_collection(symbol=symbol, datetosave=self.date,
                                                                     savedata=response_data[0],
                                                                     CollectionName=self.collection_name)
+            except KeyError:
+                print(f"################################ No results for {symbol} ################################")
+                logger.warn(
+                    f"################################ No results for {symbol} ################################")
             except Exception as e:
                 print(e)
                 print("Holding can't be fetched for URL =" + URL)
@@ -102,6 +108,7 @@ class DailyOpenCloseData(object):
                         conn = MongoDBConnectors().get_pymongo_readonly_production_production()
                     else:
                         conn = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+                    conn = MongoDBConnectors().get_pymongo_devlocal_devlocal()
                     pipeline = return_daily_open_close_pipeline(failed_tickers, self.date)
                     data_cursor = conn.ETF_db.DailyOpenCloseCollection.aggregate(pipeline)
                     combined_data = [data for data in data_cursor]
