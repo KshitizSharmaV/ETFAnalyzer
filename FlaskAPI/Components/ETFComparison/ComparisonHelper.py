@@ -7,7 +7,7 @@ import pandas as pd
 
 def ETFandHoldingsData(ETFName, date):
     try:
-        MongoDBConnectors().get_mongoengine_readonly_devlocal_production()
+        MongoDBConnectors().get_mongoengine_devlocal_devlocal()
         # Load all the data holdings data together
         etfdata = LoadHoldingsdata().getAllETFData(ETFName, date)
         if type(etfdata) == Response:

@@ -31,7 +31,8 @@ from functools import lru_cache
 
 server_logger = custom_server_logger
 
-connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+# connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 
 app = flaskAppMaker().create_app()
 

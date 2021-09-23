@@ -17,6 +17,7 @@ class AllCollectionsStatusCheck():
             self.connection = MongoDBConnectors().get_pymongo_readonly_production_production()
         else:
             self.connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+        self.connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
         self.db = self.connection.ETF_db
         pass
 
@@ -96,10 +97,10 @@ class AllCollectionsStatusCheck():
             date_to_check_in_string=(datetime.strptime(date_to_check_in_string, '%Y%m%d') - timedelta(days=1)).strftime(
                 '%Y%m%d'))
         QuotesCollFrom, QuotesCollTo, TradesCollFrom, TradesCollTo, ArbLiveCollFrom, ArbLiveCollTo, text_live = self.Live_Data_Status_Check()
-        emailobj = EmailSender()
-        msg = emailobj.message(subject='Daily Status Report ETFAnalyzer',
-                               text="\n".join([text_hist_arb, text_holdings, text_PNL, text_live]))
-        emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+        # emailobj = EmailSender()
+        # msg = emailobj.message(subject='Daily Status Report ETFAnalyzer',
+        #                        text="\n".join([text_hist_arb, text_holdings, text_PNL, text_live]))
+        # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
 
 
 if __name__ == '__main__':

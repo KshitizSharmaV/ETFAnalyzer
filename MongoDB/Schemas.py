@@ -12,12 +12,12 @@ if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
 else:
     ''' Dev Local to Production ReadOnly:
         Will need to comment out create_index() statements to use this connection '''
-    connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+    # connection = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
     ''' Dev Local to Production ReadWrite:
         Will need to specify username password file in MongoDB/MongoDBConnections.py __init__() '''
     # connection = MongoDBConnectors().get_pymongo_readWrite_devlocal_production()
     ''' Dev Local to Dev Local '''
-    # connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
+    connection = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 
 db = connection.ETF_db
 
@@ -27,12 +27,12 @@ if system_username == 'ubuntu' and system_private_ip == '172.31.76.32':
 else:
     ''' Dev Local to Production ReadOnly:
         Will need to comment out create_index() statements to use this connection '''
-    motor_client = MongoDBConnectors().get_motorasync_readonly_devlocal_production()
+    # motor_client = MongoDBConnectors().get_motorasync_readonly_devlocal_production()
     ''' Dev Local to Production ReadWrite:
         Will need to specify username password file in MongoDB/MongoDBConnections.py __init__() '''
     # motor_client = MongoDBConnectors().get_motorasync_readWrite_devlocal_production()
     ''' Dev Local to Dev Local '''
-    # motor_client = MongoDBConnectors().get_motorasync_devlocal_devlocal()
+    motor_client = MongoDBConnectors().get_motorasync_devlocal_devlocal()
 
 motor_db = motor_client.ETF_db
 

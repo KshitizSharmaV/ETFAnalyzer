@@ -18,6 +18,7 @@ if sys_private_ip == '172.31.76.32':
     connectionLocal = MongoDBConnectors().get_pymongo_readWrite_production_production()
 else:
     connectionLocal = MongoDBConnectors().get_pymongo_readonly_devlocal_production()
+connectionLocal = MongoDBConnectors().get_pymongo_devlocal_devlocal()
 db = connectionLocal.ETF_db
 TradesData = db.TradesData
 arbitragecollection = db.ArbitrageCollectionNew
