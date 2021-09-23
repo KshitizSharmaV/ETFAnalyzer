@@ -46,11 +46,11 @@ def on_message(ws, message):
 def on_error(ws, error):
     print("error : {}".format(error))
     logger.exception(error)
-    emailobj = EmailSender()
-    msg = emailobj.message(subject=error,
-                           text="Exception Caught in ETFLiveAnalysisProdWS/TradesLive.py {}".format(
-                               traceback.format_exc()))
-    emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+    # emailobj = EmailSender()
+    # msg = emailobj.message(subject=error,
+    #                        text="Exception Caught in ETFLiveAnalysisProdWS/TradesLive.py {}".format(
+    #                            traceback.format_exc()))
+    # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
     print("retrying...")
     logger.debug('retrying...')
     main()
@@ -62,8 +62,9 @@ def on_close(ws):
 
 
 def on_open(ws):
-    ws.send('{"action":"auth","params":"qOKbrjPAxnTvs4_hwPi GoFzgHgxgmyafq"}')
-    tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
+    ws.send('{"action":"auth","params":"gd4V5GVT6ipvITQYEooyqUeLzaQ2gwmp"}')
+    # tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
+    tickerlist = list(pd.read_csv("./Helper/tickerlist.csv").columns.values)
     tickerlistStr = ','.join([''.join(['AM.', str(elem)]) for elem in tickerlist])
     '''
     etflist = list(pd.read_csv("NonChineseETFs.csv").columns.values)

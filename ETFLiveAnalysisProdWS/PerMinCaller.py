@@ -9,7 +9,7 @@ import schedule
 import time
 
 # Custom Imports
-from CommonServices.EmailService import EmailSender
+# from CommonServices.EmailService import EmailSender
 from ETFLiveAnalysisProdWS.TickListsGenerator import ListsCreator
 from ETFLiveAnalysisProdWS.CalculatePerMinArb import ArbPerMin
 from CommonServices.LogCreater import CreateLogger
@@ -94,11 +94,11 @@ class PerMinAnalysis():
         except Exception as e:
             traceback.print_exc()
             logger.exception(e)
-            emailobj = EmailSender()
-            msg = emailobj.message(subject=e,
-                                   text="Exception Caught in ETFLiveAnalysisProdWS/PerMinCaller.py {}".format(
-                                       traceback.format_exc()))
-            emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
+            # emailobj = EmailSender()
+            # msg = emailobj.message(subject=e,
+            #                        text="Exception Caught in ETFLiveAnalysisProdWS/PerMinCaller.py {}".format(
+            #                            traceback.format_exc()))
+            # emailobj.send(msg=msg, receivers=['piyush888@gmail.com', 'kshitizsharmav@gmail.com'])
             pass
         
 
@@ -117,9 +117,12 @@ if __name__=='__main__':
     #######################################################
     # Load Files Components, # Below 3 Objects' life to be maintained throughout the day while market is open
     #######################################################
-    tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
-    etflist = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
-    with open('../CSVFiles/etf-hold.json', 'r') as f:
+    # tickerlist = list(pd.read_csv("../CSVFiles/tickerlist.csv").columns.values)
+    # etflist = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
+    tickerlist = list(pd.read_csv("./Helper/tickerlist.csv").columns.values)
+    etflist = ['SPY', 'VOO', 'QQQ', 'IVV', 'IJR', 'VO', 'VGT', 'XLK', 'XLF', 'SCHX']
+    # with open('../CSVFiles/etf-hold.json', 'r') as f:
+    with open('./Helper/etf-hold.json', 'r') as f:
         etfdict = json.load(f)
 
     #######################################################
@@ -132,7 +135,7 @@ if __name__=='__main__':
     # # Line 119 not needed, can cause error.
     # PerMinAnlysObj.PerMinAnalysisCycle(ArbCalcObj)
     schedule.every().minute.at(":00").do(PerMinAnlysObj.calculate_spread_for_minute)
-    schedule.every().minute.at(":04").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)
+    schedule.every().minute.at(":07").do(PerMinAnlysObj.PerMinAnalysisCycle, ArbCalcObj)
     while True:
         schedule.run_pending()
         time.sleep(1)

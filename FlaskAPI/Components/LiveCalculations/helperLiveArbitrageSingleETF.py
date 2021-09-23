@@ -9,7 +9,7 @@ from FlaskAPI.Components.ETFArbitrage.ETFArbitrageMain import calculateArbitrage
 from FlaskAPI.Helpers.CustomAPIErrorHandle import MultipleExceptionHandler
 from FlaskAPI.Helpers.ServerLogHelper import custom_server_logger
 
-daylightSavingAdjutment = 4 if date(2020,3,8)< datetime.now().date()< date(2020,11,1) else 5
+daylightSavingAdjutment = 4 if date(2021,3,8)< datetime.now().date()< date(2021,11,1) else 5
 etmoverslist = ['ETFMover%1', 'ETFMover%2', 'ETFMover%3', 'ETFMover%4', 'ETFMover%5',
                 'ETFMover%6', 'ETFMover%7', 'ETFMover%8', 'ETFMover%9', 'ETFMover%10',
                 'Change%1', 'Change%2', 'Change%3', 'Change%4', 'Change%5', 'Change%6',

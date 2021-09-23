@@ -54,7 +54,8 @@ class ListsCreator():
                 
     def create_list_files(self):
         try:
-            AllEtfNames = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
+            # AllEtfNames = list(pd.read_csv("../CSVFiles/250M_WorkingETFs.csv").columns.values)
+            AllEtfNames = ['SPY', 'VOO', 'QQQ', 'IVV', 'IJR', 'VO', 'VGT', 'XLK', 'XLF', 'SCHX']
             
             ThreadingResults = CPUBonundThreading(self.ETFHoldJsonData, AllEtfNames)
 
@@ -64,12 +65,14 @@ class ListsCreator():
                 etfdicts.append(res['ETFHoldingsData'])
                 AllHoldingsList=AllHoldingsList+res['HoldingsList']
 
-            out_file = open("../CSVFiles/etf-hold.json", "w")
+            # out_file = open("../CSVFiles/etf-hold.json", "w")
+            out_file = open("./Helper/etf-hold.json", "w")
             json.dump(etfdicts, out_file, indent=6)
             out_file.close()
 
             AllTickerSet = set(AllHoldingsList+AllEtfNames)
-            CSV_Maker().write_to_csv(data=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
+            # CSV_Maker().write_to_csv(data=list(AllTickerSet), filename="../CSVFiles/tickerlist.csv")
+            CSV_Maker().write_to_csv(data=list(AllTickerSet), filename="./Helper/tickerlist.csv")
             logger.debug("Tick Lists Generated Successfully")
             return True
         except Exception as e:

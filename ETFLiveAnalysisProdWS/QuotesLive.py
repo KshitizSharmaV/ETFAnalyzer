@@ -12,7 +12,8 @@ from MongoDB.PerMinDataOperations import PerMinDataOperations
 
 class QuotesLiveFetcher():
     def __init__(self):
-        self.etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
+        # self.etflist = pd.read_csv('../CSVFiles/250M_WorkingETFs.csv').columns.to_list()
+        self.etflist = ['SPY', 'VOO', 'QQQ', 'IVV', 'IJR', 'VO', 'VGT', 'XLK', 'XLF', 'SCHX']
         self.getUrls = [PolgonDataCreateURLS().PolygonLastQuotes(etf) for etf in self.etflist]
 
     def getDataFromPolygon(self, methodToBeCalled=None, getUrls=None):
