@@ -68,7 +68,7 @@ class masterclass:
             self.driver.quit()
 
         user_name = self.driver.find_element(By.ID, "user_login")
-        user_name.send_keys("ticketsoft")
+        user_name.send_keys("ticketsoft3")
         password = self.driver.find_element(By.ID, "password")
         password.send_keys("etfapp2020")
         login = self.driver.find_element(By.ID, "login-button")
